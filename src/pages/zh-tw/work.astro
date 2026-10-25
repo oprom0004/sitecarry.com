@@ -1,0 +1,79 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import VisualUrlMapper from '../../components/VisualUrlMapper.astro';
+import { getLocalizedPath, type Lang } from '../../i18n/utils';
+
+const lang: Lang = 'zh-tw';
+const estimatePath = getLocalizedPath('estimate', lang);
+---
+
+<Layout 
+  title="移轉實績與基準驗證指標 | SiteCarry"
+  description="秉持誠信透明原則，絕不捏造虛假客戶 Logo 與評語。公開標準化演示移轉前後的視覺預覽與實測數據。"
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-white border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="max-w-3xl mb-16">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
+          演示移轉視覺與交付驗證
+        </h1>
+        <p class="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
+          SiteCarry 嚴格遵守誠信商業原則，絕不捏造虛假客戶 Logo 或評語。以下為標準企業站台的自建演示移轉視覺預覽、前後實測數據與品質驗收清單。
+        </p>
+      </div>
+
+      <div class="rounded-xl bg-white border border-slate-200 overflow-hidden shadow-2xs mb-24">
+        <div class="grid grid-cols-1 lg:grid-cols-12">
+          <div class="lg:col-span-6 relative bg-slate-100 border-b lg:border-b-0 lg:border-r border-slate-200 min-h-[320px]">
+            <img src="/images/demo-b2b-portal.png" alt="B2B 製造設備企業官網移轉視覺預覽" class="w-full h-full object-cover" />
+            <div class="absolute top-4 left-4 px-3 py-1 rounded-md bg-white/95 border border-slate-200 text-xs font-semibold text-slate-700 shadow-2xs backdrop-blur-md">
+              DEMO BENCHMARK 01
+            </div>
+          </div>
+          <div class="lg:col-span-6 p-8 sm:p-10 space-y-6 flex flex-col justify-between bg-white">
+            <div class="space-y-4">
+              <h2 class="text-2xl font-bold text-slate-900 mb-2">B2B 製造設備企業官網移轉基準</h2>
+              <p class="text-sm text-slate-500 font-mono">WP 6.4 + 28 個外掛 ($49/月 VPS) → Astro 7 靜態化 (Cloudflare Pages $0/月)</p>
+
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="p-3.5 bg-slate-50 rounded-lg border border-slate-200 space-y-1">
+                  <p class="text-xs text-slate-500 font-medium">手機載入</p>
+                  <p class="text-xl font-bold text-slate-900 font-mono">0.8 秒</p>
+                  <p class="text-xs text-slate-400 font-mono">原: 6.2 秒</p>
+                </div>
+                <div class="p-3.5 bg-slate-50 rounded-lg border border-slate-200 space-y-1">
+                  <p class="text-xs text-slate-500 font-medium">Lighthouse</p>
+                  <p class="text-xl font-bold text-slate-900 font-mono">99/100</p>
+                  <p class="text-xs text-slate-400 font-mono">原: 43 分</p>
+                </div>
+                <div class="p-3.5 bg-slate-50 rounded-lg border border-slate-200 space-y-1">
+                  <p class="text-xs text-slate-500 font-medium">公開 PHP 漏洞</p>
+                  <p class="text-xl font-bold text-slate-900 font-mono">零風險</p>
+                  <p class="text-xs text-slate-400">無執行環境</p>
+                </div>
+                <div class="p-3.5 bg-slate-50 rounded-lg border border-slate-200 space-y-1">
+                  <p class="text-xs text-slate-500 font-medium">URL 保留率</p>
+                  <p class="text-xl font-bold text-slate-900 font-mono">100%</p>
+                  <p class="text-xs text-slate-400 font-mono">195 條對齊</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-24">
+        <VisualUrlMapper lang={lang} />
+      </div>
+
+      <div class="text-center">
+        <a href={estimatePath} class="inline-block px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all">
+          為您的網站預約移轉評估
+        </a>
+      </div>
+
+    </div>
+  </div>
+</Layout>

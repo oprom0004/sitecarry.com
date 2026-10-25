@@ -1,0 +1,117 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getLocalizedPath, type Lang } from '../../../i18n/utils';
+
+const lang: Lang = 'ja';
+const estimatePath = getLocalizedPath('estimate', lang);
+const astroPath = getLocalizedPath('wordpress-to-astro', lang);
+const phpCheckerPath = getLocalizedPath('php-version-checker', lang);
+---
+
+<Layout 
+  title="PHP2shell脆弱性と終わらないパッチ対応：静的デカップル構成による根本的防御策 | SiteCarry"
+  description="CVE-2026-109618（PHP2shell）の未認証RCE脆弱性を技術的に分析。AstroとCloudflare Edgeによる静的デカップル構成が、公開サーバーの攻撃面をゼロにする理由を解説。"
+  lang={lang}
+>
+  <div class="py-16 sm:py-24 bg-gradient-to-b from-slate-50 via-white to-white border-b border-slate-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Article Header -->
+      <div class="mb-10">
+        <div class="flex items-center gap-3 text-xs text-slate-500 mb-4 font-mono">
+          <span class="text-blue-600 font-bold uppercase tracking-wider">セキュリティアーキテクチャ解説</span>
+          <span>•</span>
+          <span>2026年10月22日</span>
+          <span>•</span>
+          <span>読了目安：約6分</span>
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6 leading-tight">
+          PHP2shell (CVE-2026-109618) と終わらない緊急パッチ対応：企業サイトが静的デカップル構成へ移行すべき根本的理由
+        </h1>
+        <p class="text-base text-slate-600 leading-relaxed font-normal">
+          2026年10月21日、PHP開発チームは全サポート対象バージョンに対して、コアランタイムに存在する深刻な未認証リモートコード実行（RCE）脆弱性（通称 <em>PHP2shell</em>）の緊急修正パッチを一斉リリースしました。世界中の技術マネージャーやサイト保守チームにとって、またしても週末の緊急対応を迫られる事態となりました。
+        </p>
+      </div>
+
+      <!-- Featured Cover Illustration -->
+      <div class="mb-12 rounded-3xl overflow-hidden border border-slate-200 shadow-lg bg-slate-100">
+        <img 
+          src="/images/guide-zero-attack-surface.png" 
+          alt="Decoupled Static Edge Shield Architecture Illustration" 
+          class="w-full max-h-[420px] object-cover object-center"
+        />
+      </div>
+
+      <!-- Main Article Body -->
+      <div class="max-w-none text-sm text-slate-700 space-y-6 leading-relaxed border-t border-slate-200 pt-8">
+        
+        <h2 class="text-xl font-bold text-slate-900 pt-2">脆弱性の概要：未認証で成立する深刻なRCE</h2>
+        <p>
+          <strong>CVE-2026-109618</strong> および <strong>CVE-2026-109619</strong> として識別された本脆弱性は、PHPコアインタプリタがメモリ不足（OOM）を処理する際、<code class="text-slate-900 font-mono bg-slate-100 px-1 py-0.5 rounded border border-slate-200">longjmp()</code> と残留したグローバルリクエスト状態の不整合によってメモリ破損を引き起こすことに起因します。最大の問題は、攻撃者が管理者権限や事前認証を一切必要とせず、細工したHTTPリクエストを送信するだけで、PHP 5.4〜8.5.11が動作する数百万台のサーバー上で任意のコードを実行できてしまう点にあります。
+        </p>
+        <p>
+          WAFベンダーによる遮断シグネチャの配信やPHPのマイナーバージョン更新が即座に行われたものの、この事象は企業のIT部門に厳しい現実を再認識させました。<strong>動的なPHP実行環境とデータベースをインターネットに直接公開し続ける限り、ゼロデイ脆弱性と緊急アップデートのいたちごっこは恒久的に終わらないということです。</strong>
+        </p>
+
+        <h2 class="text-xl font-bold text-slate-900 pt-4">従来の単体WordPress構成が抱える構造的限界</h2>
+        <p>
+          一般的なWordPress環境では、「管理画面」「MySQLデータベース」「PHP実行エンジン」「一般公開ページの生成」が同一の公開サーバー上で結合しています。訪問者がトップページや会社概要を閲覧するたびに、裏側でPHPの実行とSQL問い合わせがリアルタイムで発生します。
+        </p>
+        <ul class="list-disc list-inside space-y-2 text-slate-600">
+          <li><strong>PHPコアの脆弱性リスク：</strong> 過去のCVE-2024-4577（CGI引数インジェクション）から今回のPHP2shellに至るまで、ランタイム自体の欠陥はWAFをすり抜けてWebShellの設置につながります。</li>
+          <li><strong>プラグイン依存の連鎖崩壊：</strong> SEO、キャッシュ、問い合わせフォーム等のプラグインは頻繁に権限昇格やSQLiの脆弱性を生み、ボットの標的となります。</li>
+          <li><strong>Web改ざんとスパム送信被害：</strong> 一度WebShellが侵入すると、不正リダイレクトやスパム配信の踏み台に利用され、企業の公式ドメインがGoogle警告やメールブラックリストに登録される深刻な信用失墜を招きます。</li>
+        </ul>
+
+        <h2 class="text-xl font-bold text-slate-900 pt-4">根本的解決策：静的デカップル構成（公開攻撃面ゼロ化）</h2>
+        <p>
+          脆弱性のアラートに怯え、夜間休日の緊急復旧を繰り返す運用から脱却するため、先進企業は <strong>静的デカップル構成（Decoupled Static Edge Stack）</strong>（Astro / SSG）への全面移行を進めています：
+        </p>
+        
+        <div class="p-6 rounded-3xl bg-slate-50 border border-slate-200 space-y-3 my-6 font-mono text-xs">
+          <p class="text-blue-700 font-bold">[一般トラフィック公開層 · Public Edge Layer]</p>
+          <p class="text-slate-900">Cloudflare 全球エッジ CDN → 事前生成済み HTML / CSS / 画像（応答速度 50ms 未満・PHP 不在・SQL 不在）</p>
+          <div class="border-t border-slate-200 my-2"></div>
+          <p class="text-slate-700 font-bold">[管理・編集隔離層 · Private Admin Layer]</p>
+          <p class="text-slate-900">社内閉域網 / Cloudflare Zero Trust 認証配下 → Headless CMS または Git 管理（外部からの直接アクセス完全遮断）</p>
+        </div>
+
+        <div class="space-y-4 text-slate-700">
+          <div class="p-4 rounded-xl border border-slate-200 bg-white">
+            <h3 class="font-bold text-slate-900 mb-1 font-mono text-xs text-amber-700 uppercase tracking-wider">01. 外部アクセスは純粋な静的ファイルのみ</h3>
+            <p class="text-xs text-slate-600">一般ユーザーや攻撃者のクローラーがアクセスするのは、事前にビルドされた静的ファイルのみです。サーバー側でPHPプロセスが動作していないため、悪用可能なスレッド自体が存在しません。</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-white">
+            <h3 class="font-bold text-slate-900 mb-1 font-mono text-xs text-amber-700 uppercase tracking-wider">02. 物理構造レベルで脆弱性を無力化</h3>
+            <p class="text-xs text-slate-600">万一PHP本体やWordPressプラグインに重大なRCE脆弱性が見つかったとしても、公開WebサーバーにはPHPインタプリタが存在しないため、攻撃リクエストは成立せず単なる無効なリクエストとして即座に破棄されます。</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-white">
+            <h3 class="font-bold text-slate-900 mb-1 font-mono text-xs text-amber-700 uppercase tracking-wider">03. 圧倒的な表示速度とCore Web Vitals向上</h3>
+            <p class="text-xs text-slate-600">動的なデータベース問い合わせやPHPスクリプトの解釈遅延を排除し、世界最寄りのCloudflareエッジから瞬時にコンテンツを配信。PageSpeed 90+の満点スコアと高い検索順位評価を獲得します。</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Callout Box -->
+      <div class="mt-12 p-8 rounded-3xl bg-gradient-to-r from-blue-50 via-slate-50 to-white border border-blue-200 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+        <div class="space-y-1">
+          <h3 class="text-lg font-bold text-slate-900">公開PHPの脆弱性不安を根本から解消しませんか？</h3>
+          <p class="text-xs text-slate-600">既存URL構造を1:1で完全維持したまま、安全かつ高速なAstro静的構成へと移行するSiteCarryの移行サービスをご覧ください。</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-3 shrink-0">
+          <a href={phpCheckerPath} class="px-5 py-2.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 font-bold text-xs shadow-sm transition-all">
+            現在のPHPバージョンを確認
+          </a>
+          <a href={astroPath} class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md transition-all">
+            WordPressからAstroへの移行詳細
+          </a>
+          <a href={estimatePath} class="px-5 py-2.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-semibold text-xs shadow-sm transition-all">
+            無料見積もり・相談
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</Layout>

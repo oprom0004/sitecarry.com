@@ -1,0 +1,210 @@
+---
+import { siteConfig } from '../data/siteConfig';
+import { getLocalizedPath, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const footerCopy = {
+  en: {
+    slogan: "Move your website forward. Keep what matters.",
+    about: "SiteCarry specializes in WordPress migration, legacy dynamic website rebuilds, and decoupled static modernization for businesses in the US, Europe, Japan, and Taiwan.",
+    directContact: "Direct Contact:",
+    timezones: "Timezones:",
+    colServices: "Core Services",
+    colCompany: "Company & Process",
+    colLegal: "Legal & Standards",
+    services: [
+      { label: "WordPress Migration", href: getLocalizedPath('wordpress-migration', lang) },
+      { label: "WordPress Rebuild", href: getLocalizedPath('wordpress-rebuild', lang) },
+      { label: "WordPress to Astro", href: getLocalizedPath('wordpress-to-astro', lang) },
+      { label: "WordPress to Next.js", href: getLocalizedPath('wordpress-to-nextjs', lang) },
+      { label: "Legacy PHP Modernization", href: getLocalizedPath('legacy-php-migration', lang) },
+      { label: "PHP Version Security Checker", href: getLocalizedPath('php-version-checker', lang) },
+    ],
+    company: [
+      { label: "Pricing & Packages", href: getLocalizedPath('pricing', lang) },
+      { label: "Our 5-Stage Process", href: getLocalizedPath('process', lang) },
+      { label: "Work & Demo Benchmarks", href: getLocalizedPath('work', lang) },
+      { label: "About SiteCarry Studio", href: getLocalizedPath('about', lang) },
+      { label: "Migration Guides & CVEs", href: getLocalizedPath('guides', lang) },
+    ],
+    legal: [
+      { label: "Request Free Assessment", href: getLocalizedPath('estimate', lang) },
+      { label: "Privacy Policy", href: getLocalizedPath('privacy', lang) },
+      { label: "Terms of Service", href: getLocalizedPath('terms', lang) },
+    ],
+    guarantee: "Fixed-scope guarantee. 30-day post-launch warranty included with all builds.",
+    rights: "All rights reserved. SiteCarry. Built for reliability.",
+    langLabel: "Language:",
+  },
+  'zh-tw': {
+    slogan: "讓網站穩健前行，完整保全核心資產。",
+    about: "SiteCarry 專注於為美國、歐洲、日本與台灣企業，提供安全可靠的 WordPress 老站移轉、架構重構與靜態現代化服務。",
+    directContact: "官方信箱：",
+    timezones: "時區覆蓋：",
+    colServices: "核心服務",
+    colCompany: "關於與流程",
+    colLegal: "條款與保證",
+    services: [
+      { label: "WordPress 網站遷移", href: getLocalizedPath('wordpress-migration', lang) },
+      { label: "WordPress 整站重構", href: getLocalizedPath('wordpress-rebuild', lang) },
+      { label: "WordPress 轉 Astro（極速靜態）", href: getLocalizedPath('wordpress-to-astro', lang) },
+      { label: "WordPress 轉 Next.js（無頭架構）", href: getLocalizedPath('wordpress-to-nextjs', lang) },
+      { label: "老舊客製 PHP 現代化", href: getLocalizedPath('legacy-php-migration', lang) },
+      { label: "PHP 版本資安速查（免費）", href: getLocalizedPath('php-version-checker', lang) },
+    ],
+    company: [
+      { label: "收費方案與詳細規格", href: getLocalizedPath('pricing', lang) },
+      { label: "5 階段標準交付流程", href: getLocalizedPath('process', lang) },
+      { label: "標準演示案例與實測", href: getLocalizedPath('work', lang) },
+      { label: "關於 SiteCarry 工作室", href: getLocalizedPath('about', lang) },
+      { label: "CVE 漏洞與遷移指南", href: getLocalizedPath('guides', lang) },
+    ],
+    legal: [
+      { label: "線上需求評估諮詢", href: getLocalizedPath('estimate', lang) },
+      { label: "隱私權保護政策", href: getLocalizedPath('privacy', lang) },
+      { label: "服務協議與合約條款", href: getLocalizedPath('terms', lang) },
+    ],
+    guarantee: "固定總價保證。所有正式交付專案皆享上線後 30 天免費瑕疵保固。",
+    rights: "版權所有 © SiteCarry。專業平穩的網站現代化基石。",
+    langLabel: "語系切換：",
+  },
+  ja: {
+    slogan: "Webサイトを安全に前進。蓄積した資産を100%継承。",
+    about: "SiteCarryは、日本・米国・欧州・台湾の企業に向け、WordPressの安全な移行、旧型動的サイトの再構築、静的モダン化を提供するエンジニアリングスタジオです。",
+    directContact: "公式連絡先：",
+    timezones: "対応時差：",
+    colServices: "提供サービス",
+    colCompany: "制作体制・会社概要",
+    colLegal: "規約・品質保証",
+    services: [
+      { label: "WordPress サイト移行", href: getLocalizedPath('wordpress-migration', lang) },
+      { label: "WordPress フルリニューアル", href: getLocalizedPath('wordpress-rebuild', lang) },
+      { label: "WordPress to Astro（静的配信）", href: getLocalizedPath('wordpress-to-astro', lang) },
+      { label: "WordPress to Next.js（ヘッドレス）", href: getLocalizedPath('wordpress-to-nextjs', lang) },
+      { label: "レガシーPHP脱却・モダン化", href: getLocalizedPath('legacy-php-migration', lang) },
+      { label: "PHPバージョン脆弱性チェッカー", href: getLocalizedPath('php-version-checker', lang) },
+    ],
+    company: [
+      { label: "料金プラン・費用一覧", href: getLocalizedPath('pricing', lang) },
+      { label: "5段階の標準制作フロー", href: getLocalizedPath('process', lang) },
+      { label: "デモ検証実績・実測値", href: getLocalizedPath('work', lang) },
+      { label: "SiteCarry について", href: getLocalizedPath('about', lang) },
+      { label: "移行ガイド・脆弱性解説", href: getLocalizedPath('guides', lang) },
+    ],
+    legal: [
+      { label: "無料お見積り・技術相談", href: getLocalizedPath('estimate', lang) },
+      { label: "プライバシーポリシー", href: getLocalizedPath('privacy', lang) },
+      { label: "利用規約", href: getLocalizedPath('terms', lang) },
+    ],
+    guarantee: "固定総額保証。全案件に本番公開後30日間の無償瑕疵保証が付帯します。",
+    rights: "All rights reserved. SiteCarry. 堅牢でモダンなWeb基盤。",
+    langLabel: "言語：",
+  },
+};
+
+const f = footerCopy[lang] || footerCopy.en;
+---
+
+<footer class="bg-[#faf9f6] border-t border-[#e8e6df] text-[#575f6e]">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 mb-12">
+      
+      <!-- Brand Summary -->
+      <div class="lg:col-span-2 space-y-4">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center text-slate-950 shadow-sm shadow-amber-500/20">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="17 11 12 6 7 11"></polyline>
+              <line x1="12" y1="18" x2="12" y2="6"></line>
+            </svg>
+          </div>
+          <span class="text-base font-extrabold text-slate-900 tracking-tight">SiteCarry</span>
+        </div>
+        <p class="text-xs text-amber-800 font-semibold tracking-wide">
+          {f.slogan}
+        </p>
+        <p class="text-[#575f6e] text-sm leading-relaxed max-w-sm font-normal">
+          {f.about}
+        </p>
+        <div class="pt-2 text-xs text-slate-600 space-y-1">
+          <p>
+            <span class="text-slate-800 font-semibold">{f.directContact}</span> 
+            <a href={`mailto:${siteConfig.contactEmail}`} class="text-amber-800 hover:text-amber-900 font-medium underline underline-offset-2 font-mono">
+              {siteConfig.contactEmail}
+            </a>
+          </p>
+          <p>
+            <span class="text-slate-800 font-semibold">{f.timezones}</span> 
+            <span class="text-slate-500">{siteConfig.timezones}</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Services -->
+      <div>
+        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-900 mb-4">{f.colServices}</h3>
+        <ul class="space-y-2.5 text-sm">
+          {f.services.map((item) => (
+            <li>
+              <a href={item.href} class="text-[#575f6e] hover:text-amber-700 transition-colors">
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Navigation & Company -->
+      <div>
+        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-900 mb-4">{f.colCompany}</h3>
+        <ul class="space-y-2.5 text-sm">
+          {f.company.map((item) => (
+            <li>
+              <a href={item.href} class="text-[#575f6e] hover:text-amber-700 transition-colors">
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Legal & Guarantee -->
+      <div>
+        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-900 mb-4">{f.colLegal}</h3>
+        <ul class="space-y-2.5 text-sm">
+          {f.legal.map((item) => (
+            <li>
+              <a href={item.href} class="text-[#575f6e] hover:text-amber-700 transition-colors">
+                {item.label}
+              </a>
+            </li>
+          ))}
+          <li class="pt-2 text-xs text-slate-500 leading-relaxed font-normal">
+            {f.guarantee}
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="pt-8 border-t border-[#e8e6df] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <p>{f.rights}</p>
+      
+      <div class="flex items-center gap-3 text-slate-500 font-medium">
+        <span>{f.langLabel}</span>
+        <a href="/" class={lang === 'en' ? 'text-amber-800 font-bold underline underline-offset-2' : 'hover:text-slate-900'}>EN</a>
+        <span>•</span>
+        <a href="/ja/" class={lang === 'ja' ? 'text-amber-800 font-bold underline underline-offset-2' : 'hover:text-slate-900'}>JA</a>
+        <span>•</span>
+        <a href="/zh-tw/" class={lang === 'zh-tw' ? 'text-amber-800 font-bold underline underline-offset-2' : 'hover:text-slate-900'}>TW</a>
+      </div>
+    </div>
+
+  </div>
+</footer>

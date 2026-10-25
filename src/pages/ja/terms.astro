@@ -1,0 +1,58 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { siteConfig } from '../../data/siteConfig';
+import { type Lang } from '../../i18n/utils';
+
+const lang: Lang = 'ja';
+---
+
+<Layout 
+  title="利用規約・品質保証方針 | SiteCarry"
+  description="SiteCarryの制作スコープ定義、著作権帰属、および公開後30日間保証規定。"
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-sm text-slate-700 space-y-6 leading-relaxed">
+      
+      <div class="mb-10">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-2">利用規約および制作約款</h1>
+        <p class="text-xs text-slate-500 font-mono">発効日: 2026年10月</p>
+      </div>
+
+      <p>
+        本規約は、お客様がSiteCarry（<code class="text-amber-900 font-mono bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/80">sitecarry.com</code>）に委託されるWebサイト移行、リニューアル、モダン化業務における条件を定めます。
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">1. 業務スコープと固定総額の原則</h2>
+      <p>
+        SiteCarryの全案件は、移行対象ページ数、記事数、レイアウト数、連携機能を事前に明記した固定価格制（Fixed-Scope）を採用しています。書面に記載のない新規機能や追加仕様のご要望は、実装前に工期とお見積りを提示し、合意の上で着手いたします。
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">2. ソースコードの権利帰属</h2>
+      <p>
+        契約金額の全額受領完了をもって、本案件のために作成されたカスタムフロントエンドコード、スタイル定義、ビルドスクリプトの著作権・財産権はお客様に完全帰属します。コードはお客様所有のGitHub/GitLabリポジトリへ直接納品されます。
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">3. ステージング環境での検収</h2>
+      <p>
+        非公開検証環境（Staging）における最終検収フェーズでは、<strong>最大2回の一括フィードバック・修正対応</strong>を含みます。事前合意された仕様に対する不具合の修正は、修正回数にカウントされません。
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">4. 公開後30日間の無償瑕疵保証</h2>
+      <p>
+        本番DNS切り替え日より<strong>30日間の無償保証期間</strong>を設けています。この期間内に発見された契約範囲内の不具合（リンク切れ、レイアウト崩れ等）は無償で迅速に修正対応いたします。第三者によるコード改変や外部インフラ障害は保証対象外となります。
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">5. SEO継承に関する免責</h2>
+      <p>
+        厳格な1:1 URLマッピングとエッジ301転送を実施し、過去の評価を最大限保全します。ただし、検索順位は各検索エンジンのアルゴリズムにより決定されるため、順位上昇やアクセス増加を法的に保証するものではありません。
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">6. お問い合わせ</h2>
+      <p>
+        本約款に関するご質問やご相談は、<code class="text-amber-800 font-mono bg-amber-50 border border-amber-200/80 px-1.5 py-0.5 rounded">{siteConfig.contactEmail}</code> までご連絡ください。
+      </p>
+
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,117 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getLocalizedPath, type Lang } from '../../../i18n/utils';
+
+const lang: Lang = 'zh-tw';
+const estimatePath = getLocalizedPath('estimate', lang);
+const astroPath = getLocalizedPath('wordpress-to-astro', lang);
+const phpCheckerPath = getLocalizedPath('php-version-checker', lang);
+---
+
+<Layout 
+  title="PHP2shell 漏洞解析與無休止修補惡夢：企業網站為何必須採用靜態解耦架構？ | SiteCarry"
+  description="深度拆解 CVE-2026-109618 (PHP2shell) 核心 RCE 漏洞成因。分析為何純靜態解耦架構（Astro + Cloudflare Edge）能永久抹除公網攻擊面，徹底終結黑客入侵與緊急打補丁的焦慮。"
+  lang={lang}
+>
+  <div class="py-16 sm:py-24 bg-gradient-to-b from-slate-50 via-white to-white border-b border-slate-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Article Header -->
+      <div class="mb-10">
+        <div class="flex items-center gap-3 text-xs text-slate-500 mb-4 font-mono">
+          <span class="text-blue-600 font-bold uppercase tracking-wider">資安架構深度解析</span>
+          <span>•</span>
+          <span>2026 年 10 月 22 日</span>
+          <span>•</span>
+          <span>閱讀時間約 6 分鐘</span>
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6 leading-tight">
+          PHP2shell (CVE-2026-109618) 與無休止的漏洞修補惡夢：為什麼企業級 WordPress 必須採用純靜態解耦架構？
+        </h1>
+        <p class="text-base text-slate-600 leading-relaxed font-normal">
+          2026 年 10 月 21 日，PHP 官方安全團隊針對全線支援版本緊急發布重大修補程式，修復了存在於 PHP 核心運行時中的嚴重未授權遠端代碼執行 (RCE) 漏洞（社群代號 <em>PHP2shell</em>）。對全球數以萬計的技術主管與企業網站維運團隊而言，這又是一次週末全員待命的緊急修補演習。
+        </p>
+      </div>
+
+      <!-- Featured Cover Illustration -->
+      <div class="mb-12 rounded-3xl overflow-hidden border border-slate-200 shadow-lg bg-slate-100">
+        <img 
+          src="/images/guide-zero-attack-surface.png" 
+          alt="Decoupled Static Edge Shield Architecture Illustration" 
+          class="w-full max-h-[420px] object-cover object-center"
+        />
+      </div>
+
+      <!-- Main Article Body -->
+      <div class="max-w-none text-sm text-slate-700 space-y-6 leading-relaxed border-t border-slate-200 pt-8">
+        
+        <h2 class="text-xl font-bold text-slate-900 pt-2">漏洞成因速覽：致命的未授權 RCE</h2>
+        <p>
+          在官方編號 <strong>CVE-2026-109618</strong> 與 <strong>CVE-2026-109619</strong> 中，漏洞源自 PHP 核心直譯器在處理極端記憶體不足 (OOM) 情況下，透過 <code class="text-slate-900 font-mono bg-slate-100 px-1 py-0.5 rounded border border-slate-200">longjmp()</code> 調用與殘留全域請求狀態時產生的記憶體錯亂。最致命的是：公網遠端黑客無需任何網站管理員帳號密碼，僅需向公網伺服器發送畸形 HTTP 負載，即可在執行 PHP 5.4 至 8.5.11 的數百萬台伺服器上直接執行任意惡意程式碼。
+        </p>
+        <p>
+          雖然 Cloudflare 等雲端 WAF 廠商在數小時內緊急下發啟發式過濾特徵碼，PHP 官方也隨即釋出小版本更新，但此一事件再次向企業 IT 揭示了殘酷的架構現實：<strong>只要公網上仍暴露著動態執行的 PHP 執行時環境與資料庫，黑客自動化掃描器與 0-Day 漏洞的緊急修補輪迴就永遠不會終止。</strong>
+        </p>
+
+        <h2 class="text-xl font-bold text-slate-900 pt-4">傳統 WordPress 的根本性架構死結</h2>
+        <p>
+          標準的單體式 WordPress 架構將「內容後台」、「關聯式資料庫 (MySQL)」、「業務邏輯解析器 (PHP)」與「對外訪客渲染頁面」全部綑綁在同一個對公網開放的伺服器環境中。任何訪客在瀏覽首頁或產品頁時，背後都在即時觸發 PHP 解析與資料庫查詢。
+        </p>
+        <ul class="list-disc list-inside space-y-2 text-slate-600">
+          <li><strong>PHP 核心層漏洞防不勝防：</strong> 從早期的 CVE-2024-4577 CGI 參數注入，到如今的 PHP2shell，直譯器底層漏洞讓攻擊者能直接穿透防線植入 WebShell。</li>
+          <li><strong>龐雜外掛生態的連鎖崩潰：</strong> 主流的 SEO、快取、表單與頁面構建器外掛頻繁爆出提權漏洞，常淪為黑客批量掃描下毒的入口。</li>
+          <li><strong>資料庫與伺服器主機全面失守：</strong> 一旦被植入 WebShell，惡意腳本常被用於黑帽 SEO 跳轉、加密勒索、寄送大量垃圾郵件，導致企業網域名稱被 Google 標記危險網站並列入各大郵件黑名單。</li>
+        </ul>
+
+        <h2 class="text-xl font-bold text-slate-900 pt-4">徹底根治方案：純靜態解耦架構 (零公網攻擊面)</h2>
+        <p>
+          與其終日惶惶不安、隨時準備在深夜或連假緊急排班升級修補，越來越多具備資安遠見的企業正在轉向 <strong>純靜態解耦架構 (Decoupled Static Edge Architecture)</strong>（基於 Astro / SSG 技術棧）：
+        </p>
+        
+        <div class="p-6 rounded-3xl bg-slate-50 border border-slate-200 space-y-3 my-6 font-mono text-xs">
+          <p class="text-blue-700 font-bold">[公網流量防護層 · Public Edge Layer]</p>
+          <p class="text-slate-900">Cloudflare 全球邊緣節點 → 純靜態預渲染 HTML / CSS / 圖片 (回應低於 50ms · 零 PHP 解析 · 零 SQL 查詢)</p>
+          <div class="border-t border-slate-200 my-2"></div>
+          <p class="text-slate-700 font-bold">[內部管理隔離層 · Private Admin Layer]</p>
+          <p class="text-slate-900">企業內網 / Cloudflare Zero Trust 驗證後方 → Headless 內容庫或 Git CMS (不對公網暴露任何連接埠)</p>
+        </div>
+
+        <div class="space-y-4 text-slate-700">
+          <div class="p-4 rounded-xl border border-slate-200 bg-white">
+            <h3 class="font-bold text-slate-900 mb-1 font-mono text-xs text-amber-700 uppercase tracking-wider">01. 公網訪客與爬蟲僅能接觸純靜態快照</h3>
+            <p class="text-xs text-slate-600">當外部用戶或黑客掃描工具訪問您的網站時，伺服器僅直接返回預先構建完成的 HTML 靜態檔案。背後根本沒有 PHP 直譯器在待命，也不存在可被動態利用的執行緒。</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-white">
+            <h3 class="font-bold text-slate-900 mb-1 font-mono text-xs text-amber-700 uppercase tracking-wider">02. 在物理架構層面直接讓漏洞失效</h3>
+            <p class="text-xs text-slate-600">即使 PHP 核心或某個舊版外掛爆出嚴重的 0-Day 遠端代碼執行漏洞，黑客的自動化惡意腳本對著您的網域名稱發起攻擊時，只能接收到純靜態內容，完全無法觸發任何 PHP 代碼執行。攻擊面在物理層面被完全抹除。</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-white">
+            <h3 class="font-bold text-slate-900 mb-1 font-mono text-xs text-amber-700 uppercase tracking-wider">03. 效能與 Core Web Vitals 躍升至極致</h3>
+            <p class="text-xs text-slate-600">消除了伺服器即時編譯與資料庫查詢延遲，全站檔案由離訪客最近的 Cloudflare 邊緣 CDN 節點在幾十毫秒內送達，輕鬆實現 Google PageSpeed 90+ 滿分體驗，大幅降低主機租金與運維負擔。</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Callout Box -->
+      <div class="mt-12 p-8 rounded-3xl bg-gradient-to-r from-blue-50 via-slate-50 to-white border border-blue-200 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+        <div class="space-y-1">
+          <h3 class="text-lg font-bold text-slate-900">準備好徹底終結公網 PHP 漏洞攻擊面了嗎？</h3>
+          <p class="text-xs text-slate-600">了解 SiteCarry 專為企業量身打造的 WordPress → Astro 現代化無痛遷移工程，保證 1:1 舊網址完全無失真。</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-3 shrink-0">
+          <a href={phpCheckerPath} class="px-5 py-2.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 font-bold text-xs shadow-sm transition-all">
+            檢測目前網站 PHP 版本
+          </a>
+          <a href={astroPath} class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md transition-all">
+            WordPress 遷移至 Astro 專案
+          </a>
+          <a href={estimatePath} class="px-5 py-2.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-semibold text-xs shadow-sm transition-all">
+            獲取精確報價與諮詢
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</Layout>

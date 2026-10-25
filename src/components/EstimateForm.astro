@@ -1,0 +1,471 @@
+---
+import { siteConfig } from '../data/siteConfig';
+import { type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  preselectedTier?: string;
+}
+
+const { lang } = Astro.props;
+const initialUrl = Astro.url.searchParams.get('url') || '';
+const preselectedTier = Astro.url.searchParams.get('tier') || Astro.props.preselectedTier || '';
+
+const labels = {
+  en: {
+    title: "Request a Free Migration Assessment & Scope Review",
+    subtitle: "Tell us about your current site and objectives. We will crawl your legacy URLs, inspect plugin risks, and reply with an exact fixed-price scope.",
+    name: "Full Name",
+    email: "Business Email",
+    website: "Current Website URL (https://...)",
+    company: "Company Name",
+    primaryGoal: "Primary Objective",
+    goals: [
+      { id: "wp-migrate", label: "Migrate existing WordPress (Astro / Decoupled)" },
+      { id: "wp-rebuild", label: "Rebuild & redesign aging WordPress site" },
+      { id: "wp-astro", label: "WordPress to Astro (Static edge performance)" },
+      { id: "wp-nextjs", label: "WordPress to Next.js (React / Application features)" },
+      { id: "woocommerce-ecommerce", label: "WooCommerce / E-Commerce Decoupled Rebuild (Zero Magecart & Crash-proof)" },
+      { id: "php-legacy", label: "Legacy PHP modernization (Escape EOL & CVEs)" },
+      { id: "review-149", label: "Book $149 Migration Review first" },
+      { id: "unsure", label: "Not sure / Need technical recommendation" },
+      { id: "host-only", label: "Just host or domain transfer" },
+    ],
+    budget: "Estimated Budget (USD)",
+    budgets: [
+      "Below $1,500",
+      "$1,500 – $3,500 (Essential range)",
+      "$3,500 – $7,000 (Business Rebuild range - Recommended)",
+      "$7,000+ (Decoupled E-Commerce / Scale / Custom Enterprise)",
+      "Unsure / Dependent on technical review",
+    ],
+    timeline: "Desired Launch Timeline",
+    timelines: [
+      "Flexible / Planning phase",
+      "Within 3–4 weeks (Fast track)",
+      "Within 1–2 months",
+      "Next quarter",
+    ],
+    editorialWorkflow: "Who will maintain and update content after launch?",
+    editorials: [
+      "Our internal marketing team (prefer WordPress or visual CMS)",
+      "Non-technical staff (need simplest possible editor)",
+      "Developers / Engineers (Markdown / Git is fine)",
+      "We want SiteCarry to handle ongoing maintenance",
+    ],
+    details: "What are your biggest pain points with the current website?",
+    detailsPlaceholder: "e.g., Plugins keep breaking, slow mobile speed, fear of losing Google rankings, previous developer left, terrified of recent PHP/WP vulnerabilities...",
+    submitBtn: "Submit Website for Free Technical Assessment",
+    submitting: "Analyzing & Submitting...",
+    privacyNote: "We never request server passwords, root access, or database dumps in this initial inquiry.",
+    successTitle: "Estimate Request Received",
+    successDesc: "Your inquiry has been assigned tracking ID:",
+    successNext: "Our engineering team will crawl your provided URL, inspect page structures, and send a structured assessment report to your email.",
+    spamWarning: "Please also check your spam/junk folder if our confirmation doesn't arrive in your inbox.",
+  },
+  ja: {
+    title: "無料サイト診断・移行お見積り相談",
+    subtitle: "現行サイトのURLとお悩みをお聞かせください。全URLをクローリング精査し、客観的な診断結果と固定見積書をご案内いたします。",
+    name: "お名前",
+    email: "会社メールアドレス",
+    website: "現行サイトのURL (https://...)",
+    company: "貴社名・組織名",
+    primaryGoal: "主なご相談目的",
+    goals: [
+      { id: "wp-migrate", label: "既存WordPressの移行・高速化 (Astro / 静的化)" },
+      { id: "wp-rebuild", label: "老朽化したWordPressのデザイン刷新・リニューアル" },
+      { id: "wp-astro", label: "WordPress to Astro (超高速静的エッジ配信)" },
+      { id: "wp-nextjs", label: "WordPress to Next.js (React連携・動的機能)" },
+      { id: "woocommerce-ecommerce", label: "WooCommerce / ECサイトのヘッドレス化（決済スキミング防止・アクセス集中耐性）" },
+      { id: "php-legacy", label: "レガシーPHPサイトの刷新 (サポート終了・脆弱性対策)" },
+      { id: "review-149", label: "まずは $149 の詳細事前診断を希望" },
+      { id: "unsure", label: "何が適切かわからないため、技術提案がほしい" },
+      { id: "host-only", label: "サーバーやドメインの単純引っ越しのみ" },
+    ],
+    budget: "ご想定のご予算 (USD目安)",
+    budgets: [
+      "$1,500未満",
+      "$1,500 – $3,500 (Essentialプラン目安)",
+      "$3,500 – $7,000 (Businessプラン目安 - 標準)",
+      "$7,000以上（ヘッドレスEC / 大規模サイト / エンタープライズ）",
+      "診断結果や提案を見て判断したい",
+    ],
+    timeline: "ご希望の公開時期",
+    timelines: [
+      "特に急ぎではない／計画段階",
+      "3〜4週間以内（急ぎ）",
+      "1〜2ヶ月以内",
+      "次四半期中",
+    ],
+    editorialWorkflow: "公開後の記事更新は誰が行いますか？",
+    editorials: [
+      "自社の広報・マーケティング担当者（従来のWPや直感的な画面希望）",
+      "ITに不慣れなスタッフ（極力シンプルな管理画面を希望）",
+      "エンジニア・開発担当者（Markdown・Git管理で問題なし）",
+      "SiteCarryに月額保守として継続依頼したい",
+    ],
+    details: "現在のWebサイトで最も困っている点やご要望",
+    detailsPlaceholder: "例：プラグインを更新するのが怖い、表示が重い、前の制作会社と連絡が取れない、昨今のPHP脆弱性が心配...",
+    submitBtn: "無料お見積りを依頼する",
+    submitting: "送信中...",
+    privacyNote: "初期のお問い合わせ段階でサーバーパスワードや管理画面の認証情報を求めることは一切ありません。",
+    successTitle: "お問い合わせを受け付けました",
+    successDesc: "お問い合わせ受付番号：",
+    successNext: "担当エンジニアがご入力いただいたURLを簡易クロールの上、具体的な移行アプローチと確定見積もりをメールにて送付いたします。",
+    spamWarning: "※ メールが届かない場合は、迷惑メールフォルダもご確認ください。",
+  },
+  'zh-tw': {
+    title: "免費獲取網站架構診斷與固定總價報價",
+    subtitle: "請提供您現有的網站網址與主要痛點。我們的工程團隊將全面爬梳盤點全站 URL，並儘速回覆務實的架構建議與固定總價合約方案。",
+    name: "聯絡姓名",
+    email: "公司電子信箱",
+    website: "現有網站網址 (https://...)",
+    company: "公司或組織名稱",
+    primaryGoal: "主要改版目標",
+    goals: [
+      { id: "wp-migrate", label: "現有 WordPress 移轉與靜態化 (Astro / Decoupled)" },
+      { id: "wp-rebuild", label: "老舊 WordPress 視覺與架構重新打底 (整站改版)" },
+      { id: "wp-astro", label: "WordPress 轉 Astro (追求極速效能與零維護)" },
+      { id: "wp-nextjs", label: "WordPress 轉 Next.js (React 生態與進階功能)" },
+      { id: "woocommerce-ecommerce", label: "WooCommerce / B2C 電商無頭架構重構（杜絕結帳側錄木馬・大促爆發流量不當機）" },
+      { id: "php-legacy", label: "客製化老舊 PHP 現代化 (脫離 EOL 停更與 CVE 漏洞)" },
+      { id: "review-149", label: "先預約 USD $149 深度先期診斷" },
+      { id: "unsure", label: "不確定適合哪種方案，需要技術建議" },
+      { id: "host-only", label: "純主機搬家或網域轉移" },
+    ],
+    budget: "預估改版預算 (USD 美元)",
+    budgets: [
+      "$1,500 美元以下",
+      "$1,500 – $3,500 (Essential 輕量移轉區間)",
+      "$3,500 – $7,000 (Business 企業重建區间 - 主推推薦)",
+      "$7,000 美元以上（無頭電商 / 大規模網站 / 企業級客製方案）",
+      "視診斷結果與建議方案評估",
+    ],
+    timeline: "期望上線時間",
+    timelines: [
+      "時程彈性 / 前期規劃中",
+      "3–4 週內（加急）",
+      "1–2 個月內",
+      "下一季前",
+    ],
+    editorialWorkflow: "網站改版上線後，預計由誰負責維護與發布文章？",
+    editorials: [
+      "內部行銷團隊（習慣原本的 WordPress 或直覺圖形後台）",
+      "非技術行政同仁（需要最簡單乾淨的發布介面）",
+      "工程或技術團隊（可接受 Markdown / Git 工作流）",
+      "希望委託 SiteCarry 負責上線後的每月維護",
+    ],
+    details: "目前網站最令您困擾的問題是什麼？",
+    detailsPlaceholder: "例如：外掛不敢升級怕壞掉、手機版跑很慢、擔心改版會掉 Google 排名、原外包失聯、最近一直看到 PHP 漏洞新聞很擔心...",
+    submitBtn: "送出網站以取得免費技術診斷與報價",
+    submitting: "資料驗證與送出中...",
+    privacyNote: "在初次洽詢階段，我們絕不索取您的主機密碼、資料庫備份或敏感個資。",
+    successTitle: "已收到您的移轉需求",
+    successDesc: "您的專案追蹤編號：",
+    successNext: "工程團隊將認真分析您提供的網址結構，並寄送客製化移轉建議書至您的信箱。",
+    spamWarning: "若未收到回信，敬請檢查您的垃圾郵件匣。",
+  },
+};
+
+const c = labels[lang] || labels.en;
+---
+
+<div class="max-w-3xl mx-auto bg-white border border-slate-200 rounded-xl p-8 sm:p-10 shadow-2xs">
+  
+  <div class="mb-8">
+    <h2 class="text-2xl font-bold text-slate-900 mb-2">{c.title}</h2>
+    <p class="text-sm text-slate-600 leading-relaxed font-normal">{c.subtitle}</p>
+  </div>
+
+  <!-- Real Interactive Form -->
+  <form id="estimate-form" class="space-y-6">
+    
+    <!-- Honeypot Anti-Spam Field -->
+    <div class="hidden" aria-hidden="true">
+      <input type="text" name="website_trap_field" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <!-- Preselected tier hidden tag -->
+    <input type="hidden" name="preselected_tier" value={preselectedTier} />
+    <input type="hidden" name="lang" value={lang} />
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <!-- Full Name -->
+      <div>
+        <label for="form-name" class="block text-sm font-semibold text-slate-700 mb-2">
+          {c.name} *
+        </label>
+        <input 
+          type="text" 
+          id="form-name" 
+          name="name" 
+          required 
+          placeholder="e.g. Alex Morgan"
+          class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-900 focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all placeholder:text-slate-400"
+        />
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label for="form-email" class="block text-sm font-semibold text-slate-700 mb-2">
+          {c.email} *
+        </label>
+        <input 
+          type="email" 
+          id="form-email" 
+          name="email" 
+          required 
+          placeholder="alex@company.com"
+          class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-900 focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all placeholder:text-slate-400"
+        />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <!-- Website URL -->
+      <div>
+        <label for="form-url" class="block text-sm font-semibold text-slate-700 mb-2">
+          {c.website} *
+        </label>
+        <input 
+          type="url" 
+          id="form-url" 
+          name="website_url" 
+          required 
+          value={initialUrl}
+          placeholder="https://example.com"
+          class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-900 focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all placeholder:text-slate-400"
+        />
+        <script is:inline>
+          (function() {
+            try {
+              var p = new URLSearchParams(window.location.search);
+              var u = p.get('url');
+              if (u) {
+                var el = document.getElementById('form-url');
+                if (el) el.value = u;
+              }
+            } catch(e) {}
+          })();
+        </script>
+      </div>
+
+      <!-- Company Name -->
+      <div>
+        <label for="form-company" class="block text-sm font-semibold text-slate-700 mb-2">
+          {c.company}
+        </label>
+        <input 
+          type="text" 
+          id="form-company" 
+          name="company" 
+          placeholder="Acme Corp"
+          class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-900 focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all placeholder:text-slate-400"
+        />
+      </div>
+    </div>
+
+    <!-- Primary Objective -->
+    <div>
+      <label for="form-goal" class="block text-sm font-semibold text-slate-700 mb-2">
+        {c.primaryGoal} *
+      </label>
+      <select 
+        id="form-goal" 
+        name="primary_goal" 
+        required
+        class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-900 focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all font-medium"
+      >
+        {c.goals.map((g) => (
+          <option value={g.id}>{g.label}</option>
+        ))}
+      </select>
+    </div>
+
+    <!-- Budget & Timeline -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div>
+        <label for="form-budget" class="block text-sm font-semibold text-slate-700 mb-2">
+          {c.budget}
+        </label>
+        <select 
+          id="form-budget" 
+          name="budget" 
+          class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-900 focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all font-medium"
+        >
+          {c.budgets.map((b) => (
+            <option value={b}>{b}</option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label for="form-timeline" class="block text-sm font-semibold text-slate-700 mb-2">
+          {c.timeline}
+        </label>
+        <select 
+          id="form-timeline" 
+          name="timeline" 
+          class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-900 focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all font-medium"
+        >
+          {c.timelines.map((t) => (
+            <option value={t}>{t}</option>
+          ))}
+        </select>
+      </div>
+    </div>
+
+    <!-- Details / Pain Points -->
+    <div>
+      <label for="form-details" class="block text-sm font-semibold text-slate-700 mb-2">
+        {c.details} *
+      </label>
+      <textarea 
+        id="form-details" 
+        name="details" 
+        rows="4" 
+        required 
+        placeholder={c.detailsPlaceholder}
+        class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-900 focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all placeholder:text-slate-400"
+      ></textarea>
+    </div>
+
+    <!-- Privacy Note -->
+    <p class="text-xs text-slate-500 flex items-center gap-2">
+      <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      <span>{c.privacyNote}</span>
+    </p>
+
+    <!-- Error message display -->
+    <div id="form-error" class="hidden p-4 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-xs font-mono"></div>
+
+    <!-- Submit Button -->
+    <button 
+      type="submit" 
+      id="submit-btn" 
+      class="w-full py-3.5 px-6 rounded-lg bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all cursor-pointer flex items-center justify-center gap-2"
+    >
+      <span id="btn-text">{c.submitBtn}</span>
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+      </svg>
+    </button>
+
+    <!-- Direct Email Fallback Note -->
+    <div class="text-center pt-2">
+      <p class="text-xs text-slate-500">
+        {lang === 'zh-tw' ? '不想填寫表單？亦可直接寄信至' :
+         lang === 'ja' ? 'フォーム入力が不要な方は直接メールでお送りください：' :
+         'Prefer direct email? Send your website details to'}
+        <a href={`mailto:${siteConfig.contactEmail}`} class="font-mono text-amber-700 hover:text-amber-900 font-semibold underline underline-offset-2 ml-1">
+          {siteConfig.contactEmail}
+        </a>
+      </p>
+    </div>
+
+  </form>
+
+  <!-- Success Card -->
+  <div id="form-success" class="hidden py-8 text-center space-y-6">
+    <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-900 font-bold flex items-center justify-center mx-auto text-lg shadow-2xs">
+      <svg class="w-6 h-6 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+      </svg>
+    </div>
+
+    <div>
+      <h3 class="text-2xl font-bold text-slate-900 mb-2">{c.successTitle}</h3>
+      <p class="text-sm text-slate-600 max-w-lg mx-auto">{c.successDesc}</p>
+      <div class="mt-3 inline-block font-mono text-base font-bold text-amber-900 bg-amber-50 border border-amber-200 px-5 py-2 rounded-lg" id="tracking-id">
+        SC-20261023-8821
+      </div>
+    </div>
+
+    <div class="p-5 max-w-lg mx-auto rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-700 text-left space-y-2">
+      <p class="text-slate-900 font-bold">{c.successNext}</p>
+      <p class="text-slate-500">{c.spamWarning}</p>
+    </div>
+
+    <button 
+      type="button" 
+      id="reset-form-btn" 
+      class="text-xs text-slate-500 hover:text-slate-900 underline transition-colors"
+    >
+      Submit another inquiry
+    </button>
+  </div>
+
+</div>
+
+<script>
+  const form = document.getElementById('estimate-form') as HTMLFormElement;
+  const successCard = document.getElementById('form-success');
+  const errorBox = document.getElementById('form-error');
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+  const btnText = document.getElementById('btn-text');
+  const trackingEl = document.getElementById('tracking-id');
+  const resetBtn = document.getElementById('reset-form-btn');
+
+  if (form && successCard && errorBox && submitBtn && btnText && trackingEl) {
+    // Check if URL passed in search params
+    const urlParam = new URLSearchParams(window.location.search).get('url');
+    if (urlParam) {
+      const inputEl = document.getElementById('form-url') as HTMLInputElement;
+      if (inputEl && !inputEl.value) inputEl.value = urlParam;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorBox.classList.add('hidden');
+      errorBox.innerText = '';
+
+      const trap = form.querySelector('[name="website_trap_field"]') as HTMLInputElement;
+      if (trap && trap.value) return;
+
+      submitBtn.disabled = true;
+      btnText.innerText = 'Analyzing & Submitting...';
+
+      const formData = new FormData(form);
+      const data: Record<string, any> = {};
+      formData.forEach((val, key) => { data[key] = val; });
+
+      const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+      const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+      const trackingCode = `SC-${today}-${randomSuffix}`;
+      data.trackingId = trackingCode;
+      data.submittedAt = new Date().toISOString();
+
+      try {
+        await fetch('/api/estimate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        }).catch(() => null);
+
+        const existing = JSON.parse(localStorage.getItem('sitecarry_inquiries') || '[]');
+        existing.push(data);
+        localStorage.setItem('sitecarry_inquiries', JSON.stringify(existing));
+
+        trackingEl.innerText = trackingCode;
+        form.classList.add('hidden');
+        successCard.classList.remove('hidden');
+      } catch (err: any) {
+        errorBox.classList.remove('hidden');
+        errorBox.innerText = err.message || 'Error submitting form. Please try again.';
+      } finally {
+        submitBtn.disabled = false;
+        btnText.innerText = 'Submit Migration Request';
+      }
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        form.reset();
+        form.classList.remove('hidden');
+        successCard.classList.add('hidden');
+      });
+    }
+  }
+</script>

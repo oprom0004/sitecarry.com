@@ -1,0 +1,186 @@
+---
+import { type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const timelineData = {
+  en: {
+    phasePrefix: "Phase",
+    deliverableLabel: "Deliverable:",
+    steps: [
+      {
+        step: "01",
+        phase: "Audit & URL Inventory",
+        time: "Days 1–5",
+        desc: "We perform a headless crawl of your existing site to catalog every URL, meta tag, taxonomy term, and asset. We audit your active plugins to determine what can be converted to modern static code.",
+        deliverable: "URL inventory spreadsheet & technical migration spec",
+      },
+      {
+        step: "02",
+        phase: "Architecture & Staging Build",
+        time: "Weeks 1–3",
+        desc: "We build your new frontend using Astro or Next.js with clean Tailwind styling. We configure the editing workflow (Headless WP or modern CMS) and invite you to preview a private staging environment.",
+        deliverable: "Private password-protected staging URL for review",
+      },
+      {
+        step: "03",
+        phase: "Data Clean-up & 301 Map",
+        time: "Weeks 3–4",
+        desc: "We migrate articles, pages, and media. Legacy shortcodes and broken HTML are cleaned up. We program complete 301 redirect rules into Global CDN to guarantee 100% SEO continuity.",
+        deliverable: "Validated 301 redirect map & content parity report",
+      },
+      {
+        step: "04",
+        phase: "Acceptance & QA Verification",
+        time: "Weeks 4–5",
+        desc: "You conduct your structured feedback rounds. We verify responsive layouts across 360px–2560px, test all contact form submissions, and ensure Lighthouse scores exceed 95+ in performance.",
+        deliverable: "Lighthouse audit pass & client acceptance sign-off",
+      },
+      {
+        step: "05",
+        phase: "Zero-Downtime Launch & Warranty",
+        time: "Launch Day + 30 Days",
+        desc: "We coordinate DNS switchover with zero disruption to visitors. Google Search Console sitemaps are refreshed. Our 30-day post-launch warranty begins immediately to fix any scope defects.",
+        deliverable: "Live deployment, DNS verification, and 30-day warranty",
+      },
+    ],
+  },
+  'zh-tw': {
+    phasePrefix: "第",
+    phaseSuffix: "階段",
+    deliverableLabel: "交付成果：",
+    steps: [
+      {
+        step: "01",
+        phase: "全站盤點與歷史網址清冊",
+        time: "第 1–5 天",
+        desc: "全面爬梳現有站台，窮舉每一條歷史 URL、Meta 標籤、分類目錄與圖片附件。審查現有外掛與功能模組，擬定零遺漏的現代架構轉移方案。",
+        deliverable: "全站歷史 URL 盤點清冊與技術移轉規格書",
+      },
+      {
+        step: "02",
+        phase: "前端重構與預覽測試環境",
+        time: "第 1–3 週",
+        desc: "採用現代 Astro / Next.js 與乾淨 Tailwind 進行前端重構。配置符合您團隊習慣的後台發布流程（私有 Headless WP 或視覺化 Git CMS），並提供加密的內部測試機供驗收。",
+        deliverable: "專屬密碼保護的測試機預覽網址",
+      },
+      {
+        step: "03",
+        phase: "內容資料清洗與 301 轉址矩陣",
+        time: "第 3–4 週",
+        desc: "批次遷移既有文章、頁面與媒體附件。自動清洗冗餘短代碼與破損 HTML。在全域 CDN 節點配置嚴格的 301 永久轉址矩陣，杜絕 404 死鏈，100% 保全搜尋權重。",
+        deliverable: "301 永久轉址驗證矩陣與內容對照查核表",
+      },
+      {
+        step: "04",
+        phase: "品質驗收與跨裝置端對端測試",
+        time: "第 4–5 週",
+        desc: "進行結構化反饋修訂。嚴格校驗 360px 至 2560px 全螢幕解析度適配，測試所有諮詢表單加密傳輸，並確保 Google PageSpeed / Lighthouse 測速全數突破 95+ 分。",
+        deliverable: "Google Lighthouse 95+ 測速達標與功能驗收確認書",
+      },
+      {
+        step: "05",
+        phase: "零停機切換上線與 30 天保固",
+        time: "上線日 + 30 天",
+        desc: "無縫協同 DNS 平滑切換，訪客完全無感；主動提交 Google Search Console 新 Sitemap。上線即刻啟動 30 天交付瑕疵免費保固期，確保營運無後顧之憂。",
+        deliverable: "正式環境部署上線、DNS 切換校驗與 30 天售後保固",
+      },
+    ],
+  },
+  ja: {
+    phasePrefix: "フェーズ",
+    deliverableLabel: "納品成果物：",
+    steps: [
+      {
+        step: "01",
+        phase: "サイト全容精査・全URLインベントリ作成",
+        time: "1〜5日目",
+        desc: "現行サイトを完全クローリングし、全公開URL、メタ情報、タクソノミー、画像資産を網羅的に台帳化。利用中プラグインの棚卸しを行い、最新静的コードへの最適化設計を策定します。",
+        deliverable: "全URL照合スプレッドシート＆移行仕様書",
+      },
+      {
+        step: "02",
+        phase: "モダン設計・テスト検証環境の構築",
+        time: "1〜3週目",
+        desc: "AstroまたはNext.jsと洗練されたTailwind CSSを用いてフロントエンドを再構築。運用チームに合わせた編集環境（ヘッドレスWPまたはGit CMS）を整え、非公開の検証環境をご案内します。",
+        deliverable: "パスワード保護付きステージング検証環境URL",
+      },
+      {
+        step: "03",
+        phase: "データクレンジング・301転送マッピング",
+        time: "3〜4週目",
+        desc: "記事、固定ページ、メディアを全量移行。旧ショートコードや崩れたHTMLを自動クレンジング。グローバルCDN上で完全な301リダイレクトを設定し、既存の検索評価を100%維持します。",
+        deliverable: "301リダイレクト照合レポート＆コンテンツ移行完了報告",
+      },
+      {
+        step: "04",
+        phase: "品質検証・表示速度テスト・お客様検収",
+        time: "4〜5週目",
+        desc: "フィードバックに基づく最終調整。スマホから大画面まで（360px〜2560px）の崩れを徹底検証し、フォーム送信テストおよびGoogle Lighthouse 95点以上の高水準をクリアします。",
+        deliverable: "Lighthouse 95+達成レポート＆納品前検収完了証",
+      },
+      {
+        step: "05",
+        phase: "無停止本番公開・30日間無償保証",
+        time: "公開日 ＋ 30日間",
+        desc: "アクセスが途切れないDNS切り替えを実施。Google Search Consoleのサイトマップを即時更新。本番公開後30日間の無償瑕疵保証を開始し、万全の体制で運用開始を支援します。",
+        deliverable: "本番デプロイ完了・DNS検証・30日間無償保証書",
+      },
+    ],
+  },
+};
+
+const t = timelineData[lang] || timelineData.en;
+---
+
+<div class="relative max-w-5xl mx-auto">
+  <!-- Center Line for desktop -->
+  <div class="hidden lg:block absolute left-1/2 top-4 bottom-4 w-px bg-slate-200 -translate-x-1/2"></div>
+
+  <div class="space-y-8">
+    {t.steps.map((item, index) => {
+      const isEven = index % 2 === 1;
+      const phaseBadge = lang === 'zh-tw' 
+        ? `${t.phasePrefix} ${item.step} ${t.phaseSuffix || ''}`
+        : `${t.phasePrefix} ${item.step}`;
+
+      return (
+        <div class={`relative flex flex-col lg:flex-row items-center gap-8 ${isEven ? 'lg:flex-row-reverse' : ''}`}>
+          
+          <!-- Content Box -->
+          <div class={`w-full lg:w-1/2 ${isEven ? 'lg:pl-10 text-left' : 'lg:pr-10 lg:text-right'}`}>
+            <div class="bg-white border border-slate-200 hover:border-slate-300 p-7 sm:p-8 rounded-xl transition-all shadow-2xs">
+              <div class={`flex items-center gap-3 mb-3 ${isEven ? 'justify-start' : 'lg:justify-end'}`}>
+                <span class="text-xs font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-md">
+                  {item.time}
+                </span>
+                <span class="text-xs font-mono text-slate-400 font-semibold">{phaseBadge}</span>
+              </div>
+              
+              <h3 class="text-lg font-bold text-slate-900 mb-2 leading-snug">{item.phase}</h3>
+              <p class="text-sm text-slate-600 leading-relaxed mb-4 font-normal">{item.desc}</p>
+              
+              <div class={`text-xs text-slate-600 font-medium ${isEven ? 'text-left' : 'lg:text-right'}`}>
+                <span class="text-slate-400 mr-1.5 font-normal">{t.deliverableLabel}</span>
+                <span class="text-slate-900 font-medium">{item.deliverable}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Central Circle Indicator (Quiet, mature, neutral) -->
+          <div class="hidden lg:flex absolute left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-white border border-slate-300 items-center justify-center text-xs font-bold text-slate-700 shadow-2xs z-10">
+            {item.step}
+          </div>
+
+          <!-- Empty Column Spacer for layout symmetry -->
+          <div class="hidden lg:block w-1/2"></div>
+
+        </div>
+      );
+    })}
+  </div>
+</div>

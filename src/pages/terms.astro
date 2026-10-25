@@ -1,0 +1,58 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { siteConfig } from '../data/siteConfig';
+import { type Lang } from '../i18n/utils';
+
+const lang: Lang = 'en';
+---
+
+<Layout 
+  title="Terms of Service | SiteCarry"
+  description="Terms of service, project scope definitions, and warranty guidelines at SiteCarry."
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-sm text-slate-700 space-y-6 leading-relaxed">
+      
+      <div class="mb-10">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-2">Terms of Service</h1>
+        <p class="text-xs text-slate-500 font-mono">Effective Date: October 2026</p>
+      </div>
+
+      <p>
+        These Terms of Service govern the engagement and delivery of website migration, rebuild, and technical diagnostic services provided by SiteCarry (<code class="text-amber-900 font-mono bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/80">sitecarry.com</code>).
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">1. Scope of Work & Quotation Accuracy</h2>
+      <p>
+        All website migration proposals specify a defined scope, including page counts, article/taxonomy volume, template counts, and third-party integrations. Any feature, custom shortcode translation, or integration not expressly included in the written scope shall be treated as an add-on and quoted separately prior to implementation.
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">2. Client Ownership & Intellectual Property</h2>
+      <p>
+        Upon full settlement of agreed project fees, all bespoke frontend code, layout templates, styling tokens, and configuration scripts developed by SiteCarry for the client become the exclusive property of the client. Code is committed directly to the client's own version control repository (e.g., GitHub, GitLab).
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">3. Staging Review & Revisions</h2>
+      <p>
+        Standard build packages include <strong>2 consolidated rounds of client feedback</strong> on the private staging environment. Client feedback must be provided within agreed revision windows. Remedying defects to align with the agreed technical specification does not consume revision rounds.
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">4. 30-Day Post-Launch Warranty</h2>
+      <p>
+        SiteCarry provides a <strong>30-day post-launch warranty</strong> commencing immediately upon production DNS cutover. Under this warranty, SiteCarry will remediate any reproducible bugs, broken links within the agreed migration scope, or layout defects at zero additional cost. The warranty does not cover modifications made by third parties, new feature requests, or outages caused by external infrastructure providers.
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">5. SEO Continuity & Guarantees</h2>
+      <p>
+        SiteCarry commits to rigorous 1:1 URL mapping and 301 permanent redirect testing. However, search engine algorithms evaluate ranking based on hundreds of factors beyond on-page technical structure. While our procedures are designed to preserve existing indexation, we do not make unverifiable promises of guaranteed search rankings or traffic increases.
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">6. Inquiries & Legal Notices</h2>
+      <p>
+        For inquiries regarding service agreements or statement of work contracts, please contact <code class="text-amber-800 font-mono bg-amber-50 border border-amber-200/80 px-1.5 py-0.5 rounded">{siteConfig.contactEmail}</code>.
+      </p>
+
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,596 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getLocalizedPath, type Lang } from '../../i18n/utils';
+import { siteConfig } from '../../data/siteConfig';
+
+const lang: Lang = 'zh-tw';
+const estimatePath = getLocalizedPath('estimate', lang);
+const astroPath = getLocalizedPath('wordpress-to-astro', lang);
+const phpMigrationPath = getLocalizedPath('legacy-php-migration', lang);
+const guidePath = getLocalizedPath('guides/php2shell-wordpress-static-mitigation', lang);
+
+const phpMatrix = [
+  {
+    branch: "PHP 8.5",
+    status: "積極支援中 (Active)",
+    eolDate: "2028 年 11 月",
+    minSafeCve: "8.5.12+",
+    surcharge: "無附加費",
+    recommendation: "請確認已更新至 8.5.12+ 防禦 CVE-2026-109618",
+  },
+  {
+    branch: "PHP 8.4",
+    status: "積極支援中 (Active)",
+    eolDate: "2028 年 12 月",
+    minSafeCve: "8.4.27+",
+    surcharge: "無附加費",
+    recommendation: "請確認已更新至 8.4.27+ 防禦 CVE-2026-109618",
+  },
+  {
+    branch: "PHP 8.3",
+    status: "安全支援中 (Security Only)",
+    eolDate: "2027 年 12 月",
+    minSafeCve: "8.3.36+",
+    surcharge: "無附加費",
+    recommendation: "請確認已更新至 8.3.36+ 防禦 CVE-2026-109618",
+  },
+  {
+    branch: "PHP 8.2",
+    status: "即將停止維護 (Nearing EOL)",
+    eolDate: "2026 年 12 月",
+    minSafeCve: "8.2.35+",
+    surcharge: "2027 Q1 起加收附加費",
+    recommendation: "應立即升級至 8.2.35，並規劃靜態化或升級",
+  },
+  {
+    branch: "PHP 8.1",
+    status: "官方停止支援 (EOL)",
+    eolDate: "2025 年 12 月 (已過期)",
+    minSafeCve: "無官方補丁 (EOL)",
+    surcharge: "每月 $10–$25 美元附加費",
+    recommendation: "官方不再提供補丁。建議遷移至 Astro 靜態架構",
+  },
+  {
+    branch: "PHP 8.0",
+    status: "官方停止支援 (EOL)",
+    eolDate: "2023 年 11 月 (已過期)",
+    minSafeCve: "無官方補丁 (EOL)",
+    surcharge: "每月 $15–$35 美元附加費",
+    recommendation: "極高危險。建議徹底廢棄 PHP 運行時並重構為靜態邊緣站點",
+  },
+  {
+    branch: "PHP 7.4 / 7.x",
+    status: "官方停止支援 (EOL)",
+    eolDate: "2022 年 11 月 (已過期)",
+    minSafeCve: "無官方補丁 (EOL)",
+    surcharge: "每月 $20–$50 美元附加費",
+    recommendation: "嚴重技術債。外掛通常無法直升 PHP 8+，應遷移至純靜態",
+  },
+  {
+    branch: "PHP 5.6 / 5.x",
+    status: "官方停止支援 (EOL)",
+    eolDate: "2018 年 12 月 (已過期)",
+    minSafeCve: "無官方補丁 (EOL)",
+    surcharge: "主機商強制關停",
+    recommendation: "建議立即進行全站文章資料萃取與純靜態重構",
+  },
+];
+
+const faqs = [
+  {
+    q: "為什麼檢測結果顯示「PHP 版本已在公網標頭中隱藏」？",
+    a: "許多現代主機、反向代理伺服器或 CDN（如 Cloudflare 或配置了 expose_php = Off 的 Nginx）會過濾掉 X-Powered-By 標頭，防止自動化掃描器直接抓取。隱藏標頭是良好的資安習慣，但如果伺服器底層仍在執行未打補丁的老舊 PHP，依然無法抵禦深度漏洞攻擊。",
+  },
+  {
+    q: "哪些 PHP 版本受到 2026 年 10 月爆發的 PHP2shell (CVE-2026-109618) 漏洞影響？",
+    a: "從 PHP 5.4 到 8.5.11 的所有版本均受波及。PHP 官方已在 8.5.12、8.4.27、8.3.36 和 8.2.35 中發布修復補丁。而 PHP 8.1 及更早的 EOL 版本官方完全沒有補丁，處於無保護暴露狀態。",
+  },
+  {
+    q: "在不建立 phpinfo.php 檔案的情況下，如何在 WordPress 後台確認真實 PHP 版本？",
+    a: "請登入 WordPress 管理後台，點選「工具」→「網站健康」，點擊頂部的「資訊」分頁，展開「伺服器」區塊，即可查看精確的 PHP 版本與記憶體限制。請切勿在公網根目錄上傳 phpinfo.php，否則會直接洩漏主機敏感環境變數。",
+  },
+  {
+    q: "如果升級 PHP 版本導致老舊主題或外掛報錯白屏，該如何解決？",
+    a: "這是企業網站停留在 PHP 7.4 或 8.0 最常見的原因。強行升級老舊代碼耗時費力，且日後還會繼續過期。最徹底的做法是將公開前端遷移至現代純靜態架構（Astro），公網物理剔除 PHP 運行時，既能終生免除漏洞，又能 1:1 保全所有網址與歷史內容。",
+  },
+];
+
+const toolSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "SiteCarry PHP 版本與 HTTP 標頭資安速查工具",
+      "url": "https://sitecarry.com/zh-tw/php-version-checker/",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "All",
+      "description": "免費線上檢測網站是否在 HTTP 標頭中公開洩漏 PHP 版本、WordPress 運行痕跡或未修補的 EOL 停更分支（包含 CVE-2026-109618 PHP2shell）。"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": faqs.map((f) => ({
+        "@type": "Question",
+        "name": f.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": f.a
+        }
+      }))
+    }
+  ]
+};
+---
+
+<Layout 
+  title="免費 PHP 版本與資安漏洞速查工具 | 檢測 HTTP 標頭、EOL 狀態與 CVE-2026-109618"
+  description="免費檢測網站公網是否暴露 PHP 版本、WordPress 指紋痕跡、官方 EOL 停更狀態，以及是否符合 CVE-2026-109618 (PHP2shell) 安全修補基準。"
+  lang={lang}
+  schema={toolSchema}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- 1. HERO & INTERACTIVE SCANNER -->
+      <div class="max-w-4xl mx-auto text-center mb-16">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1c2024] tracking-tight mb-6 leading-[1.15]">
+          PHP 版本與公網標頭資安速查
+        </h1>
+        <p class="text-base sm:text-lg text-[#575f6e] max-w-2xl mx-auto leading-relaxed font-normal">
+          輸入任何網站網址，即時分析公網 HTTP 回應標頭是否洩漏 <code class="text-amber-900 bg-amber-50 px-1.5 py-0.5 rounded font-mono text-sm border border-amber-200/80">X-Powered-By: PHP</code> 指紋、是否運行於已停更（EOL）的危險分支，或存在動態 WordPress 攻擊面。
+        </p>
+      </div>
+
+      <!-- INTERACTIVE SCANNER CONSOLE -->
+      <div class="max-w-4xl mx-auto mb-24">
+        <div class="rounded-2xl border border-[#e8e6df] bg-white shadow-xs p-8 sm:p-10">
+          
+          <form id="php-check-form" class="space-y-4">
+            <label for="target-url-input" class="block text-sm font-semibold text-slate-800">
+              輸入欲檢測的網站網址（例如：https://example.com）
+            </label>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <input 
+                type="text" 
+                id="target-url-input" 
+                name="url" 
+                required 
+                placeholder="https://example.com"
+                class="flex-grow bg-[#faf9f6] border border-[#e8e6df] rounded-xl px-4 py-3.5 text-sm text-slate-900 font-mono focus:outline-none focus:border-amber-500 focus:bg-white focus:ring-1 focus:ring-amber-500 transition-all placeholder:text-slate-400"
+              />
+              <button 
+                type="submit" 
+                id="scan-submit-btn"
+                class="px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all cursor-pointer shrink-0 flex items-center justify-center gap-2"
+              >
+                <span id="scan-btn-text">立即檢測標頭</span>
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Preset Simulation Buttons for Instant Testing -->
+            <div class="pt-2 flex flex-wrap items-center gap-2 text-xs font-mono text-slate-500">
+              <span class="text-xs text-slate-500 font-sans">或點擊範例快速預覽：</span>
+              <button 
+                type="button" 
+                data-preset="eol-74"
+                class="preset-btn px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs text-slate-700 transition-colors cursor-pointer font-medium font-sans"
+              >
+                範例：暴露 PHP 7.4.33 (已停更 EOL)
+              </button>
+              <button 
+                type="button" 
+                data-preset="unpatched-83"
+                class="preset-btn px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs text-slate-700 transition-colors cursor-pointer font-medium font-sans"
+              >
+                範例：PHP 8.3.14 (需更新至 8.3.36+)
+              </button>
+              <button 
+                type="button" 
+                data-preset="static-edge"
+                class="preset-btn px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-xs text-amber-900 transition-colors cursor-pointer font-bold font-sans"
+              >
+                範例：SiteCarry 零 PHP 純靜態架構
+              </button>
+            </div>
+          </form>
+
+          <!-- Error Box -->
+          <div id="scan-error" class="hidden mt-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs font-mono text-amber-900"></div>
+
+          <!-- RESULTS PANEL -->
+          <div id="scan-results" class="hidden mt-8 pt-8 border-t border-[#e8e6df] space-y-6">
+            
+            <!-- Top Summary Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-4 p-4 rounded-xl bg-[#faf9f6] border border-[#e8e6df] font-mono text-xs">
+              <div class="flex items-center gap-2.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                <span class="text-slate-500 font-semibold font-sans">檢測標的：</span>
+                <span id="res-url" class="text-slate-900 font-bold truncate max-w-[260px] sm:max-w-md"></span>
+              </div>
+              <div class="flex items-center gap-4 text-xs font-sans">
+                <span class="text-slate-500">HTTP 狀態：<strong id="res-status" class="text-slate-900 font-mono">200</strong></span>
+                <span class="text-slate-300">•</span>
+                <span class="text-slate-500">響應延遲：<strong id="res-time" class="text-amber-700 font-mono">120ms</strong></span>
+              </div>
+            </div>
+
+            <!-- 3 Telemetry Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              
+              <!-- Card 1: Detected PHP Version -->
+              <div class="p-5 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-2">
+                <span class="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold block">公網 PHP 標頭</span>
+                <div id="res-php-version" class="text-2xl font-mono font-extrabold text-slate-900">Hidden</div>
+                <div id="res-php-badge" class="inline-block px-2.5 py-0.5 rounded-md bg-white border border-slate-200 text-[10px] font-mono text-slate-600 font-medium shadow-2xs">
+                  未公開廣播
+                </div>
+              </div>
+
+              <!-- Card 2: CVE-2026-109618 Baseline -->
+              <div class="p-5 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-2">
+                <span class="text-xs uppercase tracking-wider text-slate-500 font-semibold block">PHP2shell 最低安全補丁</span>
+                <div id="res-safe-min" class="text-lg font-mono font-bold text-slate-900">8.2.35 / 8.3.36+</div>
+                <p class="text-xs text-slate-500 font-normal">CVE-2026-109618 安全基準</p>
+              </div>
+
+              <!-- Card 3: CMS / Runtime Footprint -->
+              <div class="p-5 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-2">
+                <span class="text-xs uppercase tracking-wider text-slate-500 font-semibold block">運行時指紋特徵</span>
+                <div id="res-cms" class="text-lg font-mono font-bold text-slate-900">檢測中...</div>
+                <p id="res-edge" class="text-xs font-mono text-slate-500"></p>
+              </div>
+
+            </div>
+
+            <!-- Detailed Header & Signal Table -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              
+              <div class="lg:col-span-7 p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-700">
+                  工程診斷建議
+                </h3>
+                <p id="res-advisory" class="text-sm text-slate-700 leading-relaxed font-normal"></p>
+                
+                <div class="pt-3 border-t border-[#e8e6df]">
+                  <span class="text-xs text-slate-500 font-semibold block mb-2">偵測到的運行特徵：</span>
+                  <div id="res-signals" class="flex flex-wrap gap-2 text-xs font-mono"></div>
+                </div>
+              </div>
+
+              <div class="lg:col-span-5 p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-2.5 font-mono text-xs">
+                <h3 class="text-xs uppercase tracking-wider text-slate-700 font-bold mb-3 font-sans">
+                  HTTP 回應標頭詳情
+                </h3>
+                <div class="flex justify-between py-1.5 border-b border-[#e8e6df]">
+                  <span class="text-slate-500">X-Powered-By:</span>
+                  <span id="hdr-powered" class="text-slate-900 font-medium text-right truncate max-w-[180px]"></span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-[#e8e6df]">
+                  <span class="text-slate-500">Server:</span>
+                  <span id="hdr-server" class="text-slate-800 font-medium text-right truncate max-w-[180px]"></span>
+                </div>
+                <div class="flex justify-between py-1.5">
+                  <span class="text-slate-500">Edge / Proxy:</span>
+                  <span id="hdr-edge" class="text-slate-900 font-medium text-right truncate max-w-[180px]"></span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Conversion Callout Inside Scanner -->
+            <div class="p-8 rounded-2xl bg-[#fffcf5] border border-amber-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-2xs">
+              <div class="space-y-1.5 max-w-xl">
+                <p class="text-base font-bold text-slate-900">最安全的 PHP 版本，是公網完全零 PHP。</p>
+                <p class="text-sm text-slate-600 leading-relaxed font-normal">
+                  不必再為 PHP 停更附加費與緊急 RCE 漏洞補丁疲於奔命。我們協助您將老舊站點升級為 Astro 純靜態邊緣架構，1:1 保全所有 SEO 網址，主機費降為 $0。
+                </p>
+              </div>
+              <div class="shrink-0">
+                <a href={`${estimatePath}?goal=php-legacy`} class="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-all shadow-sm shadow-amber-500/20">
+                  免費預約現代化評估
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 2. 2026 PHP VERSION LIFECYCLE & CVE-2026-109618 MATRIX -->
+      <div class="max-w-6xl mx-auto mb-24">
+        <div class="mb-8">
+          <h2 class="text-2xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            PHP 版本支援週期、EOL 停更與 PHP2shell 修補對照表
+          </h2>
+          <p class="text-sm text-[#575f6e] max-w-3xl leading-relaxed">
+            對照您伺服器當前的 PHP 分支，了解 PHP 基金會官方停更時間、雲端主機商延伸支援附加費，以及防禦 <a href={guidePath} class="text-amber-800 font-semibold hover:underline">CVE-2026-109618 / CVE-2026-109619 (PHP2shell)</a> 所需的最低補丁版本。
+          </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-[#e8e6df] bg-white shadow-2xs">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-[#faf9f6] border-b border-[#e8e6df] text-slate-600 uppercase font-mono text-[10px] tracking-wider font-semibold">
+              <tr>
+                <th class="px-6 py-4">PHP 分支</th>
+                <th class="px-6 py-4">生命週期狀態</th>
+                <th class="px-6 py-4">官方停更日 (EOL)</th>
+                <th class="px-6 py-4">最低安全補丁</th>
+                <th class="px-6 py-4">主機延伸附加費</th>
+                <th class="px-6 py-4">建議工程處置</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#e8e6df] font-mono">
+              {phpMatrix.map((row) => (
+                <tr class="hover:bg-[#faf9f6]/70 transition-colors">
+                  <td class="px-6 py-4 font-bold text-slate-900">{row.branch}</td>
+                  <td class="px-6 py-4">
+                    <span class={`px-2.5 py-0.5 rounded-md text-[10px] border font-medium ${
+                      row.status.includes('積極')
+                        ? 'bg-amber-50 border-amber-200 text-amber-900 font-semibold'
+                        : row.status.includes('安全')
+                        ? 'bg-slate-100 border-slate-200 text-slate-700'
+                        : 'bg-stone-100 border-stone-200 text-stone-700'
+                    }`}>
+                      {row.status}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-slate-600">{row.eolDate}</td>
+                  <td class="px-6 py-4 font-bold text-amber-800">{row.minSafeCve}</td>
+                  <td class="px-6 py-4 text-slate-600">{row.surcharge}</td>
+                  <td class="px-6 py-4 font-sans text-slate-600">{row.recommendation}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 3. FAQS SECTION -->
+      <div class="max-w-4xl mx-auto mb-24">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-8 text-center">
+          常見問題解答 (FAQ)
+        </h2>
+        <div class="space-y-4">
+          {faqs.map((faq) => (
+            <div class="p-6 rounded-2xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+              <h3 class="text-base font-bold text-slate-900">{faq.q}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed font-normal">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- 4. BOTTOM CALL TO ACTION -->
+      <div class="p-8 sm:p-12 rounded-2xl bg-[#fffcf5] border border-amber-200/80 text-center max-w-4xl mx-auto space-y-6 shadow-xs">
+        <div class="space-y-2">
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            想徹底擺脫 PHP 漏洞焦慮與伺服器維護成本？
+          </h3>
+          <p class="text-sm text-slate-600 max-w-xl mx-auto">
+            我們提供客製老站數據清洗萃取、Astro 純靜態重構與 1:1 網址對齊服務。歡迎提交網址獲取免費架構評估。
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a 
+            href={phpMigrationPath} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            檢視老舊 PHP 現代化方案
+          </a>
+          <a 
+            href={`${estimatePath}?goal=php-legacy`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            免費預約架構檢測
+          </a>
+        </div>
+
+        <p class="text-xs text-slate-500 pt-2">
+          官方信箱： 
+          <a href={`mailto:${siteConfig.contactEmail}`} class="font-mono text-amber-800 hover:text-amber-900 font-semibold underline underline-offset-2 ml-1">
+            {siteConfig.contactEmail}
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const form = document.getElementById('php-check-form') as HTMLFormElement;
+  const input = document.getElementById('target-url-input') as HTMLInputElement;
+  const submitBtn = document.getElementById('scan-submit-btn') as HTMLButtonElement;
+  const btnText = document.getElementById('scan-btn-text');
+  const errorBox = document.getElementById('scan-error');
+  const resultsBox = document.getElementById('scan-results');
+
+  const resUrl = document.getElementById('res-url');
+  const resStatus = document.getElementById('res-status');
+  const resTime = document.getElementById('res-time');
+  const resPhpVersion = document.getElementById('res-php-version');
+  const resPhpBadge = document.getElementById('res-php-badge');
+  const resSafeMin = document.getElementById('res-safe-min');
+  const resCms = document.getElementById('res-cms');
+  const resEdge = document.getElementById('res-edge');
+  const resAdvisory = document.getElementById('res-advisory');
+  const resSignals = document.getElementById('res-signals');
+  const hdrPowered = document.getElementById('hdr-powered');
+  const hdrServer = document.getElementById('hdr-server');
+  const hdrEdge = document.getElementById('hdr-edge');
+
+  const presets: Record<string, any> = {
+    'eol-74': {
+      scannedUrl: 'https://legacy-b2b-example.com',
+      statusCode: 200,
+      responseTimeMs: 1420,
+      phpAnalysis: {
+        version: '7.4.33',
+        statusLabel: '官方停更 (PHP 7.4) · 未修補',
+        safeMinimum: '升級至 8.3.36+ 或 Astro 靜態化',
+        advisory: 'PHP 7.4.33 於 2022 年 11 月正式停止官方維護，不再獲得任何安全修補。該網站正透過 X-Powered-By 標頭向公網廣播版本，並直接暴露於 CVE-2026-109618 (PHP2shell) 漏洞風險中。',
+      },
+      isWordPress: true,
+      wpVersion: '6.2.4',
+      signals: [
+        'X-Powered-By: PHP/7.4.33',
+        'WP REST API 連結標頭 (api.w.org)',
+        'WordPress 靜態資源路徑 (/wp-content/)',
+        'Meta 生成器標籤 (WordPress 6.2.4)',
+      ],
+      headers: {
+        xPoweredBy: 'PHP/7.4.33',
+        server: 'Apache/2.4.54 (Ubuntu)',
+        edgeCache: '直連主機 / 無 CDN 快取',
+      },
+    },
+    'unpatched-83': {
+      scannedUrl: 'https://corporate-wp-sample.org',
+      statusCode: 200,
+      responseTimeMs: 680,
+      phpAnalysis: {
+        version: '8.3.14',
+        statusLabel: '補丁過期 (需更新至 8.3.36+)',
+        safeMinimum: '8.3.36',
+        advisory: 'PHP 8.3.14 處於活躍分支，但其補丁版本低於 2026 年 10 月發布的 CVE-2026-109618 緊急修復版 (8.3.36)。建議立即更新 PHP-FPM 並在 php.ini 中關閉 expose_php = Off。',
+      },
+      isWordPress: true,
+      wpVersion: '6.6.2',
+      signals: [
+        'X-Powered-By: PHP/8.3.14',
+        'WP REST API 標頭 (api.w.org)',
+        'PHPSESSID 動態 Cookie',
+      ],
+      headers: {
+        xPoweredBy: 'PHP/8.3.14',
+        server: 'nginx/1.24.0',
+        edgeCache: '標準 HTTP 直連',
+      },
+    },
+    'static-edge': {
+      scannedUrl: 'https://sitecarry.com',
+      statusCode: 200,
+      responseTimeMs: 38,
+      phpAnalysis: {
+        version: null,
+        statusLabel: '公網物理零 PHP 暴露',
+        safeMinimum: '物理免疫 (Astro 純靜態)',
+        advisory: '未檢測到任何公網 PHP 運行時或 X-Powered-By 標頭。所有頁面均為預渲染 HTML 純靜態，自邊緣節點極速分發，物理消滅了包含 CVE-2026-109618 在內的所有 PHP 遠端代碼執行攻擊面。',
+      },
+      isWordPress: false,
+      wpVersion: null,
+      signals: ['未偵測到 PHP 或 WordPress 動態特徵'],
+      headers: {
+        xPoweredBy: '已隱藏 / 無',
+        server: 'cloudflare',
+        edgeCache: 'Cloudflare (HIT 邊緣快取)',
+      },
+    },
+  };
+
+  function renderReport(data: any) {
+    if (!resultsBox) return;
+    errorBox?.classList.add('hidden');
+    resultsBox.classList.remove('hidden');
+
+    if (resUrl) resUrl.textContent = data.finalUrl || data.scannedUrl;
+    if (resStatus) resStatus.textContent = String(data.statusCode || 200);
+    if (resTime) resTime.textContent = `${data.responseTimeMs || 0}ms`;
+
+    const analysis = data.phpAnalysis || {};
+    if (resPhpVersion) {
+      resPhpVersion.textContent = analysis.version ? `PHP ${analysis.version}` : '已隱藏 / 無';
+    }
+    if (resPhpBadge) {
+      resPhpBadge.textContent = analysis.statusLabel || '已檢測';
+    }
+    if (resSafeMin) {
+      resSafeMin.textContent = analysis.safeMinimum || '8.3.36+';
+    }
+    if (resCms) {
+      resCms.textContent = data.isWordPress
+        ? `WordPress ${data.wpVersion ? `(${data.wpVersion})` : '已檢測出'}`
+        : data.impliesPhpRuntime
+        ? '動態 PHP 運行時'
+        : '純靜態 / 未公開';
+    }
+    if (resEdge) {
+      resEdge.textContent = data.headers?.edgeCache || '標準 HTTP';
+    }
+    if (resAdvisory) {
+      resAdvisory.textContent = analysis.advisory || '檢測完成。';
+    }
+
+    if (resSignals) {
+      resSignals.innerHTML = '';
+      const list = data.signals || [];
+      if (list.length === 0) {
+        const span = document.createElement('span');
+        span.className = 'text-slate-500 font-sans';
+        span.textContent = '無特殊指紋暴露';
+        resSignals.appendChild(span);
+      } else {
+        list.forEach((sig: string) => {
+          const badge = document.createElement('span');
+          badge.className = 'px-2 py-0.5 rounded-md bg-amber-50 border border-amber-200/80 text-amber-900 text-[11px]';
+          badge.textContent = sig;
+          resSignals.appendChild(badge);
+        });
+      }
+    }
+
+    if (hdrPowered) hdrPowered.textContent = data.headers?.xPoweredBy || 'None / Stripped';
+    if (hdrServer) hdrServer.textContent = data.headers?.server || 'Undisclosed';
+    if (hdrEdge) hdrEdge.textContent = data.headers?.edgeCache || 'None detected';
+  }
+
+  // Handle Preset Buttons
+  document.querySelectorAll('.preset-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const key = btn.getAttribute('data-preset');
+      if (key && presets[key]) {
+        if (input) input.value = presets[key].scannedUrl;
+        renderReport(presets[key]);
+      }
+    });
+  });
+
+  // Handle Form Submission
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const url = input?.value.trim();
+    if (!url) return;
+
+    if (submitBtn) submitBtn.disabled = true;
+    if (btnText) btnText.textContent = '檢測中...';
+    errorBox?.classList.add('hidden');
+
+    try {
+      const res = await fetch('/api/php-check', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+      });
+
+      const json = await res.json();
+      if (!res.ok) {
+        throw new Error(json.error || '檢測失敗，請確認該網址能從公網正常訪問。');
+      }
+
+      renderReport(json);
+    } catch (err: any) {
+      if (errorBox) {
+        errorBox.textContent = `檢測錯誤：${err.message}`;
+        errorBox.classList.remove('hidden');
+      }
+      resultsBox?.classList.add('hidden');
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+      if (btnText) btnText.textContent = '立即檢測標頭';
+    }
+  });
+</script>

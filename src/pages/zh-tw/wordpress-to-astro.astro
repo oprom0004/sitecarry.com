@@ -1,0 +1,325 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PricingTable from '../../components/PricingTable.astro';
+import { getLocalizedPath, type Lang } from '../../i18n/utils';
+import { siteConfig } from '../../data/siteConfig';
+
+const lang: Lang = 'zh-tw';
+const estimatePath = getLocalizedPath('estimate', lang);
+const pricingPath = getLocalizedPath('pricing', lang);
+
+const comparisonRows = [
+  {
+    metric: "客戶端 JavaScript 體積",
+    legacy: "幾 MB（龐大 React/Vue 運行時或十幾種外掛 JS 腳本）",
+    sitecarry: "預設 0KB（Astro 群島架構，僅按需載入互動組件）",
+  },
+  {
+    metric: "頁面渲染機制",
+    legacy: "伺服器即時計算（每次點擊均需即時執行 PHP 與 SQL）",
+    sitecarry: "事前預渲染（發布前預編譯為純淨靜態 HTML）",
+  },
+  {
+    metric: "全球首字節響應時間 (TTFB)",
+    legacy: "800ms ～ 2,500ms（隨伺服器負載與地理距離劇烈波動）",
+    sitecarry: "小於 50ms（由全球 300+ CDN 邊緣節點就近直出）",
+  },
+  {
+    metric: "每月主機與伺服器成本",
+    legacy: "每月 $50 ～ $250+ 美元（高規格 VPS、快取插件與安全防護費）",
+    sitecarry: "每月 $0（享受全球邊緣雲端 CDN 免費層）",
+  },
+  {
+    metric: "公網資安與 CVE 防禦",
+    legacy: "持續暴露（需日夜應對 PHP 遠程代碼執行與資料庫注入）",
+    sitecarry: "物理免疫（公網無任何 PHP 解釋器或資料庫端口）",
+  },
+  {
+    metric: "圖片壓縮與格式轉換",
+    legacy: "需安裝付費外掛，後台轉換耗盡 CPU 並佔據主機空間",
+    sitecarry: "構建期自動轉換為 AVIF / WebP 格式，體積銳減 70%",
+  },
+];
+
+const faqs = [
+  {
+    q: "轉為 Astro 純靜態後，網站上的聯絡表單和留言功能還能用嗎？",
+    a: "完全可以正常使用。Astro 採用「群島架構」（Islands Architecture），我們透過無伺服器端點（Serverless Edge Function）來處理表單提交，並內建高強度反垃圾郵件驗證，詢盤直接即時推送至您的企業信箱與 CRM，完全不需要維護脆弱的 PHP 郵件外掛。",
+  },
+  {
+    q: "Astro 和 Next.js 或 Gatsby 相比，有什麼本質上的優勢？",
+    a: "Next.js 和 Gatsby 即使預渲染 HTML，也會在瀏覽器端強制加載巨大的 JavaScript 運行時（Hydration 過程），導致手機端容易產生卡頓與延遲。而 Astro 預設完全剔除無用 JS，只在真正需要互動的按鈕或輪播圖上局部加載極少量 JS，帶來極致的手機載入效能與綠燈滿分。",
+  },
+  {
+    q: "我們習慣在 WordPress 後台排版發文，轉為 Astro 後會影響日常編輯嗎？",
+    a: "不會。我們提供兩種靈活模式：一種是「無頭 WordPress 模式」，您的團隊依然登入熟悉的 WordPress 後台寫稿，發布時透過 Webhook 自動觸發 Astro 邊緣編譯；另一種是升級為「Git 雲端編輯器（如 Keystatic）」，文案人員能在現代化極速界面中寫作，徹底關閉 WordPress 伺服器，節省全部主機費用。",
+  },
+  {
+    q: "網站有幾百篇歷史文章，遷移到 Astro 的編譯時間會很長嗎？",
+    a: "Astro 具備極致的構建效能，數百篇文章通常在 10～30 秒內即可完成全量靜態編譯並推送到全球 CDN 節點。無論是單篇更新或全站發布，都能在短時間內完成全球邊緣同步。",
+  },
+];
+---
+
+<Layout 
+  title="WordPress 轉 Astro 極速純靜態遷移 (WordPress to Astro) | 0.8 秒秒開與 $0 主機月費"
+  description="將傳統動態 WordPress 網站升級為現代 Astro 純靜態架構。獨創群島架構與 0KB 冗餘 JS，Google PageSpeed 99+ 滿分，公網零攻擊面，每月主機費降為 $0。"
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- HERO SECTION (核心關鍵詞置頂，無破 Badge 藥丸，無孤行箭頭) -->
+      <div class="max-w-4xl mx-auto text-center mb-20">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1c2024] tracking-tight mb-6 leading-[1.15]">
+          WordPress 轉 Astro 極速純靜態遷移
+          <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-600 block mt-3 font-sans">
+            徹底剔除動態伺服器負擔 · 實現 0.8 秒秒開與 $0 主機月費
+          </span>
+        </h1>
+        <p class="text-base sm:text-lg text-[#575f6e] max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+          在發布前將所有頁面預先編譯為純淨 HTML/CSS，透過全球 300+ CDN 雲端節點秒級分發。公網物理剔除 PHP 執行環境與動態資料庫，極致提速的同時，每月主機維護成本直接降為 $0。
+        </p>
+
+        <!-- Dual-Track Action Buttons (純淨專業，無多餘箭頭) -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            線上選購方案 · 支付定金
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-astro`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            免費取得 Astro 移轉評估
+          </a>
+        </div>
+      </div>
+
+      <!-- SECTION 1: PAIN POINTS (為什麼傳統動態計算越來越難以忍受？) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            錢花了不少、網站依然卡慢？傳統 WordPress 正在消耗您的業務：
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            傳統 WordPress 是典型的「動態即時計算」架構——每次有訪客點擊，伺服器都要執行上百次 PHP 解釋與 MySQL 資料庫查詢，先天就背負著巨大的效能與維護包袱。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">01</div>
+            <h3 class="text-lg font-bold text-slate-900">每個月都在交昂貴的主機「保護費」</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              為了讓 WordPress 不卡死，被迫購買每月幾十甚至上百美元的高規格主機（Kinsta、WP Engine、雲端 VPS）。一但降級規格，後台卡鈍、前台頻繁逾時（504 Gateway Timeout）。
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">02</div>
+            <h3 class="text-lg font-bold text-slate-900">Google 測速常年滿江紅，SEO 排名吃虧</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Google PageSpeed 分數只有三四十分，即使裝了 3 套快取外掛依然無法通過 Core Web Vitals 指標。Google 爬蟲抓取頻率低下，新文章發布數週都無法順利收錄。
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">03</div>
+            <h3 class="text-lg font-bold text-slate-900">伺服器動態維護心力交瘁</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              定期要擔心伺服器磁碟滿了、MySQL 資料庫鎖死崩潰、PHP 版本被迫升級導致外掛報錯。一旦網站當機，業務主管半夜到處找外包救火。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: ARCHITECTURE COMPARISON (動態 WordPress vs. Astro 純靜態對照表) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-10">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            傳統動態伺服器 vs. Astro 純靜態邊緣架構深度對照
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            從根本運算架構上實現降維打擊，徹底擺脫伺服器端動態計算的效能瓶頸：
+          </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-[#e8e6df] bg-white shadow-2xs">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-[#faf9f6] border-b border-[#e8e6df] text-slate-600 uppercase font-mono text-[10px] tracking-wider font-semibold">
+              <tr>
+                <th class="px-6 py-4 w-1/4">比較維度</th>
+                <th class="px-6 py-4 w-3/8 text-slate-500">傳統動態 WordPress</th>
+                <th class="px-6 py-4 w-3/8 text-amber-900 font-bold bg-amber-50/50">Astro 現代純靜態架構</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#e8e6df]">
+              {comparisonRows.map((row) => (
+                <tr class="hover:bg-[#faf9f6]/70 transition-colors">
+                  <td class="px-6 py-4 font-bold text-slate-900 font-sans">{row.metric}</td>
+                  <td class="px-6 py-4 text-slate-500 font-normal leading-relaxed">{row.legacy}</td>
+                  <td class="px-6 py-4 text-slate-900 font-semibold bg-amber-50/30 leading-relaxed">{row.sitecarry}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SECTION 3: ASTRO 4 SUPERPOWERS (Astro 4 大技術革新) -->
+      <div class="mb-24 p-8 sm:p-12 rounded-2xl bg-white border border-[#e8e6df] shadow-xs space-y-8">
+        <div class="max-w-3xl">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            為什麼全球頂尖團隊紛紛將內容網站遷往 Astro？
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Astro 是專為「內容密集型網站」量身訂做的現代前端架構，徹底打破了傳統動態網站的瓶頸：
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">1. 獨創「群島架構」（預設 0KB 冗餘 JavaScript）</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              市面上多數框架（如 Next.js、Gatsby）就算預渲染靜態，也會塞入幾 MB 的 JS 運行時（Hydration），手機依然卡頓。Astro 預設剔除所有無用 JS，輸出極度精純的 HTML5，只有需要互動的小組件才按需載入極少量 JS，帶來教科書級別的極限效能。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">2. 靜態預渲染（Ahead-of-Time Pre-rendering）</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              所有的文章、頁面與分類在發布前就已經完成「烘焙」。訪客進入時無需消耗任何伺服器 CPU 做動態資料庫查詢，直接從全球最近的 CDN 節點返回靜態快取，全球加載時間小於 0.8 秒。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">3. 公開攻擊面物理歸零</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              公網上沒有開放端口的 MySQL、沒有正在執行的 PHP 解釋器。黑客常見的 SQL 注入、遠端代碼執行（RCE）、外掛後門木馬在物理上連攻擊目標都沒有，徹底斬斷資安噩夢。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">4. 原生圖片現代格式自動壓縮</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              以往 WordPress 需要安裝好幾個付費外掛才能壓縮圖片。Astro 在構建時自動將您所有的歷史圖片轉換為現代 AVIF / WebP 格式，在畫質肉眼無損的前提下減少 70% 體積，大幅節省手機頻寬。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: TANGIBLE BENEFITS (4 大實質商業收益) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            遷移至 Astro 後，您將直接獲得的 4 大商業收益：
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            這不是為了追趕技術時髦，而是為了幫企業降低真實開支、搶佔搜尋流量與提升業務轉化。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">01</div>
+            <h3 class="text-base font-bold text-slate-900">每月主機費用直接為 $0</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              直接託管在 Cloudflare Pages 等全球 CDN 雲端免費額度，一分錢主機月租不用交，一年直接省下幾千塊現金流。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">02</div>
+            <h3 class="text-base font-bold text-slate-900">Google 測速常年 99~100 分</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              手機端 0.8 秒秒開，Core Web Vitals 全綠通過，Google 搜尋排名權重顯著上升，訪客流失率大幅降低。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">03</div>
+            <h3 class="text-base font-bold text-slate-900">原生適配 AI 搜尋（GEO）</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              純淨語意化 HTML 內嵌 JSON-LD 知識圖譜，ChatGPT、Perplexity、Gemini 等 AI 搜尋引擎檢索與引用精確度提升數倍。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">04</div>
+            <h3 class="text-base font-bold text-slate-900">永久零維護負擔</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              沒有伺服器要重啟、沒有資料庫會崩潰、沒有補丁要打。上線後放著幾年都穩如泰山，完全不需要網管維護。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: SPECIFIC FAQS -->
+      <div class="max-w-4xl mx-auto mb-24">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-8 text-center">
+          WordPress 轉 Astro 常見問題
+        </h2>
+        <div class="space-y-4">
+          {faqs.map((faq) => (
+            <div class="p-6 rounded-2xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+              <h3 class="text-base font-bold text-slate-900">{faq.q}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed font-normal">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- SECTION 6: PRICING -->
+      <div class="mb-24" id="pricing">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            WordPress 轉 Astro 透明方案與規格
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            固定總價合約，包含全量文章清洗、1:1 網址對齊驗證與上線後 30 天瑕疵保固。
+          </p>
+        </div>
+
+        <PricingTable lang={lang} />
+      </div>
+
+      <!-- SECTION 7: FINAL DUAL-TRACK CALL TO ACTION (純淨無箭頭) -->
+      <div class="p-8 sm:p-12 rounded-2xl bg-[#fffcf5] border border-amber-200/80 text-center max-w-4xl mx-auto space-y-6 shadow-xs">
+        <div class="space-y-2">
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            準備好讓您的網站享受毫秒級秒開與 $0 主機月費了嗎？
+          </h3>
+          <p class="text-sm text-slate-600 max-w-xl mx-auto">
+            歡迎提供您現有的網站網址。我們的工程師將免費評估您的老站結構，並提供具體遷移規格與固定合約總價。
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            線上選購方案 · 支付定金
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-astro`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            免費獲取 Astro 移轉評估
+          </a>
+        </div>
+
+        <p class="text-xs text-slate-500 pt-2">
+          不想填寫表單？亦可直接寄信至 
+          <a href={`mailto:${siteConfig.contactEmail}`} class="font-mono text-amber-800 hover:text-amber-900 font-semibold underline underline-offset-2 ml-1">
+            {siteConfig.contactEmail}
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</Layout>

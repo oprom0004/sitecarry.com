@@ -1,0 +1,31 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import EstimateForm from '../../components/EstimateForm.astro';
+import { type Lang } from '../../i18n/utils';
+
+const lang: Lang = 'ja';
+const tier = Astro.url.searchParams.get('tier') || '';
+---
+
+<Layout 
+  title="お見積り・移行相談 | WordPressリニューアル専門"
+  description="老朽化したWordPressの移行・リニューアルに関する無料お見積り相談。技術診断と固定総額プランをご案内いたします。"
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-white border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
+          移行・リニューアルのお見積り
+        </h1>
+        <p class="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
+          強引な営業電話や不透明な追加請求は一切ありません。現行サイトのURLとお悩みをお知らせいただければ、技術的見地からの具体的な移行案をお届けします。
+        </p>
+      </div>
+
+      <EstimateForm lang={lang} preselectedTier={tier} />
+
+    </div>
+  </div>
+</Layout>

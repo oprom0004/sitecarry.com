@@ -1,0 +1,75 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getLocalizedPath, type Lang } from '../../../i18n/utils';
+
+const lang: Lang = 'zh-tw';
+const estimatePath = getLocalizedPath('estimate', lang);
+
+const articles = [
+  {
+    slug: "php2shell-wordpress-static-mitigation",
+    image: "/images/guide-zero-attack-surface.png",
+    tag: "資安架構深度解析",
+    date: "2026 年 10 月 22 日",
+    title: "PHP2shell (CVE-2026-109618) 與無休止的漏洞修補惡夢：為什麼企業級 WordPress 必須採用純靜態解耦架構？",
+    excerpt: "從工程架構視角深度拆解近期 PHP 核心未授權遠端代碼執行 (RCE) 漏洞，分析為何將企業 WordPress 遷移至 Edge CDN 純靜態架構，能從根本上徹底終結反覆被黑客入侵與緊急打補丁的被動死循環。",
+    readTime: "閱讀時間約 6 分鐘",
+  },
+];
+---
+
+<Layout 
+  title="技術指南與資安分析報告 | SiteCarry 網站遷移專家"
+  description="深入探討 WordPress 現代化遷移、1:1 舊網址 301 轉址保全、Google Core Web Vitals 90+ 效能調校，以及純靜態解耦架構徹底防禦 PHP 漏洞的工程實踐。"
+  lang={lang}
+>
+  <div class="py-16 sm:py-24 bg-gradient-to-b from-slate-50 via-white to-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="max-w-3xl mb-16">
+        <span class="text-xs font-mono uppercase tracking-widest text-blue-600 font-semibold mb-2 block">技術知識庫與架構分析</span>
+        <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
+          網站現代化遷移技術指南
+        </h1>
+        <p class="text-base text-slate-600 leading-relaxed font-normal">
+          專為技術主管、企業主與數位總監撰寫的深度工程分析，助您在網站改版遷移中避開黑客入侵、SEO 斷崖式暴跌與維護失控陷阱。
+        </p>
+      </div>
+
+      <div class="max-w-5xl">
+        {articles.map((art) => (
+          <article class="rounded-3xl bg-white border border-slate-200 hover:border-amber-400 overflow-hidden shadow-sm hover:shadow-md transition-all grid grid-cols-1 lg:grid-cols-12">
+            <div class="lg:col-span-5 relative bg-slate-100 overflow-hidden group min-h-[240px]">
+              <img 
+                src={art.image} 
+                alt={art.title} 
+                class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+              />
+            </div>
+            <div class="lg:col-span-7 p-8 sm:p-10 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between text-xs font-mono text-slate-500 mb-4">
+                  <span class="text-amber-700 font-bold uppercase tracking-wider">{art.tag}</span>
+                  <span>{art.date}</span>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-900 mb-3 hover:text-amber-700 transition-colors leading-snug">
+                  <a href={getLocalizedPath(`guides/${art.slug}`, lang)}>{art.title}</a>
+                </h2>
+                <p class="text-xs text-slate-600 leading-relaxed mb-6">
+                  {art.excerpt}
+                </p>
+              </div>
+              <div class="flex items-center justify-between pt-4 border-t border-slate-200 text-xs font-mono">
+                <span class="text-slate-500">{art.readTime}</span>
+                <a href={getLocalizedPath(`guides/${art.slug}`, lang)} class="text-amber-700 hover:text-amber-900 transition-colors font-semibold">
+                  閱讀完整技術解析
+                </a>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+
+    </div>
+  </div>
+</Layout>

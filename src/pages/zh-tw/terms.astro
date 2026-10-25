@@ -1,0 +1,58 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { siteConfig } from '../../data/siteConfig';
+import { type Lang } from '../../i18n/utils';
+
+const lang: Lang = 'zh-tw';
+---
+
+<Layout 
+  title="服務條款與品質保證 | SiteCarry"
+  description="SiteCarry 網站遷移、改版與現代化服務合約規範與 30 天瑕疵保固說明。"
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-sm text-slate-700 space-y-6 leading-relaxed">
+      
+      <div class="mb-10">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-2">服務協議與合約條款</h1>
+        <p class="text-xs text-slate-500 font-mono">生效日期：2026 年 10 月</p>
+      </div>
+
+      <p>
+        本服務條款規範客戶委任 SiteCarry（<code class="text-amber-900 font-mono bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/80">sitecarry.com</code>）執行網站遷移、整站重構、無頭架構現代化及相關工程交付之權利與義務。
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">1. 工程範圍與報價約定</h2>
+      <p>
+        SiteCarry 所有專案皆採固定範圍合約（Fixed-Scope），明確記載包含之頁面數、文章數量、響應式模板套數與第三方整合項目。若在開發過程中提出超出原書面範圍之新增功能或客製需求，雙方應在實作前確認追加工期與報價。
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">2. 代碼產權歸屬</h2>
+      <p>
+        在客戶結清合約約定之全額款項後，SiteCarry 為該專案所編寫之客製前端代碼、佈局組件、樣式配置與自動化部署腳本，產權全數歸客戶所有。代碼將直接提交至客戶指定的自有版本控制倉庫（如 GitHub / GitLab）。
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">3. 測試環境審閱與驗收</h2>
+      <p>
+        標準方案包含私有預覽環境（Staging）之完整驗收流程，提供 <strong>2 輪彙總性修改反饋</strong>。修復未符合原約定技術規範之缺陷，不計入修改輪次。
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">4. 上線後 30 天免費瑕疵保固</h2>
+      <p>
+        專案於正式切換生產環境 DNS 之日起，享有為期 <strong>30 天之免費瑕疵保固</strong>。保固期內，若發現任何符合原合約範圍之可重現 Bug、斷鏈（404）或排版缺陷，SiteCarry 提供免費排查修復。保固範圍不包含第三方任意修改代碼、未約定之新功能追加、或外部雲端服務商之基礎建設故障。
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">5. SEO 延續性責任聲明</h2>
+      <p>
+        SiteCarry 嚴格執行 1:1 網址映射與邊緣 301 永久重定向測試，最大程度保全既有收錄與權重。惟搜尋引擎排名由數百項演算法指標共同決定，我們絕不做出違背工程倫理之「排名必升」或「流量翻倍」等虛假保證。
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">6. 合約諮詢與法律聯絡</h2>
+      <p>
+        若您對服務協議或專案合約條款有任何疑問，歡迎寄信至 <code class="text-amber-800 font-mono bg-amber-50 border border-amber-200/80 px-1.5 py-0.5 rounded">{siteConfig.contactEmail}</code>。
+      </p>
+
+    </div>
+  </div>
+</Layout>

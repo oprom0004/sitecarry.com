@@ -1,0 +1,320 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PricingTable from '../../components/PricingTable.astro';
+import { getLocalizedPath, type Lang } from '../../i18n/utils';
+import { siteConfig } from '../../data/siteConfig';
+
+const lang: Lang = 'zh-tw';
+const estimatePath = getLocalizedPath('estimate', lang);
+const pricingPath = getLocalizedPath('pricing', lang);
+
+const comparisonRows = [
+  {
+    metric: "主機商 EOL 延伸維護費",
+    legacy: "每月被強收 $15 ～ $45 美元附加費，且面臨強制停機通牒",
+    sitecarry: "附加費永久降為 $0（託管於 Cloudflare 全球 CDN 免費層）",
+  },
+  {
+    metric: "CVE 遠程代碼執行漏洞",
+    legacy: "高危險（PHP 5.6/7.x 官方無補丁，PHP2shell 等 RCE 隨時淪陷）",
+    sitecarry: "物理免疫（公網無 PHP 解析器與資料庫，黑客失去攻擊目標）",
+  },
+  {
+    metric: "歷史 .php?id= 舊網址權重",
+    legacy: "改版重做往往推翻網址，導致幾千個收錄全變 404 死鏈",
+    sitecarry: "CDN 邊緣正則 1:1 映射至語意化網址，PageRank 100% 傳遞",
+  },
+  {
+    metric: "全站載入速度 (TTFB)",
+    legacy: "2.5 ～ 5.0 秒（原生 PHP 慢查詢與伺服器硬體老化）",
+    sitecarry: "小於 0.8 秒（全球 300+ 邊緣節點毫秒響應）",
+  },
+  {
+    metric: "代碼可維護性與文檔",
+    legacy: "十幾年前未規範的意大利麵代碼，缺乏文檔，後續工程師不敢碰",
+    sitecarry: "數據乾淨萃取，採用標準現代 Git 版本控制，代碼資產歸客戶所有",
+  },
+];
+
+const faqs = [
+  {
+    q: "十幾年前開發的原生 PHP 網站，完全沒有技術文檔，你們能夠遷移嗎？",
+    a: "可以。我們具備豐富的逆向工程與數據庫萃取經驗。我們不依賴舊有的 PHP 執行代碼，而是透過專屬工具直接對接 MySQL 資料庫分析數據表結構，無損導出文章、產品、圖庫與分類，重構為結構化內容庫。",
+  },
+  {
+    q: "舊網址都是 /product.php?id=88 這種帶參數的格式，轉成現代網址會掉排名嗎？",
+    a: "不會。我們在 Cloudflare 邊緣 CDN 撰寫高精度的正規表達式（Edge Regex）規則，當訪客或 Google 爬蟲請求舊的 .php?id=88 時，邊緣節點會在 50ms 內自動以 HTTP 301 永久重定向引導至對應的現代語意化網址（如 /products/item-slug/），搜尋引擎會將累積的歷史權重 100% 傳遞給新網址。",
+  },
+  {
+    q: "主機商已經發信通知下個月強制停機關閉 PHP 7，時間上來得及嗎？",
+    a: "來得及。對於面臨強制關停緊急通牒的客戶，我們提供「緊急快照備份與過渡通道」，可在數日內先將網站核心內容與數據庫安全備份並建立邊緣快照防護，避免網站因主機商斷水斷電而直接在公網失聯。",
+  },
+  {
+    q: "遷移後，我們需要每個月繼續向主機商繳交 PHP 延伸維護費嗎？",
+    a: "完全不需要。新網站構建為純靜態現代架構後，直接部署在全球邊緣雲端免費層。您可以在驗收完成後立即關閉老舊的動態 VPS 或 cPanel 虛擬主機，徹底終結所有 PHP 延伸維護附加費與主機月費。",
+  },
+];
+---
+
+<Layout 
+  title="老舊客製 PHP 網站現代化遷移 (Legacy PHP Migration) | 徹底終結漏洞入侵與反覆被黑噩夢"
+  description="專為原生 PHP 與客製系統打造。公網物理剔除 PHP 執行環境，黑客在物理層面失去攻擊載體，徹底終結 CVE 漏洞入侵與反覆被黑噩夢，.php 與 .php?id= 舊網址 1:1 邊緣 301 映射，無損遷往現代極速架構。"
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- HERO SECTION (核心關鍵詞置頂，無破 Badge 藥丸，無孤行箭頭) -->
+      <div class="max-w-4xl mx-auto text-center mb-20">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1c2024] tracking-tight mb-6 leading-[1.15]">
+          老舊客製 PHP 網站現代化遷移
+          <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-600 block mt-3 font-sans">
+            徹底終結公網 PHP 漏洞入侵與反覆被黑噩夢 · 歷史 .php 網址 1:1 邊緣保全
+          </span>
+        </h1>
+        <p class="text-base sm:text-lg text-[#575f6e] max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+          公網 PHP 漏洞層出不窮（從遠程代碼執行到各類 0-day），黑客自動化腳本全網掃描，老站隨時可能被攻破植入勒索後門或垃圾郵件木馬。我們將您的資料庫與內容徹底解耦為零攻擊面的現代純靜態架構，公網物理剔除 PHP 執行環境，黑客失去攻擊載體，所有歷史 .php 網址 1:1 毫髮無損承接。
+        </p>
+
+        <!-- Dual-Track Action Buttons (純淨專業，無多餘箭頭) -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            線上選購方案 · 支付定金
+          </a>
+          <a 
+            href={`${estimatePath}?goal=php-legacy`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            免費預約老舊 PHP 架構檢測
+          </a>
+        </div>
+      </div>
+
+      <!-- SECTION 1: PAIN POINTS (老舊客製 PHP 網站面臨的三大嚴重危機) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            漏洞層出不窮、隨時面臨被黑癱瘓？老舊 PHP 正在成為企業隨時爆發的炸彈：
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            原生 PHP 網站一旦暴露在公網，缺乏現代安全隔離機制，正成為黑客自動化攻擊腳本最容易攻陷的活靶子。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">01</div>
+            <h3 class="text-lg font-bold text-slate-900">公網 PHP 漏洞頻發，黑客腳本掃中即淪陷</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              PHP 執行環境暴露在公網，高危遠程代碼執行（RCE）與 SQL 注入漏洞防不勝防。黑客全天候自動化掃描，老站一旦被植入勒索後門或發送垃圾郵件，伺服器 IP 會立即被國際反垃圾組織拉黑，企業信箱全面癱瘓。
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">02</div>
+            <h3 class="text-lg font-bold text-slate-900">補丁打完又有新漏洞，陷入無休止的被黑循環</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              就算花重金找人修補了這次漏洞，下個月新的核心漏洞或依賴庫缺陷又接踵而至。動態 PHP 伺服器只要掛在公網一天，技術團隊就永遠無法擺脫半夜被黑客告警驚醒的焦慮。
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">03</div>
+            <h3 class="text-lg font-bold text-slate-900">歷史 .php 參數網址深層交錯，沒人敢重寫</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              站內滿滿都是 <code class="text-slate-800 bg-slate-100 px-1 py-0.5 rounded font-mono text-xs">/detail.php?id=128</code> 這種十幾年前的參數網址，已被 Google 收錄多年且有海外外鏈。一般接案公司改版直接刪除重做，導致成百上千個 404 斷鏈，多年累積的 SEO 資產瞬間付之一炬。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: ARCHITECTURE COMPARISON TABLE (非首頁重複圖表，專屬對比規格) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-10">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            老舊客製 PHP 系統 vs. SiteCarry Astro 現代架構對照
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            告別技術債務泥潭，將老舊伺服器運算轉型為現代純靜態邊緣分發：
+          </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-[#e8e6df] bg-white shadow-2xs">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-[#faf9f6] border-b border-[#e8e6df] text-slate-600 uppercase font-mono text-[10px] tracking-wider font-semibold">
+              <tr>
+                <th class="px-6 py-4 w-1/4">比較維度</th>
+                <th class="px-6 py-4 w-3/8 text-slate-500">老舊客製原生 PHP (5.6 / 7.x)</th>
+                <th class="px-6 py-4 w-3/8 text-amber-900 font-bold bg-amber-50/50">SiteCarry Astro 純靜態邊緣架構</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#e8e6df]">
+              {comparisonRows.map((row) => (
+                <tr class="hover:bg-[#faf9f6]/70 transition-colors">
+                  <td class="px-6 py-4 font-bold text-slate-900 font-sans">{row.metric}</td>
+                  <td class="px-6 py-4 text-slate-500 font-normal leading-relaxed">{row.legacy}</td>
+                  <td class="px-6 py-4 text-slate-900 font-semibold bg-amber-50/30 leading-relaxed">{row.sitecarry}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SECTION 3: RESCUE ADVANTAGES (徹底解耦優勢) -->
+      <div class="mb-24 p-8 sm:p-12 rounded-2xl bg-white border border-[#e8e6df] shadow-xs space-y-8">
+        <div class="max-w-3xl">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            拒絕盲目升級 PHP 代碼：為什麼 Astro 純靜態現代化是最聰明的選擇？
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            把十年前未規範的 PHP 代碼硬升級到 PHP 8.4 往往需要重寫整套系統，代價高昂且未來依然要反覆維護。SiteCarry 採用架構解耦方案：
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">1. 公網 PHP 執行環境物理歸零</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              我們在構建時將資料庫內容一次性編譯為極度安全的純 HTML 靜態站點。對外公網完全不再運行任何 PHP 解析器，黑客的 SQL 注入與 CVE 漏洞在物理層面徹底失去攻擊載體。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">2. 邊緣正則 1:1 精準 301 重定向</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              我們在 Cloudflare 邊緣 CDN 撰寫精確正則表達式，自動將所有 <code class="text-slate-800 bg-slate-100 px-1 py-0.5 rounded font-mono text-xs">.php?id=xxx</code> 請求無損轉換為乾淨現代語意化網址，100% 繼承歷史搜尋權重與外鏈。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">3. 數據萃取重組，拋棄老舊意大利麵代碼</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              我們不碰您歷史伺服器上雜亂的老代碼，而是透過專屬工具精準導出 MySQL 核心文字與圖庫，重構為現代 Git 版本控制的標準 Markdown / Astro 內容庫，讓企業數據永遠屬於您自己。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">4. 終結主機附加費，月費降為 $0</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              遷移完成後，全站部署在全球雲端 CDN 邊緣免費方案。您可立即關閉老舊主機，徹底省下每月幾十美元的主機費與 EOL 延伸維護費。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: TANGIBLE BENEFITS (4 大實質商業收益) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            老舊客製 PHP 網站現代化後，您將獲得的 4 大直接收益：
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            從提心吊膽的資安被黑風險，轉身成為無懈可擊、全球秒開的現代數位資產。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">01</div>
+            <h3 class="text-base font-bold text-slate-900">省下主機延伸附加費</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              即刻終止 cPanel 與雲主機商每月的 PHP 7 額外收費，每年輕鬆省下數百至上千美元固定開支。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">02</div>
+            <h3 class="text-base font-bold text-slate-900">終身免除 CVE 漏洞修補</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              公網無 PHP、無 MySQL，徹底免疫任何針對 PHP 內核的遠端代碼執行攻擊，工程團隊再也不用半夜應急補漏洞。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">03</div>
+            <h3 class="text-base font-bold text-slate-900">載入速度從 4 秒提升至 0.8 秒</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              全站透過全球 300+ CDN 雲端節點就近分發，極速秒開，讓老舊企業網站瞬間具備科技大廠級別的訪問流暢度。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">04</div>
+            <h3 class="text-base font-bold text-slate-900">100% 承接歷史 SEO 排名</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              精確邊緣 301 映射讓所有既有的外部鏈接與 Google 收錄網址平順轉換，不浪費過去十幾年累積的一分一毫權重。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: SPECIFIC FAQS -->
+      <div class="max-w-4xl mx-auto mb-24">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-8 text-center">
+          老舊客製 PHP 現代化常見問題
+        </h2>
+        <div class="space-y-4">
+          {faqs.map((faq) => (
+            <div class="p-6 rounded-2xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+              <h3 class="text-base font-bold text-slate-900">{faq.q}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed font-normal">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- SECTION 6: PRICING -->
+      <div class="mb-24" id="pricing">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            老舊客製 PHP 現代化透明方案與規格
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            我們針對客製資料庫、模板與 URL 結構提供固定範圍工期合約，包含 30 天上線後瑕疵保固。
+          </p>
+        </div>
+
+        <PricingTable lang={lang} />
+      </div>
+
+      <!-- SECTION 7: FINAL DUAL-TRACK CALL TO ACTION (純淨無箭頭) -->
+      <div class="p-8 sm:p-12 rounded-2xl bg-[#fffcf5] border border-amber-200/80 text-center max-w-4xl mx-auto space-y-6 shadow-xs">
+        <div class="space-y-2">
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            準備好徹底解決老舊 PHP 的資安隱患與高額附加費了嗎？
+          </h3>
+          <p class="text-sm text-slate-600 max-w-xl mx-auto">
+            歡迎提供您現有的 PHP 網站網址與資料庫規模。我們的資深工程師將免費為您審查技術債務與 URL 結構，並出具固定總價遷移建議。
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            線上選購方案 · 支付定金
+          </a>
+          <a 
+            href={`${estimatePath}?goal=php-legacy`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            免費預約老舊 PHP 架構檢測
+          </a>
+        </div>
+
+        <p class="text-xs text-slate-500 pt-2">
+          不想填寫表單？亦可直接寄信至 
+          <a href={`mailto:${siteConfig.contactEmail}`} class="font-mono text-amber-800 hover:text-amber-900 font-semibold underline underline-offset-2 ml-1">
+            {siteConfig.contactEmail}
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</Layout>

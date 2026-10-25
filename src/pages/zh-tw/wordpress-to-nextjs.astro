@@ -1,0 +1,320 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PricingTable from '../../components/PricingTable.astro';
+import { getLocalizedPath, type Lang } from '../../i18n/utils';
+import { siteConfig } from '../../data/siteConfig';
+
+const lang: Lang = 'zh-tw';
+const estimatePath = getLocalizedPath('estimate', lang);
+const pricingPath = getLocalizedPath('pricing', lang);
+
+const comparisonRows = [
+  {
+    metric: "大促促銷高並發抗壓",
+    legacy: "幾百人同時結帳即造成 CPU 100% 滿載、資料庫死鎖、502 宕機",
+    sitecarry: "邊緣 ISR 靜態快取支撐百萬級並發，黑五促銷穩如磐石",
+  },
+  {
+    metric: "信用卡側錄 (Magecart) 風險",
+    legacy: "高危（結帳表單在自建伺服器運行，外掛漏洞常遭植入側錄 JS）",
+    sitecarry: "物理免疫（對接 Stripe Tokenized 託管結帳，卡號完全不經伺服器）",
+  },
+  {
+    metric: "商品目錄與篩選體驗",
+    legacy: "每次點擊篩選整頁重新刷新，手機端翻找商品遲鈍卡頓",
+    sitecarry: "React 單頁應用（SPA）毫秒級即時響應，流暢度媲美原生 App",
+  },
+  {
+    metric: "購物車轉化率與支付摩擦",
+    legacy: "繁瑣多步表單、載入緩慢，海外手機買家跳出率高達 75%+",
+    sitecarry: "原生支援 Apple Pay / Google Pay 一鍵結帳，轉化率提升 30%+",
+  },
+  {
+    metric: "歷史資料庫與訂單延續",
+    legacy: "換商城平台往往面臨歷史客戶名單、訂單與產品 SKU 丟失",
+    sitecarry: "WooCommerce 歷史 SKU、客戶與訂單 1:1 完整無損遷移",
+  },
+];
+
+const faqs = [
+  {
+    q: "升級為 Next.js 無頭商城後，我們的倉儲和客服人員需要換新後台嗎？",
+    a: "不需要。我們可以將您原有的 WooCommerce 後台保留為私有的「無頭內容與訂單 API（WPGraphQL）」。您的倉儲、發貨與客服人員依然在熟悉的 WooCommerce 後台處理訂單，而面向全球買家的前台與結帳流程則完全交由現代極速的 Next.js 邊緣雲端處理。",
+  },
+  {
+    q: "為什麼 Next.js 無頭電商能徹底消滅信用卡側錄（Magecart）木馬？",
+    a: "在傳統 WooCommerce 中，結帳輸入框直接嵌入在您的自建 WordPress 頁面裡，一旦有小外掛遭入侵，黑客就能竊聽鍵盤輸入偷走卡號。而在 Next.js 無頭架構中，結帳直接透過安全密鑰彈出 Stripe 銀行級託管介面（Tokenized Checkout），卡號從頭到尾不經過任何自建伺服器，100% 符合 PCI-DSS Level 1 最高合規標準。",
+  },
+  {
+    q: "商品庫存更新或價格調整時，前台 Next.js 頁面會即時生效嗎？",
+    a: "會即時生效。我們採用 Next.js 的增量靜態重新生成（ISR，Incremental Static Regeneration）配合 On-demand Revalidation 機制。當後台修改商品價格或庫存變動時，會自動秒級清除該商品的邊緣快取並重新生成，買家始終看到最新庫存與價格。",
+  },
+  {
+    q: "已有幾千個商品在 Google 上有排名，遷移會破壞商品 SEO 嗎？",
+    a: "完全不會。我們會為每一個商品頁、分類目錄與標籤頁提取歷史 URL 結構，並自動生成包含 Product、Offer、AggregateRating 等富資訊的結構化數據（JSON-LD），讓商品在 Google 搜尋結果中完美展示星級評價與價格徽章。",
+  },
+];
+---
+
+<Layout 
+  title="WordPress 轉 Next.js 無頭電商遷移 (WordPress to Next.js) | 高並發抗壓與零側錄資安"
+  description="將傳統 WooCommerce 與動態 WordPress 升級為現代 Next.js App Router 無頭架構。商品目錄邊緣秒開，大促高並發百萬級流量不當機，Stripe Tokenized 結帳徹底終結信用卡側錄木馬。"
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- HERO SECTION (核心關鍵詞置頂，無破 Badge 藥丸，無孤行箭頭) -->
+      <div class="max-w-4xl mx-auto text-center mb-20">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1c2024] tracking-tight mb-6 leading-[1.15]">
+          WordPress 轉 Next.js 無頭電商遷移
+          <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-600 block mt-3 font-sans">
+            打破 WooCommerce 促銷宕機宿命 · 升級 Next.js 高並發與 Stripe 零側錄安全結帳
+          </span>
+        </h1>
+        <p class="text-base sm:text-lg text-[#575f6e] max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+          針對需要動態會員中心、高並發搶購抗壓、或大型 WooCommerce 電商的成長型企業。我們將前後端徹底解耦，前端交由現代 Next.js App Router 邊緣分發，安全結帳直接對接 Stripe 安全令牌，徹底消除卡頓與信用卡側錄木馬。
+        </p>
+
+        <!-- Dual-Track Action Buttons (純淨專業，無多餘箭頭) -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            線上選購方案 · 支付定金
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-nextjs`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            免費取得 Next.js 遷移評估
+          </a>
+        </div>
+      </div>
+
+      <!-- SECTION 1: PAIN POINTS (WooCommerce 企業當前最痛的三大問題) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            流量一來就崩盤、結帳漏單被盜刷？傳統動態電商的致命硬傷：
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            WooCommerce 與傳統 WordPress 是將展示層、購物車邏輯與資料庫綑綁在同一個伺服器上，在現代電商競爭下正顯露出無法掩飾的巨大風險。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">01</div>
+            <h3 class="text-lg font-bold text-slate-900">促銷廣告一推，伺服器瞬間 502 卡死</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              黑五促銷或 EDM 郵件發送後，瞬間湧入幾千名訪客。PHP 進程瞬間佔滿 CPU，MySQL 資料庫頻繁死鎖，購物車結帳頁面卡轉幾十秒後彈出 504 逾時，白白賠掉十幾萬廣告費與訂單。
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">02</div>
+            <h3 class="text-lg font-bold text-slate-900">信用卡側錄木馬（Magecart）資安噩夢</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              傳統 WooCommerce 結帳流程在自己伺服器上運行，只要站內某個小外掛有漏洞，黑客便可在結帳頁植入側錄 JS，神不知鬼不覺偷走客戶信用卡號，面臨 PCI-DSS 巨額罰款與品牌信譽破產。
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">03</div>
+            <h3 class="text-lg font-bold text-slate-900">商品篩選卡頓，購物車流失率超高</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              每次點擊顏色、尺寸篩選都要整頁重新向伺服器請求刷新，手機端翻找商品體驗極差。繁瑣的表單填寫與緩慢的結帳步調，讓多數海外消費者在最後一步放棄購買。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: ARCHITECTURE COMPARISON TABLE (非首頁重複圖表，專屬對比規格) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-10">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            單體 WooCommerce vs. Next.js 無頭電商架構對照
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            前後端完全解耦（Headless Decoupled Architecture）是歐美 Shopify Plus 與頂級 DTC 電商品牌的標準做法：
+          </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-[#e8e6df] bg-white shadow-2xs">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-[#faf9f6] border-b border-[#e8e6df] text-slate-600 uppercase font-mono text-[10px] tracking-wider font-semibold">
+              <tr>
+                <th class="px-6 py-4 w-1/4">比較維度</th>
+                <th class="px-6 py-4 w-3/8 text-slate-500">傳統單體 WooCommerce</th>
+                <th class="px-6 py-4 w-3/8 text-amber-900 font-bold bg-amber-50/50">Next.js 邊緣無頭電商架構</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#e8e6df]">
+              {comparisonRows.map((row) => (
+                <tr class="hover:bg-[#faf9f6]/70 transition-colors">
+                  <td class="px-6 py-4 font-bold text-slate-900 font-sans">{row.metric}</td>
+                  <td class="px-6 py-4 text-slate-500 font-normal leading-relaxed">{row.legacy}</td>
+                  <td class="px-6 py-4 text-slate-900 font-semibold bg-amber-50/30 leading-relaxed">{row.sitecarry}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SECTION 3: NEXT.JS ADVANTAGES (現代無頭電商優勢) -->
+      <div class="mb-24 p-8 sm:p-12 rounded-2xl bg-white border border-[#e8e6df] shadow-xs space-y-8">
+        <div class="max-w-3xl">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            為什麼 Next.js 是高價值商業電商的終極歸宿？
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            以成熟的邊緣運算與現代 React 生態，重構電商的轉化漏斗：
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">1. 商品目錄邊緣毫秒級加載（ISR 快取）</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              數萬款商品的詳情頁與分類在邊緣節點進行增量靜態渲染（Incremental Static Regeneration），訪客瀏覽商品如同看靜態頁面般瞬間呈現，伺服器完全不消耗資料庫查詢。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">2. 託管級安全結帳（PCI-DSS Level 1 零風險）</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              結帳流程對接 Stripe Tokenized Checkout 或 Shopify Storefront，客戶信用卡卡號從頭到尾不經過任何自建伺服器，物理阻斷任何 Magecart 側錄木馬可能，資安合規完全免責。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">3. 絲滑流暢的 React 單頁應用體驗（SPA）</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              商品篩選、多角度圖組切換、加入購物車無需刷新頁面，原生支援 Apple Pay 與 Google Pay 一鍵結帳，手機端購買轉化率大幅提升 30% 以上。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">4. 靈活保留現有業務後台</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              您的團隊若習慣 WooCommerce 的庫存管理與訂單發貨流程，可將其保留為私有無頭 API（WPGraphQL），無需逼迫倉儲與客服團隊重新適應全新系統。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: TANGIBLE BENEFITS (4 大實質商業收益) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            升級 Next.js 無頭電商後，您將獲得的 4 大商業收益：
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            讓您的電商網站擁有承受爆發性流量的工程底氣，保護每筆營收安全入袋。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">01</div>
+            <h3 class="text-base font-bold text-slate-900">大促搶購 0 當機</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              百萬級高並發邊緣快取抗壓，黑五購物節與網紅帶貨流量湧入時穩如泰山，再也不會因為伺服器宕機丟單。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">02</div>
+            <h3 class="text-base font-bold text-slate-900">物理消除被黑與盜刷風險</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              公網無 PHP 漏洞、無公開 MySQL 端口，敏感結帳完全託管給 Stripe 銀行級加密，免去高額資安審計費用。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">03</div>
+            <h3 class="text-base font-bold text-slate-900">購物車轉化率顯著攀升</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              0.8 秒開箱體驗配合一鍵數位錢包付款，減少結帳摩擦阻力，直接拯救被慢網速勸退的潛在訂單。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">04</div>
+            <h3 class="text-base font-bold text-slate-900">歷史訂單與商品完整保留</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              現有 WooCommerce 商品 SKU、歷史客戶名單與 SEO 產品收錄網址 1:1 完整無損遷移，經營積累零流失。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: SPECIFIC FAQS -->
+      <div class="max-w-4xl mx-auto mb-24">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-8 text-center">
+          WordPress 轉 Next.js 無頭電商常見問題
+        </h2>
+        <div class="space-y-4">
+          {faqs.map((faq) => (
+            <div class="p-6 rounded-2xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+              <h3 class="text-base font-bold text-slate-900">{faq.q}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed font-normal">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- SECTION 6: PRICING -->
+      <div class="mb-24" id="pricing">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Next.js 無頭架構透明方案與規格
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            固定總價合約，支援 WooCommerce 數據遷移、Stripe 結帳對接與上線後 30 天瑕疵保固。
+          </p>
+        </div>
+
+        <PricingTable lang={lang} />
+      </div>
+
+      <!-- SECTION 7: FINAL DUAL-TRACK CALL TO ACTION (純淨無箭頭) -->
+      <div class="p-8 sm:p-12 rounded-2xl bg-[#fffcf5] border border-amber-200/80 text-center max-w-4xl mx-auto space-y-6 shadow-xs">
+        <div class="space-y-2">
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            準備好讓您的電商業務升級為高抗壓無頭架構了嗎？
+          </h3>
+          <p class="text-sm text-slate-600 max-w-xl mx-auto">
+            提供您目前的商城網址與預期規模，我們的架構師將免費為您審查商品結構與並發需求，並出具專屬無頭遷移藍圖。
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            線上選購方案 · 支付定金
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-nextjs`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            免費取得 Next.js 遷移評估
+          </a>
+        </div>
+
+        <p class="text-xs text-slate-500 pt-2">
+          不想填寫表單？亦可直接寄信至 
+          <a href={`mailto:${siteConfig.contactEmail}`} class="font-mono text-amber-800 hover:text-amber-900 font-semibold underline underline-offset-2 ml-1">
+            {siteConfig.contactEmail}
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</Layout>

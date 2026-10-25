@@ -1,0 +1,228 @@
+---
+import { getPricingTiers, type PricingTier } from '../data/siteConfig';
+import { useTranslations, getLocalizedPath, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  showAllDetails?: boolean;
+}
+
+const { lang, showAllDetails = false } = Astro.props;
+const t = useTranslations(lang);
+const estimatePath = getLocalizedPath('estimate', lang);
+const checkoutPath = getLocalizedPath('checkout', lang);
+const tiers: PricingTier[] = getPricingTiers(lang);
+
+const commerceBadge = {
+  en: "WooCommerce & Scale Ready",
+  ja: "EC・高負荷サイト対応",
+  "zh-tw": "支援無頭電商與大流量",
+}[lang] || "WooCommerce & Scale Ready";
+
+const depositMap = {
+  essential: { plan: 'essential-deposit', amount: '$745', pct: '50%' },
+  business: { plan: 'business-deposit', amount: '$1,396', pct: '40%' },
+  enterprise: { plan: 'enterprise-deposit', amount: '$2,760', pct: '40%' },
+};
+
+const dualTrackLabels = {
+  en: {
+    payDeposit: "Pay Kickoff Deposit",
+    freeConsult: "Need custom scope review first? Request Free Assessment",
+  },
+  'zh-tw': {
+    payDeposit: "線上支付定金鎖定排期",
+    freeConsult: "不確定規格範圍？先免費提交網址評估",
+  },
+  ja: {
+    payDeposit: "手付金を決済して即時着手",
+    freeConsult: "仕様の事前確認が必要な場合はこちら（無料相談）",
+  },
+}[lang] || {
+  payDeposit: "Pay Kickoff Deposit",
+  freeConsult: "Need custom scope review first? Request Free Assessment",
+};
+---
+
+<div class="space-y-8">
+  <!-- 3 Main Packages -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch max-w-6xl mx-auto">
+    {tiers.map((tier) => {
+      const depositInfo = depositMap[tier.id as keyof typeof depositMap] || depositMap.business;
+      return (
+        <div 
+          class={`relative rounded-xl p-8 flex flex-col justify-between transition-all duration-200 bg-white ${
+            tier.highlight 
+              ? 'border-2 border-amber-500 shadow-md shadow-amber-500/10 lg:-translate-y-1' 
+              : 'border border-slate-200 shadow-2xs hover:border-slate-300'
+          }`}
+        >
+          {tier.highlight && (
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-950 text-[11px] font-bold tracking-wide uppercase px-3.5 py-0.5 rounded-full shadow-xs">
+              {t.pricingSection.mostPopular}
+            </div>
+          )}
+
+          {tier.id === 'enterprise' && (
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-stone-900 text-amber-400 text-[11px] font-bold tracking-wide uppercase px-3.5 py-0.5 rounded-full shadow-xs border border-stone-800">
+              {commerceBadge}
+            </div>
+          )}
+
+          <div>
+            <!-- Header -->
+            <div class="mb-6">
+              <h3 class="text-2xl font-bold text-slate-900 mb-2">{tier.name}</h3>
+              <p class="text-sm text-slate-600 min-h-[48px] leading-relaxed font-normal">{tier.description}</p>
+            </div>
+
+            <!-- Price & Timeline -->
+            <div class="pb-6 mb-6 border-b border-slate-100">
+              <div class="flex items-baseline gap-2">
+                <span class="text-xs text-slate-500 uppercase font-semibold">{t.pricingSection.from || "From"}</span>
+                <span class="text-4xl font-extrabold text-slate-900 tracking-tight font-mono">{tier.priceDisplay}</span>
+                <span class="text-xs font-mono text-slate-500 font-semibold">USD</span>
+              </div>
+              <div class="mt-3 flex items-center justify-between text-xs text-slate-600 font-medium">
+                <div>
+                  <span>{t.pricingSection.timelineLabel}: </span>
+                  <span class="font-semibold text-slate-900">{tier.timeline}</span>
+                </div>
+                <div class="text-[11px] font-mono text-slate-500">
+                  Deposit: <strong class="text-slate-900 font-bold">{depositInfo.amount}</strong> ({depositInfo.pct})
+                </div>
+              </div>
+            </div>
+
+            <!-- Scope Breakdown Table -->
+            <div class="space-y-2 mb-6 text-xs text-slate-700 bg-slate-50 p-4 rounded-lg border border-slate-200 font-mono">
+              <div class="flex justify-between">
+                <span class="text-slate-500 font-sans">{t.pricingSection.scopePages || "Pages / Views"}:</span>
+                <span class="font-bold text-slate-900">{tier.scope.pages}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-500 font-sans">{t.pricingSection.scopePosts || "Articles / Products"}:</span>
+                <span class="font-bold text-slate-900">{tier.scope.posts}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-500 font-sans">{t.pricingSection.scopeTemplates || "Templates"}:</span>
+                <span class="font-bold text-slate-900">{tier.scope.templates}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-500 font-sans">{t.pricingSection.scopeLanguages || "Languages"}:</span>
+                <span class="font-bold text-slate-900">{tier.scope.languages}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-500 font-sans">{t.pricingSection.scopeForms || "Forms / Checkout"}:</span>
+                <span class="font-bold text-slate-900">{tier.scope.forms}</span>
+              </div>
+              <div class="flex justify-between pt-1.5 border-t border-slate-200/80">
+                <span class="text-amber-700 font-sans font-bold">{t.pricingSection.scopeSeoGeo || "SEO & GEO"}:</span>
+                <span class="font-bold text-slate-900 text-right">{tier.scope.seoGeo}</span>
+              </div>
+            </div>
+
+            <!-- Features Included -->
+            <div class="space-y-3 mb-8">
+              <span class="text-xs font-bold text-slate-700 uppercase tracking-wider block">
+                {t.pricingSection.whatsIncluded || "What's Included"}:
+              </span>
+              <ul class="space-y-2.5 text-sm text-slate-600">
+                {tier.features.map((feat) => (
+                  <li class="flex items-start gap-2.5">
+                    <svg class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span class="text-slate-700">{feat}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <!-- Dual-Track Action Buttons: Online Fast-Track + Free Scope Consultation -->
+          <div class="space-y-2.5 pt-2">
+            <!-- Track 1: Online Deposit Fast-Track -->
+            <a 
+              href={`${checkoutPath}?plan=${depositInfo.plan}`} 
+              class={`w-full py-3 px-4 rounded-lg text-center text-xs sm:text-sm font-semibold transition-all shadow-xs flex items-center justify-center gap-1.5 ${
+                tier.highlight
+                  ? 'bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold shadow-sm shadow-amber-500/20'
+                  : 'bg-slate-900 hover:bg-slate-800 text-white'
+              }`}
+            >
+              <span>{dualTrackLabels.payDeposit} ({depositInfo.amount})</span>
+            </a>
+
+            <!-- Track 2: Free Scope Consultation -->
+            <a 
+              href={`${estimatePath}?tier=${tier.id}`} 
+              class="block text-center text-[11px] text-slate-500 hover:text-amber-600 font-medium py-1 transition-colors"
+            >
+              {dualTrackLabels.freeConsult}
+            </a>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+
+  <!-- Clear Inquiry-Based Consultation Guarantee (No hidden checkout confusion) -->
+  <div class="rounded-xl border border-amber-200/70 bg-amber-50/40 p-4 sm:p-5 max-w-6xl mx-auto shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-700">
+    <div class="flex items-start sm:items-center gap-2.5">
+      <span class="w-5 h-5 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center shrink-0 text-xs font-bold font-mono">✓</span>
+      <div>
+        <strong class="text-slate-900 font-semibold">{t.pricingSection.inquiryNoteTitle}</strong>
+        <span class="text-slate-600 ml-1">{t.pricingSection.inquiryNoteDesc}</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-3 shrink-0">
+      <a href={`${checkoutPath}?plan=review-149`} class="text-amber-800 hover:text-amber-900 font-bold underline underline-offset-2">
+        $149 Fast-Track Review
+      </a>
+      <span class="text-slate-300">|</span>
+      <a href={estimatePath} class="text-slate-600 hover:text-amber-700 font-semibold">
+        {t.hero.ctaPrimary}
+      </a>
+    </div>
+  </div>
+
+  <!-- Shared Inclusions Banner -->
+  <div class="rounded-xl border border-slate-200 bg-white p-7 max-w-6xl mx-auto shadow-2xs">
+    <div class="mb-5">
+      <h4 class="text-sm font-bold text-slate-900 tracking-tight">
+        {t.pricingSection.sharedInclusionsTitle || "Standard Inclusions in Every SiteCarry Contract"}
+      </h4>
+    </div>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+      {t.pricingSection.sharedInclusions ? (
+        t.pricingSection.sharedInclusions.map((inc) => (
+          <div class="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-1.5">
+            <p class="font-bold text-slate-900">{inc.title}</p>
+            <p class="text-slate-600 leading-relaxed text-xs">{inc.desc}</p>
+          </div>
+        ))
+      ) : (
+        <>
+          <div class="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-1.5">
+            <p class="font-bold text-slate-900">1:1 SEO & 301 Rules</p>
+            <p class="text-slate-600 leading-relaxed text-xs">Exhaustive crawl parity. All existing slugs mapped with permanent redirects.</p>
+          </div>
+          <div class="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-1.5">
+            <p class="font-bold text-slate-900">Full Client Ownership</p>
+            <p class="text-slate-600 leading-relaxed text-xs">Code deposited in client's Git repository. Deployed to client's CDN account.</p>
+          </div>
+          <div class="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-1.5">
+            <p class="font-bold text-slate-900">Zero-Downtime Cutover</p>
+            <p class="text-slate-600 leading-relaxed text-xs">DNS migration protocol with immediate rollback safeguards prepared.</p>
+          </div>
+          <div class="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-1.5">
+            <p class="font-bold text-slate-900">30-Day Defect Warranty</p>
+            <p class="text-slate-600 leading-relaxed text-xs">Guaranteed defect resolution covering all agreed project specifications.</p>
+          </div>
+        </>
+      )}
+    </div>
+  </div>
+</div>

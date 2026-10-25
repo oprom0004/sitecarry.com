@@ -1,0 +1,349 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PricingTable from '../components/PricingTable.astro';
+import { getLocalizedPath, type Lang } from '../i18n/utils';
+import { siteConfig } from '../data/siteConfig';
+
+const lang: Lang = 'en';
+const estimatePath = getLocalizedPath('estimate', lang);
+const pricingPath = getLocalizedPath('pricing', lang);
+
+const comparisonRows = [
+  {
+    metric: "Mobile Load Speed",
+    legacy: "3.5 to 6.8 seconds (limited by PHP interpretation and dynamic MySQL queries)",
+    sitecarry: "Sub-0.8 seconds (millisecond global distribution from 300+ CDN edge nodes)",
+  },
+  {
+    metric: "Monthly Hosting Cost",
+    legacy: "$50 to $200+/month (high-spec VPS, caching plugins, security add-ons)",
+    sitecarry: "$0/month (hosted on Cloudflare Pages global edge free tier)",
+  },
+  {
+    metric: "Public Attack Surface",
+    legacy: "High risk (PHP core CVEs, vulnerable plugins, exposed MySQL ports)",
+    sitecarry: "Physically zero (pure static HTML, no PHP or MySQL running on public web)",
+  },
+  {
+    metric: "Core Web Vitals Pass Rate",
+    legacy: "Chronic red fail (LCP, INP, and CLS struggle to pass Google thresholds)",
+    sitecarry: "Consistently 98–100 green pass (boosts Google Ads Quality Scores)",
+  },
+  {
+    metric: "Plugin Dependency & Updates",
+    legacy: "Weekly anxiety (plugin updates frequently cause fatal white screens of death)",
+    sitecarry: "Zero maintenance (no plugin conflicts, stable for years without intervention)",
+  },
+  {
+    metric: "SEO Link Equity Preservation",
+    legacy: "Redesigns frequently wipe out URLs, leading to 404 swamps and traffic drops",
+    sitecarry: "1:1 URL parity and edge 301 mappings, 100% PageRank passed forward",
+  },
+];
+
+const faqs = [
+  {
+    q: "Will our Google organic search rankings drop after migrating to Astro?",
+    a: "No. We enforce a strict 1:1 URL Parity Protocol. Before initiating the migration, automated crawlers map all indexed URLs. Any necessary path adjustments are resolved with permanent 301 redirects deployed directly at the CDN edge, ensuring search engines transfer 100% of your accumulated link equity without rank loss.",
+  },
+  {
+    q: "What happens to historical blog images, attachments, and internal links?",
+    a: "Everything is preserved. Our extraction pipeline pulls all media library files, converts images into modern WebP/AVIF formats at build time, and programmatically fixes all internal href links across your articles to eliminate 404 broken assets.",
+  },
+  {
+    q: "Will our live website experience downtime during the migration process?",
+    a: "Zero downtime. All extraction, code sanitization, component rebuilds, and testing take place in an isolated private staging environment. Your production WordPress site continues serving customers uninterrupted until you inspect and approve the staging build, at which point a seamless DNS switch is executed.",
+  },
+  {
+    q: "Can our content team continue publishing articles easily after migrating to static?",
+    a: "Yes. You can keep your familiar WordPress admin as a private headless CMS (WPGraphQL), or graduate to a modern Git-based visual editor (like Keystatic) that costs zero in monthly server fees. Your editorial team gets an intuitive WYSIWYG writing experience without needing to write code.",
+  },
+];
+---
+
+<Layout 
+  title="WordPress Migration Service (WordPress Migration) | 1:1 SEO Preservation & Zero CVE Vulnerabilities"
+  description="Professional WordPress migration service. Meticulous 1:1 URL parity and SEO rank preservation, comprehensive content extraction and sanitization, and modern Astro static edge architecture."
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- HERO SECTION (Keyword front-and-center, zero badge pill, zero arrows) -->
+      <div class="max-w-4xl mx-auto text-center mb-20">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1c2024] tracking-tight mb-6 leading-[1.15]">
+          WordPress Migration Service
+          <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-600 block mt-3 font-sans">
+            1:1 SEO Link Equity Preservation · Zero Attack Surface Astro Modernization
+          </span>
+        </h1>
+        <p class="text-base sm:text-lg text-[#575f6e] max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+          Designed for companies with valuable organic rankings that need to break free from plugin bloat, sluggish hosting, and recurring malware. We extract content via isolated pipelines into an ultra-fast Astro frontend, preserving every historical URL slug 1:1.
+        </p>
+
+        <!-- Dual-Track Action Buttons (Clean, professional, zero arrows) -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            Select Plan · Pay Kickoff Deposit
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-migration`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            Request Free Site Assessment
+          </a>
+        </div>
+      </div>
+
+      <!-- SECTION 1: PAIN POINTS (The 3 Greatest Pains of Aging WordPress Sites) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Terrified of touching your site? The real costs of legacy WordPress debt:
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Most 3+ year old WordPress corporate sites find themselves trapped in an agonizing dilemma: terrified of updating plugins, constantly exposed to malware, yet terrified of redesigning due to SEO rank drops.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">01</div>
+            <h3 class="text-lg font-bold text-slate-900">Fear of Updating: One Click Triggers WSOD</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              With 25+ plugins layered on top of each other, dependencies frequently clash. The admin dashboard throws red security alerts daily, but clicking "Update" risks crashing the site with a Fatal Error or white screen of death.
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">02</div>
+            <h3 class="text-lg font-bold text-slate-900">Recurring Hacks & Google "Compromised" Badges</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Outdated PHP and unpatched plugins are targets for automated botnets. Even after hiring someone to clean the site, backdoors resurface weeks later, eventually getting labeled by Google as "This site may be hacked."
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">03</div>
+            <h3 class="text-lg font-bold text-slate-900">Yearning for a New Site, Paralyzed by Traffic Loss</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Years of content creation and backlinks represent massive business equity. Generic web agencies frequently break URL structures during rebuilds, creating a swamp of 404 errors that halves search revenue.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: ARCHITECTURE COMPARISON (Dedicated Comparison Table) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-10">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Legacy Monolithic WordPress vs. SiteCarry Astro Static Migration
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            A structural transition from fragile runtime computation to pre-rendered edge distribution:
+          </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-[#e8e6df] bg-white shadow-2xs">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-[#faf9f6] border-b border-[#e8e6df] text-slate-600 uppercase font-mono text-[10px] tracking-wider font-semibold">
+              <tr>
+                <th class="px-6 py-4 w-1/4">Evaluation Metric</th>
+                <th class="px-6 py-4 w-3/8 text-slate-500">Legacy Monolithic WordPress</th>
+                <th class="px-6 py-4 w-3/8 text-amber-900 font-bold bg-amber-50/50">SiteCarry Astro Static Build</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#e8e6df]">
+              {comparisonRows.map((row) => (
+                <tr class="hover:bg-[#faf9f6]/70 transition-colors">
+                  <td class="px-6 py-4 font-bold text-slate-900 font-sans">{row.metric}</td>
+                  <td class="px-6 py-4 text-slate-500 font-normal leading-relaxed">{row.legacy}</td>
+                  <td class="px-6 py-4 text-slate-900 font-semibold bg-amber-50/30 leading-relaxed">{row.sitecarry}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SECTION 3: SCOPE & SANITIZATION (Specific Extraction & Cleansing Deliverables) -->
+      <div class="mb-24 p-8 sm:p-12 rounded-2xl bg-white border border-[#e8e6df] shadow-xs space-y-8">
+        <div class="max-w-3xl">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Exhaustive Data Extraction & Code Cleansing Protocol
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            We never blindly transfer legacy garbage. All data passes through programmatic sanitization pipelines:
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">100% Preserved Data Assets</h4>
+            <ul class="space-y-2 text-xs text-slate-600 leading-relaxed">
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>All published articles (Posts), standalone pages (Pages), and taxonomy category trees.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>Custom Post Types (CPT) and Advanced Custom Fields (ACF) structured schema data.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>Media library images, featured article thumbnails, and author profile details.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>Historical SEO titles, meta descriptions, and Open Graph social sharing tags.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">Automated Deep Cleansing & Sanitization</h4>
+            <ul class="space-y-2 text-xs text-slate-600 leading-relaxed">
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>Identify and strip abandoned shortcodes, transforming content into semantic clean HTML.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>Scan and eliminate injected spam links, malicious iframes, and backdoor JavaScript snippets.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>Automatically convert JPG/PNG assets into modern AVIF/WebP formats, saving 70% bandwidth.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>Exhaustive internal link audit to rewrite and align all internal asset references.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: 5-STAGE PROCESS (Dedicated Timeline) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            5-Stage Zero-Downtime Migration Process
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            A disciplined engineering pipeline that protects your live business operations at every step:
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+            <span class="text-xs font-mono font-bold text-amber-800 block">STEP 01</span>
+            <h3 class="text-sm font-bold text-slate-900">Non-Destructive Extraction</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Extract data via read-only APIs. Your live website remains 100% untouched.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+            <span class="text-xs font-mono font-bold text-amber-800 block">STEP 02</span>
+            <h3 class="text-sm font-bold text-slate-900">Deep Cleansing</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Automated scripts purge obsolete shortcodes, spam injections, and inline CSS bloat.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+            <span class="text-xs font-mono font-bold text-amber-800 block">STEP 03</span>
+            <h3 class="text-sm font-bold text-slate-900">Astro Component Rebuild</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Re-engineer page layouts with modern semantic components and 0KB default JS.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+            <span class="text-xs font-mono font-bold text-amber-800 block">STEP 04</span>
+            <h3 class="text-sm font-bold text-slate-900">1:1 URL Parity Validation</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Verify every indexed slug against historical crawl logs and deploy edge 301 redirects.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+            <span class="text-xs font-mono font-bold text-amber-800 block">STEP 05</span>
+            <h3 class="text-sm font-bold text-slate-900">Zero-Downtime DNS Cutover</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Seamless domain switchover following staging acceptance, backed by a 30-day warranty.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: SPECIFIC FAQS -->
+      <div class="max-w-4xl mx-auto mb-24">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-8 text-center">
+          WordPress Migration Frequently Asked Questions
+        </h2>
+        <div class="space-y-4">
+          {faqs.map((faq) => (
+            <div class="p-6 rounded-2xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+              <h3 class="text-base font-bold text-slate-900">{faq.q}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed font-normal">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- SECTION 6: PRICING -->
+      <div class="mb-24" id="pricing">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            WordPress Migration Transparent Packages & Scope
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Fixed-scope engineering covering content extraction, 1:1 URL parity, and 30-day post-launch warranty support.
+          </p>
+        </div>
+
+        <PricingTable lang={lang} />
+      </div>
+
+      <!-- SECTION 7: FINAL DUAL-TRACK CALL TO ACTION (Clean, zero arrows) -->
+      <div class="p-8 sm:p-12 rounded-2xl bg-[#fffcf5] border border-amber-200/80 text-center max-w-4xl mx-auto space-y-6 shadow-xs">
+        <div class="space-y-2">
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            Ready to stabilize your web presence without sacrificing SEO?
+          </h3>
+          <p class="text-sm text-slate-600 max-w-xl mx-auto">
+            Provide your current website URL. Our senior migration team will audit your site health and provide a fixed-price migration blueprint.
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            Select Plan · Pay Kickoff Deposit
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-migration`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            Request Free Assessment
+          </a>
+        </div>
+
+        <p class="text-xs text-slate-500 pt-2">
+          Prefer email? Reach us directly at 
+          <a href={`mailto:${siteConfig.contactEmail}`} class="font-mono text-amber-800 hover:text-amber-900 font-semibold underline underline-offset-2 ml-1">
+            {siteConfig.contactEmail}
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</Layout>

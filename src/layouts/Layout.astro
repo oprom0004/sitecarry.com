@@ -1,0 +1,93 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getCanonicalUrl, getHreflangs, type Lang } from '../i18n/utils';
+import { siteConfig } from '../data/siteConfig';
+
+interface Props {
+  title: string;
+  description: string;
+  lang?: Lang;
+  schema?: Record<string, any>;
+}
+
+const { 
+  title, 
+  description, 
+  lang = 'en',
+  schema
+} = Astro.props;
+
+const pathname = Astro.url.pathname;
+const canonicalUrl = getCanonicalUrl(pathname);
+const hreflangs = getHreflangs(pathname);
+
+const defaultSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://sitecarry.com/#organization",
+      "name": "SiteCarry",
+      "url": "https://sitecarry.com",
+      "logo": "https://sitecarry.com/favicon.svg",
+      "description": "WordPress Migration & Legacy Website Rebuilds Studio",
+      "email": siteConfig.contactEmail,
+      "areaServed": ["US", "EU", "JP", "TW"]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://sitecarry.com/#website",
+      "url": "https://sitecarry.com",
+      "name": "SiteCarry",
+      "publisher": { "@id": "https://sitecarry.com/#organization" }
+    }
+  ]
+};
+
+const finalSchema = schema ? {
+  ...defaultSchema,
+  "@graph": [...defaultSchema["@graph"], schema]
+} : defaultSchema;
+---
+
+<!doctype html>
+<html lang={lang === 'zh-tw' ? 'zh-TW' : lang} class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title} | SiteCarry</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    {hreflangs.map((item) => (
+      <link rel="alternate" hreflang={item.lang} href={item.href} />
+    ))}
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={`${title} | SiteCarry`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content="SiteCarry" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={`${title} | SiteCarry`} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(finalSchema)} />
+  </head>
+  <body class="min-h-screen bg-[#faf9f6] text-[#1c2024] antialiased selection:bg-blue-600 selection:text-white flex flex-col font-sans">
+    <Header lang={lang} currentPath={pathname} />
+    <main class="flex-grow">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

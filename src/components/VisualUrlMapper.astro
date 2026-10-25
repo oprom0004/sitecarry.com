@@ -1,0 +1,158 @@
+---
+import { type Lang } from '../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+
+const copy = {
+  en: {
+    seoTitle: "Every historical URL, ranking, and backlink preserved.",
+    seoDesc: "We crawl your entire website before migration, creating a comprehensive route inventory. Every historical slug is verified 1:1 or deployed with permanent global CDN 301 rules so Google search rankings remain intact.",
+    cmsTitle: "Keep your familiar writing workflow, without server bloat.",
+    cmsDesc: "Your editorial team doesn't need to learn a complex new tool. Keep WordPress purely as a private, secure headless dashboard—or upgrade to a zero-maintenance Git CMS that eliminates hosting costs completely.",
+    ruleLabel: "Routing Protocol",
+    parityNote: "Full crawl parity guaranteed across all published endpoints.",
+    flowLabel: "Editorial Architecture",
+    flowDesc: "Writers continue drafting in familiar editors; changes trigger automated static compilation to global CDN.",
+    previewUrls: [
+      { legacy: "/about-company/", rule: "1:1 Exact Match", target: "/about-company/" },
+      { legacy: "/2023/11/industrial-guide/", rule: "Global 301 Redirect", target: "/guides/industrial-guide/" },
+      { legacy: "/wp-content/uploads/catalog.pdf", rule: "Media Asset Preserved", target: "/assets/docs/catalog.pdf" },
+    ],
+    optionA: {
+      title: "Option A: Private Headless WordPress",
+      desc: "Keep existing WordPress author logins on a private subdomain or intranet. The public never reaches PHP.",
+    },
+    optionB: {
+      title: "Option B: Modern Git CMS (Keystatic / Decap)",
+      desc: "Direct visual editing stored in your Git repository. Zero database, zero plugin vulnerabilities, $0 monthly hosting.",
+    },
+  },
+  ja: {
+    seoTitle: "長年蓄積したすべてのURLと検索順位を100%引き継ぎます。",
+    seoDesc: "移行前に現行サイトの全URLを自動クローリングし、精緻な照合マップを作成。過去のURLは原則1:1で維持し、階層変更時もグローバルCDNで恒久301リダイレクトを設定するため、Googleの検索評価や被リンクを一切損ないません。",
+    cmsTitle: "使い慣れたWordPress管理画面のまま、安全に更新。",
+    cmsDesc: "ライターや運用チームが新しい操作を覚える負担はありません。WordPressを安全な非公開ヘッドレスCMSとして維持するか、月額保守費ゼロの軽量Git CMSへ移行するか、運用形態に合わせて柔軟に選択できます。",
+    ruleLabel: "ルーティング仕様",
+    parityNote: "公開されている全エンドポイントの完全照合を保証します。",
+    flowLabel: "編集・配信フロー",
+    flowDesc: "投稿画面での執筆を継続し、記事公開時に静的HTMLが自動生成されてグローバルCDNへ即時展開されます。",
+    previewUrls: [
+      { legacy: "/about-company/", rule: "1:1 完全一致", target: "/about-company/" },
+      { legacy: "/2023/11/industrial-guide/", rule: "グローバル 301 転送", target: "/guides/industrial-guide/" },
+      { legacy: "/wp-content/uploads/catalog.pdf", rule: "メディアファイル保持", target: "/assets/docs/catalog.pdf" },
+    ],
+    optionA: {
+      title: "選択肢 A：非公開ヘッドレスWordPress運用",
+      desc: "既存のWordPress投稿画面を非公開サブドメインや社内網に残して運用。一般訪問者はPHPやDBに一切接触しません。",
+    },
+    optionB: {
+      title: "選択肢 B：軽量Git CMS（Keystatic / Decap）",
+      desc: "Gitリポジトリと直結した直感的な編集画面。データベース不要、プラグイン脆弱性ゼロ、サーバー代完全$0運用。",
+    },
+  },
+  'zh-tw': {
+    seoTitle: "每一條歷史網址、Google 排名與反向連結完整守護。",
+    seoDesc: "在切換上線前，自動爬梳並建立舊站全量 URL 清冊。所有既有路徑皆以 1:1 保留或在全球 300+ CDN 雲端節點配置永久 301 轉址，確保 Google 權重不流失、舊外鏈零死鏈。",
+    cmsTitle: "保留熟悉的發文習慣，徹底擺脫主機漏洞威脅。",
+    cmsDesc: "您的內容團隊無需痛苦重新適應複雜後台。可選擇將既有 WordPress 作為非公開的純後台（Headless CMS），亦可升級為 $0 主機月費的現代視覺化 Git CMS。",
+    ruleLabel: "轉址對照規範",
+    parityNote: "保證全站公開網址 100% 照合，無遺漏死鏈。",
+    flowLabel: "內容發布架構",
+    flowDesc: "編輯團隊維持習慣的工作介面，發布時自動觸發靜態編譯並推送到全球 CDN 節點。",
+    previewUrls: [
+      { legacy: "/about-company/", rule: "1:1 精確對齊", target: "/about-company/" },
+      { legacy: "/2023/11/industrial-guide/", rule: "全域 301 轉址", target: "/guides/industrial-guide/" },
+      { legacy: "/wp-content/uploads/catalog.pdf", rule: "媒體附件無損繼承", target: "/assets/docs/catalog.pdf" },
+    ],
+    optionA: {
+      title: "方案 A：私有隔離 Headless WordPress",
+      desc: "編輯登入保留在非公開子網域或公司內網，維持習慣的發文流程。公網訪客絕不接觸 PHP 與資料庫。",
+    },
+    optionB: {
+      title: "方案 B：現代視覺化 Git CMS（Keystatic / Decap）",
+      desc: "直覺好用的視覺化編輯器，內容直接納入 Git 版本庫儲存。無資料庫、無外掛漏洞、每月 $0 主機費。",
+    },
+  },
+};
+
+const c = copy[lang] || copy.en;
+---
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+  
+  <!-- Card 1: 1:1 SEO & URL Parity (Generous, clean, readable with warm stone accents) -->
+  <div class="rounded-xl bg-white border border-[#e8e6df] hover:border-[#dcd9ce] p-8 sm:p-10 flex flex-col justify-between shadow-2xs hover:shadow-md transition-all duration-300">
+    <div class="space-y-4">
+      <h3 class="text-2xl font-bold text-[#1c2024] leading-snug">
+        {c.seoTitle}
+      </h3>
+
+      <p class="text-base text-[#575f6e] leading-relaxed font-normal">
+        {c.seoDesc}
+      </p>
+
+      <!-- Clean, Spacious URL Transition Showcase -->
+      <div class="pt-4 space-y-3">
+        {c.previewUrls.map((item) => (
+          <div class="p-3.5 sm:p-4 rounded-lg bg-[#faf9f6] border border-[#e8e6df] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
+            <div class="flex items-center gap-2 text-[#1c2024] font-mono min-w-0">
+              <span class="truncate text-[#575f6e]">{item.legacy}</span>
+              <span class="text-slate-400 shrink-0">→</span>
+              <span class="font-semibold truncate text-[#1c2024]">{item.target}</span>
+            </div>
+            <span class="text-xs text-amber-900 bg-amber-50 border border-amber-200/80 px-2.5 py-0.5 rounded font-medium shrink-0 whitespace-nowrap self-start sm:self-auto">
+              {item.rule}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="pt-6 mt-6 border-t border-[#f4f3ec] text-xs text-[#575f6e]">
+      {c.parityNote}
+    </div>
+  </div>
+
+  <!-- Card 2: Editorial Continuity (Clear narrative, clean architecture notes) -->
+  <div class="rounded-xl bg-white border border-[#e8e6df] hover:border-[#dcd9ce] p-8 sm:p-10 flex flex-col justify-between shadow-2xs hover:shadow-md transition-all duration-300">
+    <div class="space-y-4">
+      <h3 class="text-2xl font-bold text-[#1c2024] leading-snug">
+        {c.cmsTitle}
+      </h3>
+
+      <p class="text-base text-[#575f6e] leading-relaxed font-normal">
+        {c.cmsDesc}
+      </p>
+
+      <!-- Decoupled Publishing Flow Overview -->
+      <div class="pt-4 space-y-3">
+        <div class="p-4 rounded-lg bg-[#faf9f6] border border-[#e8e6df] space-y-1.5">
+          <div class="text-xs font-semibold text-[#1c2024]">
+            {c.optionA.title}
+          </div>
+          <p class="text-xs text-[#575f6e] leading-relaxed">
+            {c.optionA.desc}
+          </p>
+        </div>
+
+        <div class="p-4 rounded-lg bg-[#faf9f6] border border-[#e8e6df] space-y-1.5">
+          <div class="text-xs font-semibold text-[#1c2024]">
+            {c.optionB.title}
+          </div>
+          <p class="text-xs text-[#575f6e] leading-relaxed">
+            {c.optionB.desc}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pt-6 mt-6 border-t border-[#f4f3ec] text-xs text-[#575f6e]">
+      {c.flowDesc}
+    </div>
+  </div>
+
+</div>

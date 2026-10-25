@@ -1,0 +1,325 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PricingTable from '../../components/PricingTable.astro';
+import { getLocalizedPath, type Lang } from '../../i18n/utils';
+import { siteConfig } from '../../data/siteConfig';
+
+const lang: Lang = 'zh-tw';
+const estimatePath = getLocalizedPath('estimate', lang);
+const pricingPath = getLocalizedPath('pricing', lang);
+
+const comparisonRows = [
+  {
+    metric: "HTML DOM 節點深度",
+    legacy: "深達 15～25 層嵌套（Elementor / Divi 拖拉編輯器自動生成）",
+    sitecarry: "精簡至 3～5 層（純淨語意化組件，代碼體積精簡 80%）",
+  },
+  {
+    metric: "手機端渲染與捲動",
+    legacy: "嚴重卡頓掉幀（被迫載入多套肥大 CSS 框架與 jQuery 動效）",
+    sitecarry: "絲滑 60fps（0KB 冗餘 JS，輕量 Tailwind CSS 現代樣式）",
+  },
+  {
+    metric: "視覺設計美學風格",
+    legacy: "粗糙僵硬的市售商業套版感、過時動效與凌亂排版",
+    sitecarry: "2026 歐美日頂尖 B2B / SaaS 國際高階美學，極致耐看",
+  },
+  {
+    metric: "外掛相依與維護責任",
+    legacy: "原接案團隊失聯，站內堆疊 40 個套件，無人敢碰",
+    sitecarry: "現代無外掛架構，源碼交付自有 Git 倉庫，完全掌控",
+  },
+  {
+    metric: "搜尋廣告品質得分 (QS)",
+    legacy: "低（因手機加載慢與使用者體驗差，導致廣告點擊單價居高不下）",
+    sitecarry: "顯著提升（Core Web Vitals 滿分，大幅降低 Google Ads 獲客成本）",
+  },
+  {
+    metric: "歷史文章與網址資產",
+    legacy: "常見外包粗暴推翻網址結構，造成全站 404 死鏈與流量暴跌",
+    sitecarry: "全量歷史文章 1:1 承接，邊緣 301 規則確保權重持續增長",
+  },
+];
+
+const faqs = [
+  {
+    q: "整站重構改版，需要我們企業自己重新提供所有文字和圖片嗎？",
+    a: "完全不需要。我們具備自動化萃取工具，會直接從您現有的舊站中無損導出所有優質產品介紹、企業歷史與部落格文章，並為其重新適配高質感的現代排版。您只需專注審查新版設計與確認新增的業務亮點即可。",
+  },
+  {
+    q: "我們之前的網站是用 Elementor 做的，改版後還能繼續用 Elementor 嗎？",
+    a: "我們堅決不建議在重構中繼續使用 Elementor。Elementor 雖然拖拉方便，但會產生深達十幾層的無效 HTML 節點與幾十個無用 JS 庫，是導致手機卡頓與測速赤字的罪魁禍首。改版後我們會將其重構為極速純淨的現代組件，若需要編輯文章，文案人員依然享有直觀易用的視覺編輯器。",
+  },
+  {
+    q: "改版重構的工期通常需要多久？期間會影響現有網站營運嗎？",
+    a: "標準商業重構專案工期一般為 2～4 週。整個重構過程均在我們的私有獨立預覽環境（Staging）中進行，您現有的舊網站全程不受任何影響，照常接待客戶與產生詢盤，直至新站驗收完成才進行零停機切換。",
+  },
+  {
+    q: "改版後如果發現排版問題或 Bug，有售後保固支援嗎？",
+    a: "有。SiteCarry 所有正式專案皆包含自 DNS 正式切換上線日起算之「30 天免費瑕疵保固」。保固期內任何屬於約定範圍內的排版缺陷或功能 Bug，我們一律提供免費優先修復。",
+  },
+];
+---
+
+<Layout 
+  title="WordPress 網站改版與整站重構 (WordPress Rebuild) | 拋棄臃腫套版，重塑秒開品牌形象"
+  description="專為主題停更、外掛疊床架屋、手機版載入緩慢的老舊 WordPress 企業站打造。徹底剔除 Elementor 臃腫代碼，升級 Astro 現代極速純靜態架構，保留歷史文章與 SEO 權重，全面重塑高質感品牌形象。"
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- HERO SECTION (核心關鍵詞置頂，無破 Badge 藥丸，無孤行箭頭) -->
+      <div class="max-w-4xl mx-auto text-center mb-20">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1c2024] tracking-tight mb-6 leading-[1.15]">
+          WordPress 網站改版與整站重構
+          <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-600 block mt-3 font-sans">
+            徹底終結 Elementor 頁面構建器臃腫死局 · 以 Astro 現代架構重塑高質感企業旗艦
+          </span>
+        </h1>
+        <p class="text-base sm:text-lg text-[#575f6e] max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+          當舊主題停止維護、外掛相互打架、手機端嚴重卡頓時，打補丁只是在浪費預算。我們保留您所有的歷史文章、核心內容與 SEO 權重，採用 Astro 現代群島架構徹底打底重構，打造符合國際水準的高質感響應式官網。
+        </p>
+
+        <!-- Dual-Track Action Buttons (純淨專業，無多餘箭頭) -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            線上選購方案 · 支付定金
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-rebuild`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            免費預約網站改版評估
+          </a>
+        </div>
+      </div>
+
+      <!-- SECTION 1: PAIN POINTS (老站改版三大血淚痛點) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            修補修不完、改版又怕掉排名？老舊官網正在阻礙您的業務增長：
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            絕大多數幾年前用 Elementor、Divi 或商業主題搭建的官網，隨著時間推移都演變成了「難以維護、開得極慢、設計過時」的負資產。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">01</div>
+            <h3 class="text-lg font-bold text-slate-900">「套版堆疊」導致的效能死局</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              早期拖拉式頁面編輯器產生了深達十幾層的無效 HTML 節點，外加二、三十個外掛各自載入臃腫 CSS/JS 庫。即使買了昂貴的主機，手機端加載依然超過 6 秒，高達 65% 的潛在買家在頁面完全打開前就關閉了視窗。
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">02</div>
+            <h3 class="text-lg font-bold text-slate-900">原團隊失聯，接手工程師不敢動</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              當初接案的個人或工作室早已解散，主題作者也早在兩年前停止更新。站內外掛盤根錯節，後續接手的工程師看到這堆「技術債」誰都不敢碰，生怕點一下更新就整站白屏報錯。
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">03</div>
+            <h3 class="text-lg font-bold text-slate-900">視覺老舊，嚴重損害海外買家信任</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              版面充斥著生硬落伍的圖文排版與不協調的配色，與貴公司當前日益增強的專業實力嚴重脫節。歐美、日本的高價值企業客戶造訪時，第一眼甚至會懷疑「這家公司是否還在正常營運」。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: ARCHITECTURE COMPARISON TABLE (非首頁重複圖表，專屬對比規格) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-10">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            舊式拖拉套版網站 vs. SiteCarry Astro 現代重構對照
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            不再陷入每兩年買一次套版的輪迴，以工程化現代組件為企業建立長期數位資產：
+          </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-[#e8e6df] bg-white shadow-2xs">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-[#faf9f6] border-b border-[#e8e6df] text-slate-600 uppercase font-mono text-[10px] tracking-wider font-semibold">
+              <tr>
+                <th class="px-6 py-4 w-1/4">比較維度</th>
+                <th class="px-6 py-4 w-3/8 text-slate-500">舊式 Elementor / 套版網站</th>
+                <th class="px-6 py-4 w-3/8 text-amber-900 font-bold bg-amber-50/50">SiteCarry Astro 現代重構</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#e8e6df]">
+              {comparisonRows.map((row) => (
+                <tr class="hover:bg-[#faf9f6]/70 transition-colors">
+                  <td class="px-6 py-4 font-bold text-slate-900 font-sans">{row.metric}</td>
+                  <td class="px-6 py-4 text-slate-500 font-normal leading-relaxed">{row.legacy}</td>
+                  <td class="px-6 py-4 text-slate-900 font-semibold bg-amber-50/30 leading-relaxed">{row.sitecarry}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SECTION 3: REBUILD SPECIFICATIONS (全新現代重構規格) -->
+      <div class="mb-24 p-8 sm:p-12 rounded-2xl bg-white border border-[#e8e6df] shadow-xs space-y-8">
+        <div class="max-w-3xl">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            拒絕套版輪迴：為什麼 Astro 是官網重構的最佳基石？
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            如果在 WordPress 上再買一套新主題，兩年後依然會重蹈覆轍。SiteCarry 採用現代 Astro 解耦架構為您徹底打底：
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">1. 徹底剔除 Elementor 臃腫 DOM 結構</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              傳統頁面編輯器一個簡單按鈕就包裹了 8 層無效 `div`。我們採用純淨的現代語意化組件重構，代碼體積精簡 80%，讓瀏覽器以最少 CPU 資源瞬間完成佈局渲染。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">2. 預設 0KB 冗餘 JavaScript</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              靜態內容頁面預設不載入任何客戶端 JS 運行時，只有表單或互動部件按需載入。即使在偏遠地區或訊號微弱的手機環境下，頁面依然能瞬間呈現、絲滑滑動。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">3. 國際高質感設計語彙（去廉價感）</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              摒棄土味廉價的撞色與過度花俏的過時動效。採用溫潤紙質底色、精密字距微調與符合 2026 年歐美頂尖 SaaS / B2B 旗艦標準的視覺排版，讓品牌溢價立即翻倍。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">4. 內容團隊零門檻的現代無頭編輯器</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              重構並不代表放棄文章編輯。您可選擇保留私有 WordPress 後台專門用於撰寫文章，或升級為更輕量、無主機費的 Git 雲端編輯器（如 Keystatic），寫作體驗流暢無比。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: TANGIBLE BENEFITS (4 大實質商業質變) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            整站重構改版後，您將獲得的 4 大商業質變：
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            改版不是單純換張皮，而是為企業打造兼具極致效能、頂級形象與高轉化率的長期資產。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">01</div>
+            <h3 class="text-base font-bold text-slate-900">品牌溢價與詢盤率倍增</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              現代高級的國際化視覺讓海外買家第一時間產生專業信賴，訪客平均停留時間大幅增長，詢盤轉化率明顯提升。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">02</div>
+            <h3 class="text-base font-bold text-slate-900">Google 核心網頁指標全綠</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              手機端 0.8 秒秒開，LCP、CLS、INP 全部進入 Google 頂尖區間，大幅提升 Google Ads 廣告品質分數，降低獲客成本。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">03</div>
+            <h3 class="text-base font-bold text-slate-900">歷史 SEO 權重滴水不漏</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              舊站所有收錄網址 1:1 映射，配合邊緣 301 重定向機制，改版後完全不掉排名，讓歷年積累的搜尋權重持續發揮價值。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">04</div>
+            <h3 class="text-base font-bold text-slate-900">每年省下數千元主機開銷</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              告別動態 VPS 與昂貴的管理型主機，全站直接部署在 Cloudflare 全球邊緣節點，主機月費歸零，再無外包維護負擔。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: SPECIFIC FAQS -->
+      <div class="max-w-4xl mx-auto mb-24">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-8 text-center">
+          WordPress 網站改版重構常見問題
+        </h2>
+        <div class="space-y-4">
+          {faqs.map((faq) => (
+            <div class="p-6 rounded-2xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+              <h3 class="text-base font-bold text-slate-900">{faq.q}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed font-normal">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- SECTION 6: PRICING -->
+      <div class="mb-24" id="pricing">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            WordPress 整站重構透明方案與規格
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            包含全新現代視覺設計、歷史文章無損萃取清洗、1:1 網址對齊與上線後 30 天瑕疵保固。
+          </p>
+        </div>
+
+        <PricingTable lang={lang} />
+      </div>
+
+      <!-- SECTION 7: FINAL DUAL-TRACK CALL TO ACTION (純淨無箭頭) -->
+      <div class="p-8 sm:p-12 rounded-2xl bg-[#fffcf5] border border-amber-200/80 text-center max-w-4xl mx-auto space-y-6 shadow-xs">
+        <div class="space-y-2">
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            準備好徹底甩掉臃腫老套版，煥新您的企業門面了嗎？
+          </h3>
+          <p class="text-sm text-slate-600 max-w-xl mx-auto">
+            提供您現有的老站網址，我們的資深架構師將免費為您審查代碼與主題健康度，並出具具體的改版規劃與固定總價。
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            線上選購方案 · 支付定金
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-rebuild`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            免費預約網站改版評估
+          </a>
+        </div>
+
+        <p class="text-xs text-slate-500 pt-2">
+          不想填寫表單？亦可直接寄信至 
+          <a href={`mailto:${siteConfig.contactEmail}`} class="font-mono text-amber-800 hover:text-amber-900 font-semibold underline underline-offset-2 ml-1">
+            {siteConfig.contactEmail}
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</Layout>

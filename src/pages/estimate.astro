@@ -1,0 +1,34 @@
+---
+import Layout from '../layouts/Layout.astro';
+import EstimateForm from '../components/EstimateForm.astro';
+import { useTranslations, type Lang } from '../i18n/utils';
+
+const lang: Lang = 'en';
+const t = useTranslations(lang);
+const tier = Astro.url.searchParams.get('tier') || '';
+---
+
+<Layout 
+  title="Get a Migration Estimate | Transparent Fixed Pricing"
+  description="Request a detailed scope and price assessment for your WordPress migration or legacy website rebuild. Receive an objective technical recommendations and fixed quote."
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-white border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Top Overview Header -->
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
+          Estimate Your Migration
+        </h1>
+        <p class="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
+          No vague sales calls or hidden hourly meters. Share your URL and requirements below, and we'll reply with honest technical recommendations and a fixed quote.
+        </p>
+      </div>
+
+      <!-- Live Form Component -->
+      <EstimateForm lang={lang} preselectedTier={tier} />
+
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,325 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PricingTable from '../components/PricingTable.astro';
+import { getLocalizedPath, type Lang } from '../i18n/utils';
+import { siteConfig } from '../data/siteConfig';
+
+const lang: Lang = 'en';
+const estimatePath = getLocalizedPath('estimate', lang);
+const pricingPath = getLocalizedPath('pricing', lang);
+
+const comparisonRows = [
+  {
+    metric: "HTML DOM Depth",
+    legacy: "15 to 25 layers deep (generated automatically by Elementor / Divi page builders)",
+    sitecarry: "Clean 3 to 5 levels (semantic components, cutting HTML weight by 80%)",
+  },
+  {
+    metric: "Mobile Scroll & Render",
+    legacy: "Severe frame drops (burdened by jQuery plugins and bloated CSS frameworks)",
+    sitecarry: "Fluid 60fps scrolling (0KB redundant JS, modern utility-first Tailwind CSS)",
+  },
+  {
+    metric: "Visual Aesthetics & Typography",
+    legacy: "Rigid commercial template feel, dated animations, and unmaintainable inline styles",
+    sitecarry: "Refined 2026 SaaS/B2B international design, timeless and authoritative",
+  },
+  {
+    metric: "Plugin Dependency & Responsibility",
+    legacy: "Original team vanished, leaving 40 plugins that no successor dares update",
+    sitecarry: "Modern zero-plugin architecture, source code committed to your own Git repo",
+  },
+  {
+    metric: "Ad Quality Score & Acquisition Cost",
+    legacy: "Poor (slow mobile landing speed inflates Google Ads CPC bids)",
+    sitecarry: "Optimized (green Core Web Vitals directly lower customer acquisition costs)",
+  },
+  {
+    metric: "Historical Articles & SEO Slugs",
+    legacy: "Redesigns frequently wipe out URLs, leading to 404 swamps and traffic drops",
+    sitecarry: "All articles transferred 1:1, edge 301 rules protect search authority",
+  },
+];
+
+const faqs = [
+  {
+    q: "Do we need to supply all copy and images again for the rebuild?",
+    a: "No. Our automated extraction tools pull all existing marketing copy, product descriptions, case studies, and blog posts directly from your current site. We then re-typeset your content into modern, polished responsive layouts. You only need to review the staging environment and supply any new business updates.",
+  },
+  {
+    q: "Our previous website was built with Elementor. Can we keep Elementor in the rebuild?",
+    a: "We strongly advise against continuing with Elementor. Visual drag-and-drop builders generate excessive DOM bloat and force dozens of unminified script libraries, which is the primary cause of mobile sluggishness. We re-engineer your pages into ultra-clean components while providing an intuitive, lightweight visual editor for your writers.",
+  },
+  {
+    q: "How long does a typical redesign and rebuild take? Will our live site be affected?",
+    a: "Standard business rebuilds typically take 2 to 4 weeks. The entire rebuild is developed in a private staging environment. Your current live site continues taking customer inquiries completely unaffected until the new build is approved for a zero-downtime DNS cutover.",
+  },
+  {
+    q: "Is there a post-launch warranty if any bugs or layout defects are found?",
+    a: "Yes. Every SiteCarry project includes a full 30-day post-launch warranty starting from production DNS launch. Any reproducible bugs, layout defects, or broken links within the agreed scope are remediated immediately at zero additional cost.",
+  },
+];
+---
+
+<Layout 
+  title="WordPress Rebuild & Redesign Service (WordPress Rebuild) | Modernize Bloated Themes & Sub-Second Speed"
+  description="Rebuild slow, outdated WordPress sites built on Elementor or Divi into modern Astro decoupled websites. Brand redesign, clean components, 1:1 historical content preservation, and sub-second speed."
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- HERO SECTION (Keyword front-and-center, zero badge pill, zero arrows) -->
+      <div class="max-w-4xl mx-auto text-center mb-20">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1c2024] tracking-tight mb-6 leading-[1.15]">
+          WordPress Rebuild & Redesign Service
+          <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-600 block mt-3 font-sans">
+            Eliminate Page Builder Bloat & Obsolete Themes · Re-architect on Astro for Sub-Second Speed
+          </span>
+        </h1>
+        <p class="text-base sm:text-lg text-[#575f6e] max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+          When legacy themes are abandoned, plugins clash, and mobile browsing crawls, patch fixes are a waste of budget. We preserve your historical content and SEO link equity while rebuilding your frontend on Astro's modern Islands architecture.
+        </p>
+
+        <!-- Dual-Track Action Buttons (Clean, professional, zero arrows) -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            Select Plan · Pay Kickoff Deposit
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-rebuild`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            Request Free Rebuild Assessment
+          </a>
+        </div>
+      </div>
+
+      <!-- SECTION 1: PAIN POINTS (Why Outdated WordPress Builds Hinder Growth) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Tired of band-aid fixes? How legacy theme bloat hurts your bottom line:
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Corporate sites built years ago with Elementor, Divi, or commercial templates gradually degrade into unmaintainable, sluggish liabilities that drive customers away.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">01</div>
+            <h3 class="text-lg font-bold text-slate-900">Drag-and-Drop Page Builder Dead-End</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Visual builders create deeply nested DOM trees with dozens of unminified CSS and JS files. Even on high-spec servers, mobile loading drags past 6 seconds, causing over 65% of potential B2B buyers to abandon the page.
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">02</div>
+            <h3 class="text-lg font-bold text-slate-900">Original Agency Disappeared, No One Dares Touch It</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              The original freelance developer or agency has long vanished, and the theme author stopped issuing updates years ago. Subsequent engineers look at the tangled web of 40 active plugins and refuse to take responsibility.
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">03</div>
+            <h3 class="text-lg font-bold text-slate-900">Dated Visual Design Damaging Trust</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Your company's market reputation and product quality have grown, but your website still looks like a dated, rigid commercial template. International enterprise prospects wonder whether the company is still actively innovating.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: ARCHITECTURE COMPARISON TABLE (Dedicated Comparison Table) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-10">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Legacy Drag-and-Drop Themes vs. SiteCarry Astro Modern Rebuild
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Break the theme purchasing cycle and build a permanent, engineered corporate asset:
+          </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-[#e8e6df] bg-white shadow-2xs">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-[#faf9f6] border-b border-[#e8e6df] text-slate-600 uppercase font-mono text-[10px] tracking-wider font-semibold">
+              <tr>
+                <th class="px-6 py-4 w-1/4">Evaluation Metric</th>
+                <th class="px-6 py-4 w-3/8 text-slate-500">Legacy Elementor / Commercial Themes</th>
+                <th class="px-6 py-4 w-3/8 text-amber-900 font-bold bg-amber-50/50">SiteCarry Astro Rebuild</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#e8e6df]">
+              {comparisonRows.map((row) => (
+                <tr class="hover:bg-[#faf9f6]/70 transition-colors">
+                  <td class="px-6 py-4 font-bold text-slate-900 font-sans">{row.metric}</td>
+                  <td class="px-6 py-4 text-slate-500 font-normal leading-relaxed">{row.legacy}</td>
+                  <td class="px-6 py-4 text-slate-900 font-semibold bg-amber-50/30 leading-relaxed">{row.sitecarry}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SECTION 3: REBUILD SPECIFICATIONS (Deep Technical Breakdown) -->
+      <div class="mb-24 p-8 sm:p-12 rounded-2xl bg-white border border-[#e8e6df] shadow-xs space-y-8">
+        <div class="max-w-3xl">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Break the Theme Cycle: Why Astro Rebuilds Last for Years
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Buying another off-the-shelf WordPress theme will just land you back in technical debt two years later. SiteCarry rebuilds on a modern, decoupled foundation:
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">1. Clean Component Architecture (Stripping DOM Bloat)</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              We eliminate the 8 layers of nested divs generated by page builders. Clean, semantic HTML components reduce total code weight by 80%, allowing browsers to render pages near instantaneously.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">2. 0KB Default JavaScript Overhead</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Content pages ship with zero client-side JavaScript. Only interactive elements (forms, sliders) load minimal JS on demand, ensuring fluid scrolling even on low-end mobile hardware.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">3. Modern International Design Standards</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Refined typography, balanced whitespace, and purposeful color harmony built with modern Tailwind CSS. Aligned with current North American and European SaaS standards to elevate your brand authority.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">4. Headless Content Management Without the Server</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Rebuilding does not mean losing content management. Keep WordPress as a private headless content API, or graduate to a Git-backed CMS (like Keystatic) that costs zero in monthly server fees.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: TANGIBLE BENEFITS (4 Direct Business Returns) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            4 Tangible Business Returns from a Ground-Up Rebuild:
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Not just a cosmetic facelift—a strategic upgrade in performance, conversion rate, and engineering stability.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">01</div>
+            <h3 class="text-base font-bold text-slate-900">Elevated Brand Authority</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Modern aesthetic increases buyer trust immediately, leading to longer session durations and significantly higher B2B inquiry rates.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">02</div>
+            <h3 class="text-base font-bold text-slate-900">Flawless Core Web Vitals</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              0.8-second load speeds earn top-tier scores in Google PageSpeed, improving Google Ads Quality Scores and reducing acquisition costs.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">03</div>
+            <h3 class="text-base font-bold text-slate-900">1:1 SEO Link Equity Preserved</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              All historical URLs and metadata are meticulously mapped. Automated CDN edge 301 rules ensure you don't lose a drop of search authority.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">04</div>
+            <h3 class="text-base font-bold text-slate-900">Zero Ongoing Hosting Fees</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Decommission expensive managed WordPress hosting. Deploy globally on Cloudflare edge CDN with zero monthly hosting invoices.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: SPECIFIC FAQS -->
+      <div class="max-w-4xl mx-auto mb-24">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-8 text-center">
+          WordPress Rebuild Frequently Asked Questions
+        </h2>
+        <div class="space-y-4">
+          {faqs.map((faq) => (
+            <div class="p-6 rounded-2xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+              <h3 class="text-base font-bold text-slate-900">{faq.q}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed font-normal">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- SECTION 6: PRICING -->
+      <div class="mb-24" id="pricing">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            WordPress Rebuild Packages & Scope
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Includes custom UI design, full historical article migration, strict 1:1 URL parity, and 30-day post-launch warranty support.
+          </p>
+        </div>
+
+        <PricingTable lang={lang} />
+      </div>
+
+      <!-- SECTION 7: FINAL DUAL-TRACK CALL TO ACTION (Clean, zero arrows) -->
+      <div class="p-8 sm:p-12 rounded-2xl bg-[#fffcf5] border border-amber-200/80 text-center max-w-4xl mx-auto space-y-6 shadow-xs">
+        <div class="space-y-2">
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            Ready to replace your bloated theme with a high-speed flagship?
+          </h3>
+          <p class="text-sm text-slate-600 max-w-xl mx-auto">
+            Provide your current website URL. Our senior architects will audit your theme health for free and outline a fixed-price rebuild plan.
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            Select Plan · Pay Kickoff Deposit
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-rebuild`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            Request Free Rebuild Assessment
+          </a>
+        </div>
+
+        <p class="text-xs text-slate-500 pt-2">
+          Prefer email? Reach us directly at 
+          <a href={`mailto:${siteConfig.contactEmail}`} class="font-mono text-amber-800 hover:text-amber-900 font-semibold underline underline-offset-2 ml-1">
+            {siteConfig.contactEmail}
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</Layout>

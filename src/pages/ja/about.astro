@@ -1,0 +1,67 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { siteConfig } from '../../data/siteConfig';
+import { getLocalizedPath, type Lang } from '../../i18n/utils';
+
+const lang: Lang = 'ja';
+const estimatePath = getLocalizedPath('estimate', lang);
+---
+
+<Layout 
+  title="私たちについて | SiteCarry"
+  description="SiteCarryの理念、技術標準、老朽化WordPressの安全な移行に対するこだわりについて。"
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-white border-b border-slate-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="mb-14">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6 leading-[1.15]">
+          ウェブサイトを前進させ、価値ある資産を確実に守る。
+        </h1>
+        <p class="text-lg sm:text-xl text-slate-600 leading-relaxed font-normal">
+          SiteCarryは、日本、アメリカ、ヨーロッパ、台湾の中小企業を対象に、WordPressサイトの移行・再構築および静的化（Decoupled）を専門に行うスタジオです。
+        </p>
+      </div>
+
+      <div class="space-y-12 text-slate-600 leading-relaxed border-t border-slate-200 pt-12">
+        <h2 class="text-2xl font-bold text-slate-900">4つの基本姿勢</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div class="p-7 rounded-xl bg-slate-50/70 border border-slate-200 shadow-2xs space-y-2.5">
+            <span class="text-3xl font-extrabold font-mono text-slate-300 block">01</span>
+            <h3 class="text-lg font-bold text-slate-900">1. 検索資産の最優先保護</h3>
+            <p class="text-sm text-slate-600 leading-relaxed font-normal">URL構造を尊重し、1:1の恒久301リダイレクトを設計。長年のSEO評価を決して無駄にしません。</p>
+          </div>
+          <div class="p-7 rounded-xl bg-slate-50/70 border border-slate-200 shadow-2xs space-y-2.5">
+            <span class="text-3xl font-extrabold font-mono text-slate-300 block">02</span>
+            <h3 class="text-lg font-bold text-slate-900">2. 明瞭な固定総額</h3>
+            <p class="text-sm text-slate-600 leading-relaxed font-normal">着手前に明確な作業範囲を合意。後から追加請求が発生することはありません。</p>
+          </div>
+          <div class="p-7 rounded-xl bg-slate-50/70 border border-slate-200 shadow-2xs space-y-2.5">
+            <span class="text-3xl font-extrabold font-mono text-slate-300 block">03</span>
+            <h3 class="text-lg font-bold text-slate-900">3. 公開脆弱性リスクのゼロ化</h3>
+            <p class="text-sm text-slate-600 leading-relaxed font-normal">公開サーバーにPHPやSQLを置かないアーキテクチャで、日々のパッチ救火から解放します。</p>
+          </div>
+          <div class="p-7 rounded-xl bg-slate-50/70 border border-slate-200 shadow-2xs space-y-2.5">
+            <span class="text-3xl font-extrabold font-mono text-slate-300 block">04</span>
+            <h3 class="text-lg font-bold text-slate-900">4. お客様100%所有</h3>
+            <p class="text-sm text-slate-600 leading-relaxed font-normal">納品物はすべてお客様ご自身のGit・Cloudflareアカウントに納品。囲い込みは一切行いません。</p>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-xl bg-slate-50 border border-slate-200 text-sm space-y-2.5 shadow-2xs mt-8">
+          <div><strong class="text-slate-800">連絡先メール:</strong> <a href={`mailto:${siteConfig.contactEmail}`} class="text-amber-800 font-semibold hover:underline ml-1 font-mono">{siteConfig.contactEmail}</a></div>
+          <div><strong class="text-slate-800">対応言語・タイムゾーン:</strong> <span class="text-slate-600 ml-1">{siteConfig.timezones}</span></div>
+          <div><strong class="text-slate-800">直接サポート:</strong> <span class="text-slate-600 ml-1">技術担当エンジニアより直接丁寧にご返信いたします</span></div>
+        </div>
+      </div>
+
+      <div class="mt-14 pt-8 border-t border-slate-200">
+        <a href={estimatePath} class="inline-block px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition-all shadow-sm shadow-amber-500/20">
+          サイト移行について相談する
+        </a>
+      </div>
+
+    </div>
+  </div>
+</Layout>

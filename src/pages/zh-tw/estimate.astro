@@ -1,0 +1,31 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import EstimateForm from '../../components/EstimateForm.astro';
+import { type Lang } from '../../i18n/utils';
+
+const lang: Lang = 'zh-tw';
+const tier = Astro.url.searchParams.get('tier') || '';
+---
+
+<Layout 
+  title="專案評估與報價諮詢 | WordPress 網站改版移轉"
+  description="線上填寫老舊 WordPress 網站移轉或現代化改版需求。由資深工程師提供客觀網站檢測分析與固定總價建議書。"
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-white border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
+          專案需求評估與報價諮詢
+        </h1>
+        <p class="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
+          無冗長推銷電話、無模糊計費。請提供您目前的網站網址與預期目標，我們將儘速回覆技術評估與固定總價建議。
+        </p>
+      </div>
+
+      <EstimateForm lang={lang} preselectedTier={tier} />
+
+    </div>
+  </div>
+</Layout>

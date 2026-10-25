@@ -1,0 +1,349 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PricingTable from '../../components/PricingTable.astro';
+import { getLocalizedPath, type Lang } from '../../i18n/utils';
+import { siteConfig } from '../../data/siteConfig';
+
+const lang: Lang = 'zh-tw';
+const estimatePath = getLocalizedPath('estimate', lang);
+const pricingPath = getLocalizedPath('pricing', lang);
+
+const comparisonRows = [
+  {
+    metric: "手機端載入時間",
+    legacy: "3.5 ～ 6.8 秒（受限於 PHP 解釋與 MySQL 動態查詢）",
+    sitecarry: "小於 0.8 秒（全球 CDN 邊緣節點毫秒分發）",
+  },
+  {
+    metric: "每月主機維護費用",
+    legacy: "每月 $50 ～ $200+ 美元（高配 VPS 或管理型主機）",
+    sitecarry: "每月 $0（託管於 Cloudflare 全球邊緣免費層）",
+  },
+  {
+    metric: "公網攻擊面與安全",
+    legacy: "高危險（PHP 內核漏洞、外掛後門、MySQL 端口暴露）",
+    sitecarry: "物理歸零（純靜態 HTML，公網無 PHP/MySQL 運行）",
+  },
+  {
+    metric: "Google 核心網頁指標",
+    legacy: "常年滿江紅（LCP、INP、CLS 難以通過）",
+    sitecarry: "常年 98～100 分綠燈滿分（大幅提高廣告品質分數）",
+  },
+  {
+    metric: "外掛更新與維護負擔",
+    legacy: "每週提心吊膽（點升級容易導致白屏 WSOD 或錯位）",
+    sitecarry: "永久零負擔（無動態外掛相衝，幾年不維護依然穩如泰山）",
+  },
+  {
+    metric: "歷史 SEO 權重延續",
+    legacy: "常見改版導致大量 404 死鏈，搜尋流量腰斬",
+    sitecarry: "1:1 嚴格網址對齊與邊緣 301 映射，權重 100% 傳遞",
+  },
+];
+
+const faqs = [
+  {
+    q: "WordPress 遷移到 Astro 後，現有的 Google 搜尋排名會受到影響嗎？",
+    a: "不會。我們執行嚴格的「1:1 網址對齊協議」，在遷移前透過自動化爬蟲抓取您所有的既有收錄網址。若有結構微調，會在 CDN 邊緣層直接配置永久 301 重新導向規則，確保搜尋引擎爬蟲與外部反向連結平滑轉移，搜尋權重毫髮無損。",
+  },
+  {
+    q: "過去幾百篇文章裡的舊圖片、附件和內部連結會失效嗎？",
+    a: "完全不會。我們的數據處理管線會將歷史媒體庫圖片完整導出，並在構建時自動轉換為現代高效的 WebP/AVIF 格式，同時批量修正文章正文內部的相對路徑與附件連結，絕不留下破碎圖片或 404 死鏈。",
+  },
+  {
+    q: "遷移施工期間，我們目前營運中的 WordPress 網站會中斷訪問嗎？",
+    a: "完全不會中斷。所有萃取、代碼清洗、組件重構與驗收測試，都在我們獨立的私有預覽環境（Staging）進行，完全不干擾您現有的正式網站。僅在最後驗收通過後，才進行 DNS 零停機秒級切換。",
+  },
+  {
+    q: "遷移為純靜態架構後，文案人員還能像以前一樣發布新文章嗎？",
+    a: "可以。您可以選擇保留您熟悉的私有 WordPress 後台作為無頭內容管理系統（Headless CMS），也可以升級為零主機月費的現代雲端 Git 編輯器（如 Keystatic）。文案團隊依然擁有流暢直觀的圖文編輯界面，無需編寫任何代碼。",
+  },
+];
+---
+
+<Layout 
+  title="WordPress 網站遷移服務 (WordPress Migration) | 1:1 保全 SEO 排名與零被黑"
+  description="專業 WordPress 網站遷移與搬家服務。1:1 完整保全歷史網址與 SEO 搜尋排名，全量文章與媒體清洗萃取，升級 Astro 現代極速純靜態架構，公網漏洞物理歸零。"
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- HERO SECTION (核心關鍵詞置頂，無破 Badge 藥丸，無孤行箭頭) -->
+      <div class="max-w-4xl mx-auto text-center mb-20">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1c2024] tracking-tight mb-6 leading-[1.15]">
+          WordPress 網站遷移服務
+          <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-600 block mt-3 font-sans">
+            1:1 保全 SEO 排名與網址 · 零漏洞升級現代純靜態架構
+          </span>
+        </h1>
+        <p class="text-base sm:text-lg text-[#575f6e] max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+          專為擔心改版掉排名、受夠外掛相衝與資安威脅的企業打造。我們不碰原伺服器受污染檔案，透過獨立數據通道精準萃取文章、圖片與分類，重構為極速、零漏洞的現代 Astro 純靜態前端，每一條歷史網址 1:1 嚴格對齊，Google 搜尋排名毫髮無損。
+        </p>
+
+        <!-- Dual-Track Action Buttons (純淨專業，無多餘箭頭) -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            線上選購方案 · 支付定金
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-migration`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            免費獲取老站檢測報告
+          </a>
+        </div>
+      </div>
+
+      <!-- SECTION 1: PAIN POINTS (客戶當前最真實的三大煎熬) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            老站不敢動、天天提心吊膽？您可能正經歷這些折磨：
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            絕大多數運行 3 年以上的 WordPress 企業站，都陷入了「不敢升級、隨時被黑、但又不敢輕易改版」的進退兩難泥潭。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">01</div>
+            <h3 class="text-lg font-bold text-slate-900">外掛不敢更新，一碰就白屏崩潰</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              站內裝了二、三十個外掛，彼此版本相衝。後台整天跳出高危險安全警告，但只要手賤點了升級，前台版面直接錯位、排版碎裂，甚至出現致命錯誤（Fatal Error）全站癱瘓。
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">02</div>
+            <h3 class="text-lg font-bold text-slate-900">隔三差五被黑，Google 被標記入侵</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              舊版 PHP 與過期外掛漏洞被全球自動化機器人日夜掃描。好不容易找人清理了病毒，過幾天又被植入色情博彩暗鏈，甚至在 Google 搜尋結果上被直接標記為「此網站可能遭到劫持」。
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">03</div>
+            <h3 class="text-lg font-bold text-slate-900">想重做新站，又極度害怕「排名全掉」</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              辛苦累積了幾百篇專業文章與外鏈，很多接案公司改版直接把舊網址換掉，導致滿站 404 死鏈、幾年的自然搜尋流量直接腰斬。這種代價，任何成熟企業都無法承受。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: ARCHITECTURE COMPARISON TABLE (非首頁重複圖表，專屬對比規格) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-10">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            傳統動態 WordPress vs. SiteCarry 現代遷移架構對照
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            這不是單純更換外掛或主題，而是從底層運算邏輯上進行根本性現代化升級：
+          </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-[#e8e6df] bg-white shadow-2xs">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-[#faf9f6] border-b border-[#e8e6df] text-slate-600 uppercase font-mono text-[10px] tracking-wider font-semibold">
+              <tr>
+                <th class="px-6 py-4 w-1/4">比較維度</th>
+                <th class="px-6 py-4 w-3/8 text-slate-500">傳統動態 WordPress 架構</th>
+                <th class="px-6 py-4 w-3/8 text-amber-900 font-bold bg-amber-50/50">SiteCarry Astro 純靜態遷移</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#e8e6df]">
+              {comparisonRows.map((row) => (
+                <tr class="hover:bg-[#faf9f6]/70 transition-colors">
+                  <td class="px-6 py-4 font-bold text-slate-900 font-sans">{row.metric}</td>
+                  <td class="px-6 py-4 text-slate-500 font-normal leading-relaxed">{row.legacy}</td>
+                  <td class="px-6 py-4 text-slate-900 font-semibold bg-amber-50/30 leading-relaxed">{row.sitecarry}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SECTION 3: SCOPE & DATA SANITIZATION (專屬遷移範疇與代碼清洗清單) -->
+      <div class="mb-24 p-8 sm:p-12 rounded-2xl bg-white border border-[#e8e6df] shadow-xs space-y-8">
+        <div class="max-w-3xl">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            完整的數據萃取與代碼深度清洗規範
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            我們絕不盲目打包歷史垃圾檔案。所有內容均通過嚴格的過濾管道，確保乾淨、安全地交付：
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">100% 完整保留的數據資產</h4>
+            <ul class="space-y-2 text-xs text-slate-600 leading-relaxed">
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>所有發布狀態的歷史文章（Posts）、獨立分頁（Pages）與多層級分類目錄。</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>自定義文章類型（CPT）與進階自定義欄位（ACF）之結構化數據。</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>媒體庫高清圖片、文章特色圖片（Featured Image）與作者資料。</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>歷史 SEO 標題（Title）、Meta 描述（Description）與 Open Graph 社交標籤。</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">自動化深度清洗與過濾項目</h4>
+            <ul class="space-y-2 text-xs text-slate-600 leading-relaxed">
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>自動辨識並清除失效短代碼（Shortcodes），轉換為原生純淨語意化 HTML。</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>徹底掃描並剔除歷史受感染的惡意腳本（JavaScript注入、可疑iframe及暗鏈）。</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>歷史 JPG/PNG 圖片構建時自動壓縮並生成現代 WebP/AVIF 格式，減少 70% 體積。</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>全站死鏈掃描，將所有內嵌內部連結更新為規範對齊網址。</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: 5-STAGE ZERO-DOWNTIME PROCESS (5 階段零停機遷移工程標準) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            5 階段零停機標準工程流程
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            從初審到上線，每一步驟皆有嚴密的防護與驗收機制，絕不冒險中斷正式業務：
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+            <span class="text-xs font-mono font-bold text-amber-800 block">STEP 01</span>
+            <h3 class="text-sm font-bold text-slate-900">無損數據萃取</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              透過獨立唯讀 API 導出數據，原站照常運行，絕不改動伺服器任何底層代碼。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+            <span class="text-xs font-mono font-bold text-amber-800 block">STEP 02</span>
+            <h3 class="text-sm font-bold text-slate-900">深度清洗過濾</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              自動化腳本清洗短代碼、惡意注入與冗餘行內樣式，重組為結構化 Markdown。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+            <span class="text-xs font-mono font-bold text-amber-800 block">STEP 03</span>
+            <h3 class="text-sm font-bold text-slate-900">Astro 組件重構</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              採用現代 Astro 語意化組件重建前台頁面，保證 0KB 冗餘 JS 與極致響應式體驗。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+            <span class="text-xs font-mono font-bold text-amber-800 block">STEP 04</span>
+            <h3 class="text-sm font-bold text-slate-900">1:1 網址對齊驗證</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              全量對比舊站收錄清單，部署 CDN 邊緣 301 重定向，零死鏈、零權重丟失。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+            <span class="text-xs font-mono font-bold text-amber-800 block">STEP 05</span>
+            <h3 class="text-sm font-bold text-slate-900">DNS 零停機切換</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              客戶在私有預覽環境驗收滿意後，無縫切換 DNS，享 30 天免費瑕疵保固。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: SPECIFIC FAQS (針對遷移的最常見疑問) -->
+      <div class="max-w-4xl mx-auto mb-24">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-8 text-center">
+          WordPress 網站遷移常見問題
+        </h2>
+        <div class="space-y-4">
+          {faqs.map((faq) => (
+            <div class="p-6 rounded-2xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+              <h3 class="text-base font-bold text-slate-900">{faq.q}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed font-normal">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- SECTION 6: PRICING -->
+      <div class="mb-24" id="pricing">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            WordPress 網站遷移透明方案與規格
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            固定總價合約，包含全量文章媒體清洗、1:1 網址對齊驗證與上線後 30 天瑕疵保固。
+          </p>
+        </div>
+
+        <PricingTable lang={lang} />
+      </div>
+
+      <!-- SECTION 7: FINAL DUAL-TRACK CALL TO ACTION (純淨無箭頭) -->
+      <div class="p-8 sm:p-12 rounded-2xl bg-[#fffcf5] border border-amber-200/80 text-center max-w-4xl mx-auto space-y-6 shadow-xs">
+        <div class="space-y-2">
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            準備好安全平穩地升級現代架構了嗎？
+          </h3>
+          <p class="text-sm text-slate-600 max-w-xl mx-auto">
+            提供您現有的老站網址，資深工程師將免費為您審查技術健康度與網址結構，並出具固定總價遷移建議。
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            線上選購方案 · 支付定金
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-migration`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            免費獲取老站檢測報告
+          </a>
+        </div>
+
+        <p class="text-xs text-slate-500 pt-2">
+          不想填寫表單？亦可直接寄信至 
+          <a href={`mailto:${siteConfig.contactEmail}`} class="font-mono text-amber-800 hover:text-amber-900 font-semibold underline underline-offset-2 ml-1">
+            {siteConfig.contactEmail}
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</Layout>

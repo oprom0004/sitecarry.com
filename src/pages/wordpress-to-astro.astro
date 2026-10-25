@@ -1,0 +1,325 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PricingTable from '../components/PricingTable.astro';
+import { getLocalizedPath, type Lang } from '../i18n/utils';
+import { siteConfig } from '../data/siteConfig';
+
+const lang: Lang = 'en';
+const estimatePath = getLocalizedPath('estimate', lang);
+const pricingPath = getLocalizedPath('pricing', lang);
+
+const comparisonRows = [
+  {
+    metric: "Client-Side JavaScript Payload",
+    legacy: "Several megabytes (heavy hydration runtimes and stacked plugin scripts)",
+    sitecarry: "0KB by default (Astro Islands architecture, JS only where interactive)",
+  },
+  {
+    metric: "Rendering Model",
+    legacy: "Server-side dynamic compilation on every single request",
+    sitecarry: "Ahead-of-Time (AOT) static pre-rendering directly into pure HTML",
+  },
+  {
+    metric: "Global Time to First Byte (TTFB)",
+    legacy: "800ms to 2,500ms (drastically affected by distance and database query load)",
+    sitecarry: "Under 50ms (delivered globally from 300+ CDN edge cache locations)",
+  },
+  {
+    metric: "Monthly Hosting & Maintenance",
+    legacy: "$50 to $250+/month (high-tier VPS, caching add-ons, security monitoring)",
+    sitecarry: "$0/month (hosted on global edge CDN generous free tiers)",
+  },
+  {
+    metric: "Security & Vulnerability Exposure",
+    legacy: "Constant threat (automated botnets targeting PHP RCEs and SQL injection)",
+    sitecarry: "Physically immune (no live PHP engine or database ports facing the public web)",
+  },
+  {
+    metric: "Image Format & Compression",
+    legacy: "Requires costly plugins that consume host storage and CPU",
+    sitecarry: "Build-time automated transformation into AVIF/WebP, cutting size by 70%",
+  },
+];
+
+const faqs = [
+  {
+    q: "Will contact forms and dynamic features still work after migrating to static Astro?",
+    a: "Yes, seamlessly. Astro utilizes an Islands Architecture. Dynamic components like contact forms and search inputs are connected to serverless edge endpoints with built-in spam protection, delivering leads instantly to your email and CRM without needing vulnerable PHP mail plugins.",
+  },
+  {
+    q: "How does Astro differ from Next.js or Gatsby for content sites?",
+    a: "Next.js and Gatsby force large JavaScript hydration bundles onto the browser even for static text pages, which often degrades mobile interaction readiness. Astro ships pure HTML by default and only loads minimal JavaScript for islands that require user interaction, achieving flawless 99+ Core Web Vitals scores.",
+  },
+  {
+    q: "Can our editorial team continue writing articles in WordPress?",
+    a: "Yes. You can retain your existing WordPress backend as a private headless CMS (WPGraphQL) that triggers edge deployments via Webhook, or transition to a lightweight, zero-hosting-cost Git CMS like Keystatic. Your writers enjoy a smooth, modern WYSIWYG experience either way.",
+  },
+  {
+    q: "How long does it take to compile hundreds of historical articles in Astro?",
+    a: "Astro compiles static pages with extreme speed. A content site with hundreds of articles typically builds in just 10 to 30 seconds, enabling near-instantaneous global deployment across all edge CDN nodes.",
+  },
+];
+---
+
+<Layout 
+  title="WordPress to Astro Migration Service (WordPress to Astro) | Sub-Second Speed & $0/mo Hosting"
+  description="Migrate dynamic WordPress websites to Astro's modern decoupled architecture. Islands architecture with 0KB redundant JS, Google PageSpeed 99+, zero public attack surface, and $0/mo cloud edge hosting."
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- HERO SECTION (Keyword front-and-center, zero badge pill, zero arrows) -->
+      <div class="max-w-4xl mx-auto text-center mb-20">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1c2024] tracking-tight mb-6 leading-[1.15]">
+          WordPress to Astro Migration Service
+          <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-600 block mt-3 font-sans">
+            Graduate from Dynamic Server Overhead · Sub-Second Speed & $0/mo Hosting
+          </span>
+        </h1>
+        <p class="text-base sm:text-lg text-[#575f6e] max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+          Pre-render every page into pure semantic HTML ahead of time and distribute globally across 300+ CDN edge nodes. Physically eliminate PHP runtimes and MySQL databases from the public web—unlocking instant loading while dropping monthly hosting costs to $0.
+        </p>
+
+        <!-- Dual-Track Action Buttons (Clean, professional, zero arrows) -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            Select Plan · Pay Kickoff Deposit
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-astro`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            Request Free Astro Assessment
+          </a>
+        </div>
+      </div>
+
+      <!-- SECTION 1: PAIN POINTS (Why Traditional WordPress Is Dragging Your Business Down) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Spending big on hosting yet your site still crawls? The hidden costs of dynamic WordPress:
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Traditional WordPress relies on dynamic runtime computation—every single visitor triggers hundreds of PHP executions and MySQL queries, creating an unavoidable performance and maintenance bottleneck.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">01</div>
+            <h3 class="text-lg font-bold text-slate-900">Extortionate Monthly Hosting "Protection Fees"</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Forced into paying $50 to $200+ each month for managed WordPress hosting (Kinsta, WP Engine) or hefty cloud VPS instances just to keep the site from freezing. If you downgrade specs, the admin crawls and 504 gateway timeouts appear.
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">02</div>
+            <h3 class="text-lg font-bold text-slate-900">Failing Core Web Vitals Hurting Search Ranks</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Google PageSpeed scores languish in the red 30s and 40s. Even after stacking 3 different caching and minification plugins, mobile LCP remains terrible and Google's crawl budget slows down drastically.
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">03</div>
+            <h3 class="text-lg font-bold text-slate-900">Server & Database Maintenance Fatigue</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Constant dread over runaway server logs filling storage disks, MySQL deadlocks, and mandatory PHP runtime upgrades breaking legacy themes. When things crash, executives scramble to find emergency contractors.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: ARCHITECTURE COMPARISON TABLE (Dedicated Comparison Table) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-10">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Dynamic Monolithic Servers vs. Astro Static Edge Architecture
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Eliminate server-side calculation bottlenecks with a pure pre-rendered architecture:
+          </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-[#e8e6df] bg-white shadow-2xs">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-[#faf9f6] border-b border-[#e8e6df] text-slate-600 uppercase font-mono text-[10px] tracking-wider font-semibold">
+              <tr>
+                <th class="px-6 py-4 w-1/4">Evaluation Metric</th>
+                <th class="px-6 py-4 w-3/8 text-slate-500">Traditional Dynamic WordPress</th>
+                <th class="px-6 py-4 w-3/8 text-amber-900 font-bold bg-amber-50/50">Astro Modern Static Architecture</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#e8e6df]">
+              {comparisonRows.map((row) => (
+                <tr class="hover:bg-[#faf9f6]/70 transition-colors">
+                  <td class="px-6 py-4 font-bold text-slate-900 font-sans">{row.metric}</td>
+                  <td class="px-6 py-4 text-slate-500 font-normal leading-relaxed">{row.legacy}</td>
+                  <td class="px-6 py-4 text-slate-900 font-semibold bg-amber-50/30 leading-relaxed">{row.sitecarry}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SECTION 3: ASTRO 4 SUPERPOWERS (Deep Technical Breakdown) -->
+      <div class="mb-24 p-8 sm:p-12 rounded-2xl bg-white border border-[#e8e6df] shadow-xs space-y-8">
+        <div class="max-w-3xl">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Why Modern Engineering Teams Migrate Content Sites to Astro
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Astro is engineered specifically for content-rich websites, eliminating the compromises of dynamic monolithic CMS platforms:
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">1. Islands Architecture (0KB Default Client JavaScript)</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Unlike Next.js or Gatsby which ship megabytes of React hydration scripts that stall mobile devices, Astro renders 100% clean HTML by default. Interactive islands load only when explicitly needed, delivering textbook performance.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">2. Ahead-of-Time Pre-rendering (AOT)</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Every single article, page, and category is pre-baked during the build phase. When a visitor arrives, Cloudflare's edge CDN responds in milliseconds without spinning up server CPUs or executing database lookups.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">3. Physical Elimination of Public Attack Surface</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              No public PHP interpreter, no open MySQL database ports. Automated CVE botnets, SQL injection scanners, and malicious plugin backdoors physically have zero attack surface to exploit.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">4. Built-in Modern Media Compression (AVIF / WebP)</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Forget paying for third-party image compression plugins. Astro automatically transforms all legacy image uploads into modern AVIF and WebP formats during deployment, trimming bandwidth by 70% with zero quality loss.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: TANGIBLE BENEFITS (4 Direct Business Returns) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Direct Business Returns After Migrating to Astro:
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            This isn't just about modern technology—it is about cutting operating expenses, capturing higher organic search traffic, and converting more buyers.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">01</div>
+            <h3 class="text-base font-bold text-slate-900">$0/mo Hosting Overhead</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Hosted directly on Cloudflare Pages global edge CDN free tier. Save thousands in hosting and server maintenance year after year.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">02</div>
+            <h3 class="text-base font-bold text-slate-900">99+ Google PageSpeed</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              0.8-second mobile load times and green Core Web Vitals lift organic rankings and immediately reduce user bounce rates.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">03</div>
+            <h3 class="text-base font-bold text-slate-900">Native AI Search (GEO) Ready</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Pure semantic HTML with integrated JSON-LD schema ensures AI engines (ChatGPT, Perplexity, Gemini) extract and cite your brand accurately.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">04</div>
+            <h3 class="text-base font-bold text-slate-900">Zero Maintenance Headaches</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              No servers to reboot, no corrupted database tables, no emergency plugin patches. Your website runs effortlessly for years.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: SPECIFIC FAQS -->
+      <div class="max-w-4xl mx-auto mb-24">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-8 text-center">
+          WordPress to Astro Frequently Asked Questions
+        </h2>
+        <div class="space-y-4">
+          {faqs.map((faq) => (
+            <div class="p-6 rounded-2xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+              <h3 class="text-base font-bold text-slate-900">{faq.q}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed font-normal">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- SECTION 6: PRICING -->
+      <div class="mb-24" id="pricing">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            WordPress to Astro Transparent Pricing
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Every package includes automated content extraction and cleansing, 1:1 URL parity preservation, and a full 30-day post-launch warranty.
+          </p>
+        </div>
+
+        <PricingTable lang={lang} />
+      </div>
+
+      <!-- SECTION 7: FINAL DUAL-TRACK CALL TO ACTION (Clean, zero arrows) -->
+      <div class="p-8 sm:p-12 rounded-2xl bg-[#fffcf5] border border-amber-200/80 text-center max-w-4xl mx-auto space-y-6 shadow-xs">
+        <div class="space-y-2">
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            Ready to give your website sub-second speed and $0 hosting?
+          </h3>
+          <p class="text-sm text-slate-600 max-w-xl mx-auto">
+            Share your current website URL. Our senior migration engineers will inspect your site health for free and provide a detailed scope and fixed-price quote.
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            Select Plan · Pay Kickoff Deposit
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-astro`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            Request Free Assessment
+          </a>
+        </div>
+
+        <p class="text-xs text-slate-500 pt-2">
+          Prefer email? Contact us at 
+          <a href={`mailto:${siteConfig.contactEmail}`} class="font-mono text-amber-800 hover:text-amber-900 font-semibold underline underline-offset-2 ml-1">
+            {siteConfig.contactEmail}
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</Layout>

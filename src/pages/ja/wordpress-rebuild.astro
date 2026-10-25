@@ -1,0 +1,325 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PricingTable from '../../components/PricingTable.astro';
+import { getLocalizedPath, type Lang } from '../../i18n/utils';
+import { siteConfig } from '../../data/siteConfig';
+
+const lang: Lang = 'ja';
+const estimatePath = getLocalizedPath('estimate', lang);
+const pricingPath = getLocalizedPath('pricing', lang);
+
+const comparisonRows = [
+  {
+    metric: "HTML DOM 構造の階層深度",
+    legacy: "15 ～ 25 層の極度な入れ子（ElementorやDiviが生成する無駄なdivの山）",
+    sitecarry: "3 ～ 5 層のクリーンな構造（セマンティック設計でHTML容量を80%削減）",
+  },
+  {
+    metric: "モバイル描画とスクロール",
+    legacy: "深刻なカクつき（jQueryプラグインと肥大化したCSSフレームワークの干渉）",
+    sitecarry: "滑らかな 60fps スクロール（余剰JS 0KB、モダンなTailwind CSS最適化）",
+  },
+  {
+    metric: "デザイン・タイポグラフィ",
+    legacy: "無骨な市販テンプレート感、時代遅れの演出と崩れた余白",
+    sitecarry: "洗練された2026年基準のSaaS/B2B国際水準デザイン、高い信頼感と可読性",
+  },
+  {
+    metric: "プラグイン依存と保守体制",
+    legacy: "当初の担当者が解散、40個のプラグインが放置され誰も触れない状態",
+    sitecarry: "プラグイン依存ゼロ、ソースコード一式を貴社Gitリポジトリへ完全納品",
+  },
+  {
+    metric: "広告品質スコア・獲得単価",
+    legacy: "低迷（スマホ着地速度の遅れによりGoogle広告のCPCクリック単価が高騰）",
+    sitecarry: "最適化（Core Web Vitals合格により広告品質スコア向上、CPA削減）",
+  },
+  {
+    metric: "過去記事・SEOスラッグの継承",
+    legacy: "一般的なリニューアルでURLが失われ404多発、検索流入が激減",
+    sitecarry: "すべての過去記事を1:1継承、CDNエッジ301転送で検索評価を完全保全",
+  },
+];
+
+const faqs = [
+  {
+    q: "リニューアルにあたり、既存の原稿や画像をすべて再支給する必要がありますか？",
+    a: "いいえ、不要です。弊社の自動抽出ツールにより、既存サイトのテキスト、製品紹介、導入事例、過去のブログ記事を画像ごと一括で抽出します。抽出したデータを最新のレスポンシブコンポーネントに合わせて再レイアウトしますので、お客様はステージング環境をご確認いただき、新しく追加したい事業情報のみをご提供いただくだけで結構です。",
+  },
+  {
+    q: "以前のサイトはElementorで作られていました。今回の再構築でもElementorを使い続けられますか？",
+    a: "Elementorを継続して使用することは推奨いたしません。ビジュアルエディタはDOM構造を著しく肥大化させ、大量の不要なスクリプトを読み込むため、モバイル表示が極端に重くなる元凶となります。SiteCarryではコードを極限まで軽量化しつつ、日々の記事執筆には直感的で動作の軽いビジュアル編集画面（Keystaticなど）をご用意します。",
+  },
+  {
+    q: "リニューアル制作期間はどのくらいですか？その間、現在のサイトは停止しますか？",
+    a: "一般的な企業サイトのフルリニューアル期間は約2〜4週間です。制作は非公開のステージング環境で進めるため、現在稼働中のWebサイトは通常通りお問い合わせを受け付け可能です。お客様の最終検収が完了した後に無停止でDNSを切り替えます。",
+  },
+  {
+    q: "納品後に不具合やレイアウト崩れが見つかった場合の保証はありますか？",
+    a: "はい。SiteCarryのすべてのリニューアル案件には、本番公開後30日間の完全瑕疵保証が含まれています。合意された仕様範囲内における表示崩れやリンク切れ、バグが発見された場合は、無償で迅速に修正対応いたします。",
+  },
+];
+---
+
+<Layout 
+  title="WordPress フルリニューアル＆再構築サービス (WordPress Rebuild) | 肥大化テーマ刷新・表示速度0.8秒化・SEO資産継承"
+  description="ElementorやDiviで構築され重くなった古いWordPressサイトを、最新Astro静的アーキテクチャで根本から再構築。ブランドデザイン刷新、1:1過去記事完全継承、スマホ表示0.8秒化。"
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- HERO SECTION (Core Commercial Keyword First, Zero Badge, Zero Orphan Arrows) -->
+      <div class="max-w-4xl mx-auto text-center mb-20">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1c2024] tracking-tight mb-6 leading-[1.15]">
+          WordPress フルリニューアル＆再構築サービス
+          <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-600 block mt-3 font-sans">
+            旧型テーマの肥大化から脱却 · 0.8秒表示の洗練された企業フラッグシップへ
+          </span>
+        </h1>
+        <p class="text-base sm:text-lg text-[#575f6e] max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+          テーマが更新停止になり、プラグイン同士が競合し、スマホ表示が重い場合、場当たり的なパッチ当ては予算の無駄です。過去の記事とSEO資産を完全継承しながら、Astroのアイランドアーキテクチャで根本から再構築します。
+        </p>
+
+        <!-- Dual-Track Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            プランを選択 · 手付金で着手
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-rebuild`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            無料のリニューアル診断を依頼
+          </a>
+        </div>
+      </div>
+
+      <!-- SECTION 1: PAIN POINTS (旧型テーマが引き起こす3大課題) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            つぎはぎの改修に限界？古いWordPressが事業成長を阻む理由：
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            数年前にElementorや有料市販テーマで構築したサイトは、時間の経過とともに「更新不能・極めて低速・デザイン陳腐化」の負債へと変わっていきます。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">01</div>
+            <h3 class="text-lg font-bold text-slate-900">ページビルダーによるDOMの超肥大化</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              初期のドラッグ＆ドロップ編集機能は、1つのボタンに対して十数層の無駄なdivを生成。スマホでの読み込みは6秒を超え、見込み顧客の65%が画面が開く前に離脱します。
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">02</div>
+            <h3 class="text-lg font-bold text-slate-900">制作会社が解散し、誰も触れない状態</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              当初担当した外部スタッフや制作会社は解散し、テーマ作者の更新も数年前に停止。40個ものプラグインが絡み合う技術負債を前に、社内外のエンジニア誰もが改修を拒絶します。
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">03</div>
+            <h3 class="text-lg font-bold text-slate-900">デザインの陳腐化が企業信用を毀損</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              企業の規模や技術力は成長したにもかかわらず、Webサイトは無骨で時代遅れのレイアウトのまま。海外の有力企業が来訪した際、「現在も活動しているのか」という不信感を与えかねません。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: ARCHITECTURE COMPARISON TABLE -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-10">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            旧型Elementor / 市販テーマ vs. SiteCarry Astro 再構築
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            市販テーマの買い替えサイクルから脱却し、永続的に企業資産となる堅牢な設計へ：
+          </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-[#e8e6df] bg-white shadow-2xs">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-[#faf9f6] border-b border-[#e8e6df] text-slate-600 uppercase font-mono text-[10px] tracking-wider font-semibold">
+              <tr>
+                <th class="px-6 py-4 w-1/4">比較項目</th>
+                <th class="px-6 py-4 w-3/8 text-slate-500">旧型 Elementor / 市販テーマ</th>
+                <th class="px-6 py-4 w-3/8 text-amber-900 font-bold bg-amber-50/50">SiteCarry Astro モダン再構築</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#e8e6df]">
+              {comparisonRows.map((row) => (
+                <tr class="hover:bg-[#faf9f6]/70 transition-colors">
+                  <td class="px-6 py-4 font-bold text-slate-900 font-sans">{row.metric}</td>
+                  <td class="px-6 py-4 text-slate-500 font-normal leading-relaxed">{row.legacy}</td>
+                  <td class="px-6 py-4 text-slate-900 font-semibold bg-amber-50/30 leading-relaxed">{row.sitecarry}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SECTION 3: REBUILD SPECIFICATIONS -->
+      <div class="mb-24 p-8 sm:p-12 rounded-2xl bg-white border border-[#e8e6df] shadow-xs space-y-8">
+        <div class="max-w-3xl">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            テーマの買い替えを繰り返さない：なぜAstroでの再構築なのか
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            市販テーマを買い替えても、2年後には再びプラグイン競合とパフォーマンス低下に悩まされます。SiteCarryは根本から疎結合アーキテクチャで再構築します：
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">1. クリーンなコンポーネント設計（DOM肥大化の解消）</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              ページビルダーが生成していた十数層の無駄なdivを完全排除。セマンティックで無駄のないHTMLコンポーネントにより、コード総量を80%削減しブラウザの初期描画を瞬時に完了させます。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">2. デフォルト0KBのJavaScript設計</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              本文ページにはクライアント側のJavaScriptを一切含めず配信。お問い合わせフォームなどの動的UIパーツのみに必要な最小限のスクリプトを読み込むため、低スペックなモバイル端末でも滑らかに動作します。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">3. 国際水準の洗練されたUI/UXデザイン</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              モダンなTailwind CSSを活用し、洗練されたタイポグラフィ、適切な余白、品格のあるカラーパレットを構築。北米・欧州の先進的なB2B/SaaSサイトと同等以上の企業ブランド価値を演出します。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">4. サーバー不要のモダンCMS管理環境</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              再構築しても記事の更新性は犠牲になりません。WordPressを非公開ヘッドレスAPIとして温存するか、サーバー費用0円で動作するGitベースのビジュアルエディタ（Keystaticなど）へスムーズに移行できます。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: TANGIBLE BENEFITS -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            根本リニューアルによって手に入る4大ビジネス成果：
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            見かけのデザイン変更にとどまらず、顧客転換率（CVR）とエンジニアリングの永続的な安定性をもたらします。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">01</div>
+            <h3 class="text-base font-bold text-slate-900">企業ブランド信頼性の向上</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              現代的で洗練された佇まいが見込み顧客の信頼感を高め、直帰率を低減しB2Bの問い合わせ率を大幅に引き上げます。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">02</div>
+            <h3 class="text-base font-bold text-slate-900">Core Web Vitals 完全合格</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              0.8秒表示とGoogle PageSpeed最高評価により、Google広告の品質スコアが改善し、顧客獲得単価（CPA）を圧縮します。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">03</div>
+            <h3 class="text-base font-bold text-slate-900">1:1 SEO被リンク資産を完全継承</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              既存の全URLとメタデータを漏れなくマッピング。CDNエッジ301転送ルールにより、長年蓄積した検索評価を確実に保護します。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">04</div>
+            <h3 class="text-base font-bold text-slate-900">サーバー維持費の月額0円化</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              高額なマネージドWordPressサーバーを解約。CloudflareグローバルエッジCDNの無料枠で運用し、固定費を大幅にカットします。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: SPECIFIC FAQS -->
+      <div class="max-w-4xl mx-auto mb-24">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-8 text-center">
+          WordPress フルリニューアル よくある質問
+        </h2>
+        <div class="space-y-4">
+          {faqs.map((faq) => (
+            <div class="p-6 rounded-2xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+              <h3 class="text-base font-bold text-slate-900">{faq.q}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed font-normal">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- SECTION 6: PRICING -->
+      <div class="mb-24" id="pricing">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            WordPress リニューアル明確なプランと仕様
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            独自UIデザイン、全過去記事の移行、1:1 URLパリティ保証、納品後30日間の無償サポートを含みます。
+          </p>
+        </div>
+
+        <PricingTable lang={lang} />
+      </div>
+
+      <!-- SECTION 7: FINAL DUAL-TRACK CALL TO ACTION -->
+      <div class="p-8 sm:p-12 rounded-2xl bg-[#fffcf5] border border-amber-200/80 text-center max-w-4xl mx-auto space-y-6 shadow-xs">
+        <div class="space-y-2">
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            肥大化したテーマを捨て、超高速なフラッグシップサイトへ刷新しませんか？
+          </h3>
+          <p class="text-sm text-slate-600 max-w-xl mx-auto">
+            既存サイトのURLをお知らせください。シニアアーキテクトが現在のテーマ構造を無料で診断し、確定価格のリニューアル計画書を作成します。
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            プランを選択 · 手付金で着手
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-rebuild`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            無料のリニューアル診断を依頼
+          </a>
+        </div>
+
+        <p class="text-xs text-slate-500 pt-2">
+          メールでのお問い合わせをご希望ですか？技術窓口直通：
+          <a href={`mailto:${siteConfig.contactEmail}`} class="font-mono text-amber-800 hover:text-amber-900 font-semibold underline underline-offset-2 ml-1">
+            {siteConfig.contactEmail}
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</Layout>

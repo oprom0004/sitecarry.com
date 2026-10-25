@@ -1,0 +1,67 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { siteConfig } from '../../data/siteConfig';
+import { getLocalizedPath, type Lang } from '../../i18n/utils';
+
+const lang: Lang = 'zh-tw';
+const estimatePath = getLocalizedPath('estimate', lang);
+---
+
+<Layout 
+  title="關於 SiteCarry | WordPress 移轉與網站改版工作室"
+  description="認識 SiteCarry 的核心理念、工程化交付標準，以及我們如何協助企業平穩移轉老舊 WordPress 網站。"
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-white border-b border-slate-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="mb-14">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6 leading-[1.15]">
+          讓網站穩健前進，完整保留核心資產。
+        </h1>
+        <p class="text-lg sm:text-xl text-slate-600 leading-relaxed font-normal">
+          SiteCarry 是一家專注於 WordPress 老站移轉、架構重構與靜態現代化的專業工程工作室，服務涵蓋美國、歐洲、日本與台灣企業客戶。
+        </p>
+      </div>
+
+      <div class="space-y-12 text-slate-600 leading-relaxed border-t border-slate-200 pt-12">
+        <h2 class="text-2xl font-bold text-slate-900">4 大工程原則</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div class="p-7 rounded-xl bg-slate-50/70 border border-slate-200 shadow-2xs space-y-2.5">
+            <span class="text-3xl font-extrabold font-mono text-slate-300 block">01</span>
+            <h3 class="text-lg font-bold text-slate-900">1. 搜尋資產首要保留</h3>
+            <p class="text-sm text-slate-600 leading-relaxed font-normal">嚴格守護歷史 URL 與 Meta 數據，全數配置 301 轉址對照，絕不浪費多年積累的搜尋權重。</p>
+          </div>
+          <div class="p-7 rounded-xl bg-slate-50/70 border border-slate-200 shadow-2xs space-y-2.5">
+            <span class="text-3xl font-extrabold font-mono text-slate-300 block">02</span>
+            <h3 class="text-lg font-bold text-slate-900">2. 明訂範疇，固定總價</h3>
+            <p class="text-sm text-slate-600 leading-relaxed font-normal">事前明定頁面與功能界線，無浮濫灌水工時，於測試機完成全數驗收後才請領尾款。</p>
+          </div>
+          <div class="p-7 rounded-xl bg-slate-50/70 border border-slate-200 shadow-2xs space-y-2.5">
+            <span class="text-3xl font-extrabold font-mono text-slate-300 block">03</span>
+            <h3 class="text-lg font-bold text-slate-900">3. 公開攻擊面歸零</h3>
+            <p class="text-sm text-slate-600 leading-relaxed font-normal">對外採用全球 CDN 雲端發布，無執行中的 PHP 與資料庫暴露於公網，免除資安焦慮。</p>
+          </div>
+          <div class="p-7 rounded-xl bg-slate-50/70 border border-slate-200 shadow-2xs space-y-2.5">
+            <span class="text-3xl font-extrabold font-mono text-slate-300 block">04</span>
+            <h3 class="text-lg font-bold text-slate-900">4. 客戶 100% 程式碼擁有權</h3>
+            <p class="text-sm text-slate-600 leading-relaxed font-normal">專案直接存入客戶自有的 Git 倉庫與主機帳戶，無綁約、無私有系統壁壘。</p>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-xl bg-slate-50 border border-slate-200 text-sm space-y-2.5 shadow-2xs mt-8">
+          <div><strong class="text-slate-800">聯絡信箱:</strong> <a href={`mailto:${siteConfig.contactEmail}`} class="text-amber-800 font-semibold hover:underline ml-1 font-mono">{siteConfig.contactEmail}</a></div>
+          <div><strong class="text-slate-800">時區覆蓋:</strong> <span class="text-slate-600 ml-1">UTC+8 (台灣/亞洲時區) / 歐美主要商業時區</span></div>
+          <div><strong class="text-slate-800">服務承諾:</strong> <span class="text-slate-600 ml-1">所有諮詢與需求評估皆由工程團隊親自檢視並儘速回覆</span></div>
+        </div>
+      </div>
+
+      <div class="mt-14 pt-8 border-t border-slate-200">
+        <a href={estimatePath} class="inline-block px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition-all shadow-sm shadow-amber-500/20">
+          與我們討論您的網站移轉
+        </a>
+      </div>
+
+    </div>
+  </div>
+</Layout>

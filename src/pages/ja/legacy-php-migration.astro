@@ -1,0 +1,320 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PricingTable from '../../components/PricingTable.astro';
+import { getLocalizedPath, type Lang } from '../../i18n/utils';
+import { siteConfig } from '../../data/siteConfig';
+
+const lang: Lang = 'ja';
+const estimatePath = getLocalizedPath('estimate', lang);
+const pricingPath = getLocalizedPath('pricing', lang);
+
+const comparisonRows = [
+  {
+    metric: "サーバー会社のEOL延長保守費",
+    legacy: "毎月 $15 ～ $45 の追加料金を強制徴収、強制停止の通牒に直面",
+    sitecarry: "追加費用は恒久的に 0 円（Cloudflare グローバルエッジ無料枠で稼働）",
+  },
+  {
+    metric: "CVE 遠隔コード実行（RCE）脆弱性",
+    legacy: "極めて危険（PHP 5.6/7.x公式パッチなし、PHP2shell等の標的に）",
+    sitecarry: "物理的に免疫（公網にPHP実行エンジンもMySQLポートも非存在）",
+  },
+  {
+    metric: "過去の .php?id= 検索順位・URL資産",
+    legacy: "一般的なリニューアルでURLが抹消され404多発、検索順位が暴落",
+    sitecarry: "CDNエッジ正規表現で1:1転送、過去のPageRankを100%確実に継承",
+  },
+  {
+    metric: "全ページ表示速度 (TTFB)",
+    legacy: "2.5 ～ 5.0 秒（レガシーPHP処理、低速DBクエリ、老朽化サーバー）",
+    sitecarry: "0.8 秒未満（世界300箇所以上のエッジCDNからミリ秒単位で返答）",
+  },
+  {
+    metric: "コード品質と保守性",
+    legacy: "10年以上前のドキュメントなきスパゲッティコード、後任が着手を拒絶",
+    sitecarry: "データを安全抽出、最新Gitバージョン管理で全コード資産を貴社へ納品",
+  },
+];
+
+const faqs = [
+  {
+    q: "10年以上前に開発された独自PHPサイトで仕様書もありませんが、移行できますか？",
+    a: "はい、可能です。弊社は豊富なリバースエンジニアリングとデータベース抽出の実績を有しています。古いPHPのソースコードに依存するのではなく、MySQLデータベースへ直接接続してテーブル構造を解析し、記事、製品データ、画像、カテゴリを構造化データとして安全に抽出・再構築します。",
+  },
+  {
+    q: "旧URLが /product.php?id=88 のようなパラメータ形式ですが、新サイトで順位は落ちませんか？",
+    a: "落ちません。CloudflareエッジCDN上で高精度な正規表現ルール（Edge Regex）を配備します。旧来のパラメータ付きURLへのアクセスは50ms以内に最新のセマンティックURL（例: /products/item-slug/）へHTTP 301永久転送されるため、検索エンジンが蓄積したドメイン評価を100%引き継ぐことができます。",
+  },
+  {
+    q: "サーバー会社から来月PHP 7を強制停止すると通告されました。納期は間に合いますか？",
+    a: "間に合います。強制停止の期日が迫っているお客様には「緊急バックアップ＆過渡的エッジ保護」を提供しています。数日以内に現行サイトのコンテンツとDBスナップショットを確保し、CDNキャッシュ保護を敷くことで、サーバー停止によるWebサイトの公網失信を防止します。",
+  },
+  {
+    q: "移行後も、サーバー会社へ毎月のPHP延長保守料を払い続ける必要がありますか？",
+    a: "完全に不要になります。新サイトは純粋な静的アーキテクチャとして構築され、グローバルエッジCDNの無料枠で稼働します。検収完了後、直ちに古いVPSやcPanelホスティングを解約でき、月々のサーバー代とPHP延長保守料を完全にゼロにできます。",
+  },
+];
+---
+
+<Layout 
+  title="レガシーPHP脱却・モダン化移行サービス (Legacy PHP Migration) | 相次ぐ脆弱性と不正侵入被害からの完全脱却"
+  description="独自PHPサイト・カスタムシステムを最新のAstro静的アーキテクチャへ移行。公開PHP実行エンジンを物理的に排除し、CVE脆弱性と不正侵入の脅威を根本遮断。.phpおよび.php?id=の旧URLを1:1エッジ301転送で完全保全します。"
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- HERO SECTION (Core Commercial Keyword First, Zero Badge, Zero Orphan Arrows) -->
+      <div class="max-w-4xl mx-auto text-center mb-20">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1c2024] tracking-tight mb-6 leading-[1.15]">
+          レガシーPHP脱却・モダン化移行サービス
+          <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-600 block mt-3 font-sans">
+            相次ぐPHP脆弱性と不正侵入被害から完全脱却 · 過去の .php 網址を1:1エッジ完全保全
+          </span>
+        </h1>
+        <p class="text-base sm:text-lg text-[#575f6e] max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+          公網に露出したPHPは、遠隔コード実行（RCE）やゼロデイ攻撃を狙う自動化ボットの格好の標的です。一度侵入されれば、ランサムウェアのバックドア設置や迷惑メールの踏み台に悪用され、企業メールが全停止する危機に直面します。データベースとフロントエンドを疎結合化し、公開攻撃面ゼロのAstro静的構成へ移行。歴史ある .php の旧URLも1:1で完全保全します。
+        </p>
+
+        <!-- Dual-Track Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            プランを選択 · 手付金で着手
+          </a>
+          <a 
+            href={`${estimatePath}?goal=php-legacy`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            無料のレガシーPHP診断を依頼
+          </a>
+        </div>
+      </div>
+
+      <!-- SECTION 1: PAIN POINTS (旧型PHPサイトが抱える3大危機) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            相次ぐ不正侵入スキャン、脆弱性アラート？動的PHPが抱える構造的リスク：
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            公網にPHP実行エンジンを晒している限り、攻撃ボットの標的となり、深夜の緊急復旧対応から逃れることはできません。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">01</div>
+            <h3 class="text-lg font-bold text-slate-900">公網PHPの脆弱性を狙う自動化ボットの脅威</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              PHPコアのCGI脆弱性やライブラリの欠陥を突き、世界中からボットが24時間スキャン。一度侵入されればスパム送信やマイニングに悪用され、サーバーIPが国際ブラックリストに登録されて社内メールが全滅します。
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">02</div>
+            <h3 class="text-lg font-bold text-slate-900">パッチを当てても終わらない、緊急対応ループ</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              高額な外注費を払って一時的に穴を塞いでも、数ヶ月後には新たなCVEやゼロデイが公表されます。動的なPHPとDBが公網にある限り、エンジニアチームは夜間の緊急アラートの恐怖から解放されません。
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">03</div>
+            <h3 class="text-lg font-bold text-slate-900">複雑な .php?id= の旧URLに誰も触れない</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              サイト内には <code class="text-slate-800 bg-slate-100 px-1 py-0.5 rounded font-mono text-xs">/detail.php?id=128</code> のような過去のURLが密集。リニューアルでこれらを消去すると大量の404エラーが発生し、長年のSEO資産が完全に水泡に帰します。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: ARCHITECTURE COMPARISON TABLE -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-10">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            旧型独自開発PHP (5.6 / 7.x) vs. SiteCarry Astro 静的エッジアーキテクチャ
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            老朽化したサーバー運用の技術負債を清算し、最新の事前レンダリング構造へ移行：
+          </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-[#e8e6df] bg-white shadow-2xs">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-[#faf9f6] border-b border-[#e8e6df] text-slate-600 uppercase font-mono text-[10px] tracking-wider font-semibold">
+              <tr>
+                <th class="px-6 py-4 w-1/4">比較項目</th>
+                <th class="px-6 py-4 w-3/8 text-slate-500">旧型独自開発 PHP (5.6 / 7.x)</th>
+                <th class="px-6 py-4 w-3/8 text-amber-900 font-bold bg-amber-50/50">SiteCarry Astro 静的エッジ構成</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#e8e6df]">
+              {comparisonRows.map((row) => (
+                <tr class="hover:bg-[#faf9f6]/70 transition-colors">
+                  <td class="px-6 py-4 font-bold text-slate-900 font-sans">{row.metric}</td>
+                  <td class="px-6 py-4 text-slate-500 font-normal leading-relaxed">{row.legacy}</td>
+                  <td class="px-6 py-4 text-slate-900 font-semibold bg-amber-50/30 leading-relaxed">{row.sitecarry}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SECTION 3: RESCUE ADVANTAGES -->
+      <div class="mb-24 p-8 sm:p-12 rounded-2xl bg-white border border-[#e8e6df] shadow-xs space-y-8">
+        <div class="max-w-3xl">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            古いPHPコードの改修に追われない：Astro静的モダン化という最適解
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            10年前の未規格なPHPコードを無理にPHP 8.4へバージョンアップしても、膨大な費用がかかる上に将来また保守問題が発生します。SiteCarryはデータを疎結合に分離します：
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">1. 公開攻撃面の物理的ゼロ化</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              ビルド時にデータベース内容を安全な純粋静的HTMLへ事前コンパイル。公網上にPHPエンジンもMySQLポートも存在しないため、SQLインジェクションやCVEの悪用が物理的に不可能になります。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">2. 高精度なエッジ正規表現 301 転送</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              CloudflareエッジCDN上で正規表現ルールを配備し、過去の <code class="text-slate-800 bg-slate-100 px-1 py-0.5 rounded font-mono text-xs">.php?id=xxx</code> へのアクセスを最新のセマンティックURLへ自動転送。被リンクと検索順位を100%継承します。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">3. スパゲッティコードと決別するクリーンなデータ抽出</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              乱雑な旧PHPコードを移植するのではなく、独自ツールでMySQLから記事やメディアのみを高精度に抽出。Gitバージョン管理されたモダンなコンテンツリポジトリへと再編し、企業の重要資産として保全します。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">4. ホスティング追加費用の完全撤廃（月額0円）</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              移行後はグローバルCDNエッジの無料枠で稼働。老朽化した高額サーバーを即座に解約し、毎月のホスティング費用とPHP EOL延長保守料を恒久的にゼロにできます。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: TANGIBLE BENEFITS -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            レガシーPHP脱却によって手に入る4大ビジネス成果：
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            改ざんや停止に怯える日々から、無欠で超高速なモダンデジタル資産へと生まれ変わります。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">01</div>
+            <h3 class="text-base font-bold text-slate-900">EOL延長追加料金の完全撤廃</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              cPanelやサーバー会社から請求されるPHP 7延長サポート費を即時解約。年間数十万円規模の固定支出を削減します。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">02</div>
+            <h3 class="text-base font-bold text-slate-900">恒久的なCVE脆弱性パッチからの解放</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              公網にPHPもMySQLも存在しないため、新たなCVE脆弱性が公表されても深夜の緊急パッチ作業に追われることはありません。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">03</div>
+            <h3 class="text-base font-bold text-slate-900">0.8秒のグローバル極速表示</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              世界300箇所以上のCDNエッジからミリ秒で配信。老朽化サーバーの低速表示から一転、最新SaaS水準の快適性を実現します。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">04</div>
+            <h3 class="text-base font-bold text-slate-900">100%のSEO被リンク・検索評価継承</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              エッジ301転送により、長年インデックスされてきた過去のURLや外部被リンクの評価を1ミリも無駄にせず新サイトへ継承します。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: SPECIFIC FAQS -->
+      <div class="max-w-4xl mx-auto mb-24">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-8 text-center">
+          レガシーPHP脱却 よくある質問
+        </h2>
+        <div class="space-y-4">
+          {faqs.map((faq) => (
+            <div class="p-6 rounded-2xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+              <h3 class="text-base font-bold text-slate-900">{faq.q}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed font-normal">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- SECTION 6: PRICING -->
+      <div class="mb-24" id="pricing">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            レガシーPHPモダン化 明確なプランと納品仕様
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            独自データベース抽出、1:1エッジURLマッピング、納品後30日間の瑕疵保証を含む固定価格プラン。
+          </p>
+        </div>
+
+        <PricingTable lang={lang} />
+      </div>
+
+      <!-- SECTION 7: FINAL DUAL-TRACK CALL TO ACTION -->
+      <div class="p-8 sm:p-12 rounded-2xl bg-[#fffcf5] border border-amber-200/80 text-center max-w-4xl mx-auto space-y-6 shadow-xs">
+        <div class="space-y-2">
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            古いPHPの脆弱性不安と毎月の追加請求から解放されませんか？
+          </h3>
+          <p class="text-sm text-slate-600 max-w-xl mx-auto">
+            現在稼働中のWebサイトURLとデータベース規模をお知らせください。シニアエンジニアが技術負債を無料で診断し、確定価格の移行提案書を作成します。
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            プランを選択 · 手付金で着手
+          </a>
+          <a 
+            href={`${estimatePath}?goal=php-legacy`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            無料のレガシーPHP診断を依頼
+          </a>
+        </div>
+
+        <p class="text-xs text-slate-500 pt-2">
+          メールでのお問い合わせをご希望ですか？技術窓口直通：
+          <a href={`mailto:${siteConfig.contactEmail}`} class="font-mono text-amber-800 hover:text-amber-900 font-semibold underline underline-offset-2 ml-1">
+            {siteConfig.contactEmail}
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</Layout>

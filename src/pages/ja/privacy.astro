@@ -1,0 +1,62 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { siteConfig } from '../../data/siteConfig';
+import { type Lang } from '../../i18n/utils';
+
+const lang: Lang = 'ja';
+---
+
+<Layout 
+  title="プライバシーポリシー | SiteCarry"
+  description="SiteCarryのプライバシーポリシーおよびデータ保護方針。"
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-sm text-slate-700 space-y-6 leading-relaxed">
+      
+      <div class="mb-10">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-2">プライバシーポリシー</h1>
+        <p class="text-xs text-slate-500 font-mono">発効日: 2026年10月</p>
+      </div>
+
+      <p>
+        SiteCarry（<code class="text-amber-900 font-mono bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/80">sitecarry.com</code>）は、お客様の企業データおよび知的財産を厳格なエンジニアリング規範に基づいて機密保持します。本ポリシーでは、情報の収集・利用・保護について定めます。
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">1. 収集する情報</h2>
+      <p>
+        お見積りやお問い合わせのフォームをご利用いただく際、以下の必要最小限の情報を任意でご提供いただきます：
+      </p>
+      <ul class="list-disc list-inside space-y-1.5 text-slate-600">
+        <li>ご担当者名および会社用メールアドレス</li>
+        <li>現行WebサイトのURLおよび技術的なご要望</li>
+        <li>概算のページ数・記事数およびご予算感</li>
+      </ul>
+      <p class="p-4 rounded-xl bg-white border border-[#e8e6df] text-xs text-slate-600 shadow-2xs">
+        <strong class="text-slate-900">重要事項:</strong> 公開フォーム上でWordPressの管理者パスワードやSSH鍵、DB接続情報を入力いただくことは一切ありません。正式着手後の認証情報の受け渡しは、暗号化通信を用いて個別に行います。
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">2. 情報の利用目的</h2>
+      <p>
+        収集した情報は以下の目的のみに厳格に限定して利用します：
+      </p>
+      <ul class="list-disc list-inside space-y-1.5 text-slate-600">
+        <li>ご提示いただいた公開URLの技術的検証および確定お見積りの作成</li>
+        <li>仕様確認や制作進行に関するお客様へのご連絡</li>
+        <li>合意されたWebサイト移行・開発業務の適切な遂行</li>
+      </ul>
+      <p>お客様の情報を第三者マーケティング企業へ売却・譲渡することは一切ございません。</p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">3. データの保存と削除</h2>
+      <p>
+        お問い合わせ情報は、業務遂行に必要な期間に限り適切に管理されます。情報の削除をご希望の場合は、いつでも <code class="text-slate-900 font-mono bg-white border border-[#e8e6df] px-1.5 py-0.5 rounded">{siteConfig.contactEmail}</code> までご連絡いただければ速やかに対応いたします。
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">4. お問い合わせ窓口</h2>
+      <p>
+        プライバシーポリシーに関するご質問は、<code class="text-amber-800 font-mono bg-amber-50 border border-amber-200/80 px-1.5 py-0.5 rounded">{siteConfig.contactEmail}</code> までお問い合わせください。
+      </p>
+
+    </div>
+  </div>
+</Layout>

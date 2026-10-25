@@ -1,0 +1,257 @@
+---
+import { siteConfig } from '../data/siteConfig';
+import { useTranslations, getLocalizedPath, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  currentPath: string;
+}
+
+const { lang, currentPath } = Astro.props;
+const t = useTranslations(lang);
+
+const navItems = [
+  { label: t.nav.services, href: getLocalizedPath('wordpress-migration', lang) },
+  { label: t.nav.pricing, href: getLocalizedPath('pricing', lang) },
+  { label: t.nav.process, href: getLocalizedPath('process', lang) },
+  { label: t.nav.work, href: getLocalizedPath('work', lang) },
+  { label: t.nav.about, href: getLocalizedPath('about', lang) },
+  { label: t.nav.guides, href: getLocalizedPath('guides', lang) },
+];
+
+const homePath = getLocalizedPath('', lang);
+const estimatePath = getLocalizedPath('estimate', lang);
+
+const languages = [
+  { code: 'en' as Lang, label: 'EN', full: 'English (US / EU)' },
+  { code: 'ja' as Lang, label: 'JA', full: '日本語 (Japan)' },
+  { code: 'zh-tw' as Lang, label: 'TW', full: '繁體中文 (Taiwan)' },
+];
+---
+
+<header class="sticky top-0 z-50 backdrop-blur-md bg-[#faf9f6]/95 border-b border-[#e8e6df] transition-all shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      
+      <!-- Brand Logo (Sunny Warm Golden Amber Mark, perfectly matching the theme) -->
+      <a href={homePath} class="flex items-center gap-2.5 group">
+        <div class="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center text-slate-950 shadow-sm shadow-amber-500/20 group-hover:bg-amber-400 transition-colors">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="17 11 12 6 7 11"></polyline>
+            <line x1="12" y1="18" x2="12" y2="6"></line>
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-base font-extrabold tracking-tight text-slate-900 group-hover:text-amber-700 transition-colors leading-none">SiteCarry</span>
+          <span class="text-[10px] uppercase tracking-wider text-slate-500 font-semibold pt-1">Migration Studio</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-7">
+        {navItems.map((item) => {
+          const isActive = currentPath.includes(item.href) && item.href !== homePath;
+          return (
+            <a 
+              href={item.href} 
+              class={`text-sm tracking-tight transition-colors ${
+                isActive 
+                  ? 'text-amber-700 font-bold' 
+                  : 'text-slate-600 hover:text-slate-900 font-medium'
+              }`}
+            >
+              {item.label}
+            </a>
+          );
+        })}
+      </nav>
+
+      <!-- Right Actions & Language Switcher -->
+      <div class="hidden md:flex items-center gap-3">
+        
+        <!-- Language Switcher: Zero dead zone (top-full pt-1.5), robust hover bridge + click toggle -->
+        <div class="relative" id="lang-switcher">
+          <button 
+            type="button" 
+            id="lang-menu-btn"
+            aria-expanded="false"
+            aria-haspopup="true"
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-all cursor-pointer shadow-2xs select-none"
+            aria-label="Select Language"
+          >
+            <span>{languages.find(l => l.code === lang)?.label}</span>
+            <svg id="lang-caret" class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+            </svg>
+          </button>
+          
+          <!-- Dropdown Wrapper: Physically starts at top-full with padding-top to eliminate mouse dead zone -->
+          <div 
+            id="lang-dropdown"
+            class="absolute right-0 top-full pt-1.5 w-48 transition-all z-50 hidden"
+          >
+            <div class="rounded-xl border border-slate-200 bg-white shadow-xl p-1.5 ring-1 ring-black/5">
+              {languages.map((l) => (
+                <a 
+                  href={getLocalizedPath(currentPath, l.code)}
+                  class={`flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+                    l.code === lang 
+                      ? 'bg-amber-50 text-amber-900 font-semibold border border-amber-200/70' 
+                      : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900'
+                  }`}
+                >
+                  <span class="flex items-center gap-2">
+                    {l.code === lang && (
+                      <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                    )}
+                    <span>{l.full}</span>
+                  </span>
+                  <span class="text-[10px] text-slate-400 font-mono font-semibold">{l.label}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- Primary CTA Button (Sunny Golden Amber, unified with Hero CTA) -->
+        <a 
+          href={estimatePath} 
+          class="inline-flex items-center justify-center px-4 py-2 rounded-lg text-xs font-bold text-slate-950 bg-amber-500 hover:bg-amber-400 active:scale-[0.99] shadow-sm shadow-amber-500/20 transition-all"
+        >
+          {t.nav.getEstimate}
+        </a>
+      </div>
+
+      <!-- Mobile Button -->
+      <div class="flex md:hidden items-center gap-2">
+        <a 
+          href={estimatePath} 
+          class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-950 bg-amber-500 hover:bg-amber-400"
+        >
+          {t.nav.getEstimate}
+        </a>
+        <button 
+          id="mobile-menu-btn"
+          type="button" 
+          class="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer"
+          aria-label="Toggle Menu"
+        >
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Mobile Drawer -->
+  <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6 space-y-2">
+    {navItems.map((item) => (
+      <a 
+        href={item.href} 
+        class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-amber-700"
+      >
+        {item.label}
+      </a>
+    ))}
+    
+    <div class="pt-3 border-t border-slate-200 flex items-center justify-around">
+      {languages.map((l) => (
+        <a 
+          href={getLocalizedPath(currentPath, l.code)}
+          class={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+            l.code === lang 
+              ? 'bg-amber-500 text-slate-950 font-bold' 
+              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+          }`}
+        >
+          {l.full}
+        </a>
+      ))}
+    </div>
+  </div>
+</header>
+
+<script>
+  // Mobile menu toggle
+  const mobileBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (mobileBtn && mobileMenu) {
+    mobileBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  }
+
+  // Desktop Language Dropdown (Hover with Grace-Delay + Click Toggle + Click Outside)
+  const switcher = document.getElementById('lang-switcher');
+  const langBtn = document.getElementById('lang-menu-btn');
+  const langDropdown = document.getElementById('lang-dropdown');
+  const langCaret = document.getElementById('lang-caret');
+
+  if (switcher && langBtn && langDropdown) {
+    let closeTimer: ReturnType<typeof setTimeout> | null = null;
+    let isOpen = false;
+
+    function openMenu() {
+      if (closeTimer) {
+        clearTimeout(closeTimer);
+        closeTimer = null;
+      }
+      isOpen = true;
+      langDropdown?.classList.remove('hidden');
+      langBtn?.setAttribute('aria-expanded', 'true');
+      if (langCaret) langCaret.classList.add('rotate-180');
+    }
+
+    function closeMenu(immediate = false) {
+      if (immediate) {
+        if (closeTimer) {
+          clearTimeout(closeTimer);
+          closeTimer = null;
+        }
+        isOpen = false;
+        langDropdown?.classList.add('hidden');
+        langBtn?.setAttribute('aria-expanded', 'false');
+        if (langCaret) langCaret.classList.remove('rotate-180');
+        return;
+      }
+
+      if (closeTimer) clearTimeout(closeTimer);
+      closeTimer = setTimeout(() => {
+        isOpen = false;
+        langDropdown?.classList.add('hidden');
+        langBtn?.setAttribute('aria-expanded', 'false');
+        if (langCaret) langCaret.classList.remove('rotate-180');
+      }, 220); // 220ms grace delay ensures mouse never loses hover bridge
+    }
+
+    // Hover on container: open immediately, close with grace buffer
+    switcher.addEventListener('mouseenter', () => openMenu());
+    switcher.addEventListener('mouseleave', () => closeMenu(false));
+
+    // Click toggle on button
+    langBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (isOpen) {
+        closeMenu(true);
+      } else {
+        openMenu();
+      }
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!switcher.contains(e.target as Node)) {
+        closeMenu(true);
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeMenu(true);
+      }
+    });
+  }
+</script>

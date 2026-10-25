@@ -1,0 +1,320 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PricingTable from '../components/PricingTable.astro';
+import { getLocalizedPath, type Lang } from '../i18n/utils';
+import { siteConfig } from '../data/siteConfig';
+
+const lang: Lang = 'en';
+const estimatePath = getLocalizedPath('estimate', lang);
+const pricingPath = getLocalizedPath('pricing', lang);
+
+const comparisonRows = [
+  {
+    metric: "High-Traffic Concurrency Under Promos",
+    legacy: "Hundreds of simultaneous buyers trigger 100% CPU lockups and 502/504 errors",
+    sitecarry: "Edge ISR static caching seamlessly handles millions of requests without lag",
+  },
+  {
+    metric: "Magecart Credit Card Skimming Risk",
+    legacy: "High danger (self-hosted checkout forms vulnerable to malicious plugin injection)",
+    sitecarry: "Physically immune (direct tokenized checkout to Stripe; card numbers never touch origin)",
+  },
+  {
+    metric: "Catalog Filtering & Cart Experience",
+    legacy: "Sluggish full-page reloads on every facet filter; slow mobile navigation",
+    sitecarry: "Fluid React Single-Page Application (SPA) with instant instantaneous filtering",
+  },
+  {
+    metric: "Mobile Conversion & Checkout Friction",
+    legacy: "Multi-step complex checkout forms lead to cart abandonment exceeding 75%",
+    sitecarry: "Native Apple Pay / Google Pay one-click buying lifts conversions by 25%+",
+  },
+  {
+    metric: "Historical Store Data & SKUs",
+    legacy: "Switching platforms often leads to lost order histories and broken product links",
+    sitecarry: "Existing WooCommerce products, customer records, and URLs migrate 1:1",
+  },
+];
+
+const faqs = [
+  {
+    q: "Will our fulfillment and customer service teams need to learn a new backend?",
+    a: "No. We can retain your existing WooCommerce admin purely as a private headless API (WPGraphQL). Your warehouse, shipping, and customer support staff continue processing orders in the dashboard they already know, while your public storefront and checkout run on an ultra-fast Next.js edge stack.",
+  },
+  {
+    q: "How does headless Next.js physically eliminate Magecart payment skimming?",
+    a: "In traditional WooCommerce, credit card form fields exist directly in your self-hosted WordPress pages, meaning a single compromised plugin can inject skimming JavaScript. In our decoupled architecture, checkout is offloaded to Stripe Tokenized Checkout. Card numbers never touch self-hosted servers, ensuring 100% PCI-DSS Level 1 compliance.",
+  },
+  {
+    q: "When product prices or stock change, do Next.js catalog pages update immediately?",
+    a: "Yes. We configure Next.js Incremental Static Regeneration (ISR) paired with On-demand Revalidation. Whenever an inventory count or price is updated in WooCommerce, a webhook purges the edge cache in seconds, ensuring shoppers always see accurate pricing without burdening origin databases.",
+  },
+  {
+    q: "We have thousands of indexed product URLs in Google. Will this migration hurt our SEO?",
+    a: "No. We map every single product page, category taxonomy, and tag 1:1, injecting comprehensive JSON-LD structured schemas (Product, Offer, AggregateRating). This ensures your listings maintain star ratings and price badges in Google search results without dropping ranks.",
+  },
+];
+---
+
+<Layout 
+  title="WordPress to Next.js Migration (WordPress to Next.js) | Headless Commerce & Enterprise Scale"
+  description="Migrate high-traffic WooCommerce stores and dynamic WordPress platforms to Next.js App Router. Edge catalog caching, crash-proof flash sales, and Stripe tokenized checkout that eliminates Magecart skimming malware."
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- HERO SECTION (Keyword front-and-center, zero badge pill, zero arrows) -->
+      <div class="max-w-4xl mx-auto text-center mb-20">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1c2024] tracking-tight mb-6 leading-[1.15]">
+          WordPress to Next.js Migration
+          <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-600 block mt-3 font-sans">
+            Eliminate WooCommerce Flash-Sale Crashes · Headless Commerce & Stripe Tokenized Checkout
+          </span>
+        </h1>
+        <p class="text-base sm:text-lg text-[#575f6e] max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+          For growing DTC brands, WooCommerce stores, and interactive portals needing high-concurrency resilience. We decouple frontend from backend, serving catalog pages from edge nodes and routing checkout through PCI-compliant tokenized gateways to eliminate Magecart skimmers.
+        </p>
+
+        <!-- Dual-Track Action Buttons (Clean, professional, zero arrows) -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            Select Plan · Pay Kickoff Deposit
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-nextjs`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            Request Free Next.js Assessment
+          </a>
+        </div>
+      </div>
+
+      <!-- SECTION 1: PAIN POINTS (The 3 Critical Vulnerabilities of Monolithic Commerce) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Traffic spikes crashing servers? Checkout abandonment killing ROI? The pain points of monolithic stores:
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            WooCommerce bundles product browsing, shopping cart logic, and transaction processing on a single server, exposing high-growth stores to severe risks.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">01</div>
+            <h3 class="text-lg font-bold text-slate-900">Black Friday Server Crashes (502 / 504 Timeouts)</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              When paid ad traffic or influencer drops hit, thousands of simultaneous shoppers arrive. Monolithic PHP processes saturate CPU, MySQL deadlocks, and checkout freezes—burning ad spend and losing tens of thousands in sales.
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">02</div>
+            <h3 class="text-lg font-bold text-slate-900">Magecart Credit Card Skimmer Nightmares</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Traditional WooCommerce handles card fields directly on self-hosted servers. A single compromised plugin allows hackers to inject JavaScript skimmers into checkout, siphoning customer card numbers and triggering devastating PCI fines.
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">03</div>
+            <h3 class="text-lg font-bold text-slate-900">Sluggish Filtering & High Cart Abandonment</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Clicking colors, sizes, or category filters requires full-page server round-trips. Mobile shoppers get frustrated by laggy browsing and multi-step forms, leading to cart drop-off rates exceeding 75%.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: ARCHITECTURE COMPARISON TABLE (Dedicated Comparison Table) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-10">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Monolithic WooCommerce vs. Next.js Headless Commerce
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Decoupled architecture is the enterprise standard used by leading DTC and modern retail platforms:
+          </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-[#e8e6df] bg-white shadow-2xs">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-[#faf9f6] border-b border-[#e8e6df] text-slate-600 uppercase font-mono text-[10px] tracking-wider font-semibold">
+              <tr>
+                <th class="px-6 py-4 w-1/4">Evaluation Metric</th>
+                <th class="px-6 py-4 w-3/8 text-slate-500">Monolithic WooCommerce</th>
+                <th class="px-6 py-4 w-3/8 text-amber-900 font-bold bg-amber-50/50">Next.js Edge Headless Commerce</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#e8e6df]">
+              {comparisonRows.map((row) => (
+                <tr class="hover:bg-[#faf9f6]/70 transition-colors">
+                  <td class="px-6 py-4 font-bold text-slate-900 font-sans">{row.metric}</td>
+                  <td class="px-6 py-4 text-slate-500 font-normal leading-relaxed">{row.legacy}</td>
+                  <td class="px-6 py-4 text-slate-900 font-semibold bg-amber-50/30 leading-relaxed">{row.sitecarry}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SECTION 3: NEXT.JS ADVANTAGES (Deep Technical Breakdown) -->
+      <div class="mb-24 p-8 sm:p-12 rounded-2xl bg-white border border-[#e8e6df] shadow-xs space-y-8">
+        <div class="max-w-3xl">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Why Next.js Decoupled Commerce Is the Gold Standard for DTC Brands
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Headless decoupled architecture is the proven foundation used by industry leaders like Shopify Plus and high-scale retailers:
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">1. Instant Product Browsing (Edge ISR Caching)</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Thousands of product detail pages and catalog categories are cached via Incremental Static Regeneration at the edge. Visitors browse products with instantaneous sub-second responses without touching origin databases.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">2. Hosted Tokenized Checkout (PCI-DSS Level 1 Safe)</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Transactions are offloaded directly to Stripe Tokenized Checkout or Shopify Storefront. Credit card numbers never touch self-hosted servers, physically eliminating Magecart skimmers and eliminating compliance overhead.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">3. Fluid React Single-Page Application (SPA)</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Instant facet filtering, slide-out carts, and native Apple Pay / Google Pay one-click buying make mobile shopping frictionless, typically lifting conversion rates by 25% or more.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">4. Retain Familiar Operational Backends</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              If your warehouse and fulfillment teams rely on WooCommerce order flows, we keep it as a private headless API (WPGraphQL). No need to retrain fulfillment staff on a completely new platform.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: TANGIBLE BENEFITS (4 Direct Business Returns) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            4 Tangible Business Returns from Next.js Migration:
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Equip your store to handle viral traffic and ensure every promotional campaign turns into captured revenue.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">01</div>
+            <h3 class="text-base font-bold text-slate-900">Zero Crash Flash Sales</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Millions of requests handled seamlessly at the edge. Holiday surges and influencer marketing campaigns stay up without lag.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">02</div>
+            <h3 class="text-base font-bold text-slate-900">Zero Payment Skimming Risk</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Zero public PHP vulnerabilities and 100% tokenized Stripe processing protect your brand from card fraud and compliance penalties.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">03</div>
+            <h3 class="text-base font-bold text-slate-900">Higher Cart Conversion</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Instant mobile page loads and digital wallet checkouts reduce friction, turning casual browsers into paying customers.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">04</div>
+            <h3 class="text-base font-bold text-slate-900">Full Data & SEO Preservation</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Historical customer records, order histories, SKUs, and indexed product URLs migrate 1:1 with zero disruption.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: SPECIFIC FAQS -->
+      <div class="max-w-4xl mx-auto mb-24">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-8 text-center">
+          WordPress to Next.js Frequently Asked Questions
+        </h2>
+        <div class="space-y-4">
+          {faqs.map((faq) => (
+            <div class="p-6 rounded-2xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+              <h3 class="text-base font-bold text-slate-900">{faq.q}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed font-normal">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- SECTION 6: PRICING -->
+      <div class="mb-24" id="pricing">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Next.js Headless Transparent Investment
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Fixed-scope contracts covering WooCommerce extraction, custom React components, Stripe checkout, and 30-day post-launch warranty.
+          </p>
+        </div>
+
+        <PricingTable lang={lang} />
+      </div>
+
+      <!-- SECTION 7: FINAL DUAL-TRACK CALL TO ACTION (Clean, zero arrows) -->
+      <div class="p-8 sm:p-12 rounded-2xl bg-[#fffcf5] border border-amber-200/80 text-center max-w-4xl mx-auto space-y-6 shadow-xs">
+        <div class="space-y-2">
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            Ready to upgrade your store to a crash-proof headless architecture?
+          </h3>
+          <p class="text-sm text-slate-600 max-w-xl mx-auto">
+            Provide your store URL and expected catalog size. Our architects will inspect your concurrency requirements and design a headless roadmap.
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            Select Plan · Pay Kickoff Deposit
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-nextjs`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            Request Free Next.js Assessment
+          </a>
+        </div>
+
+        <p class="text-xs text-slate-500 pt-2">
+          Prefer email? Reach our engineering desk directly at 
+          <a href={`mailto:${siteConfig.contactEmail}`} class="font-mono text-amber-800 hover:text-amber-900 font-semibold underline underline-offset-2 ml-1">
+            {siteConfig.contactEmail}
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</Layout>

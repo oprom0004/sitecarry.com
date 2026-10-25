@@ -1,0 +1,596 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getLocalizedPath, type Lang } from '../../i18n/utils';
+import { siteConfig } from '../../data/siteConfig';
+
+const lang: Lang = 'ja';
+const estimatePath = getLocalizedPath('estimate', lang);
+const astroPath = getLocalizedPath('wordpress-to-astro', lang);
+const phpMigrationPath = getLocalizedPath('legacy-php-migration', lang);
+const guidePath = getLocalizedPath('guides/php2shell-wordpress-static-mitigation', lang);
+
+const phpMatrix = [
+  {
+    branch: "PHP 8.5",
+    status: "アクティブサポート中",
+    eolDate: "2028年11月",
+    minSafeCve: "8.5.12+",
+    surcharge: "追加料金なし",
+    recommendation: "CVE-2026-109618対策のため8.5.12以上へ更新確認",
+  },
+  {
+    branch: "PHP 8.4",
+    status: "アクティブサポート中",
+    eolDate: "2028年12月",
+    minSafeCve: "8.4.27+",
+    surcharge: "追加料金なし",
+    recommendation: "CVE-2026-109618対策のため8.4.27以上へ更新確認",
+  },
+  {
+    branch: "PHP 8.3",
+    status: "セキュリティサポート中",
+    eolDate: "2027年12月",
+    minSafeCve: "8.3.36+",
+    surcharge: "追加料金なし",
+    recommendation: "CVE-2026-109618対策のため8.3.36以上へ更新確認",
+  },
+  {
+    branch: "PHP 8.2",
+    status: "まもなくEOL（サポート終了間近）",
+    eolDate: "2026年12月",
+    minSafeCve: "8.2.35+",
+    surcharge: "2027年Q1より各社課金開始",
+    recommendation: "直ちに8.2.35へ適用し、静的化または移行を計画",
+  },
+  {
+    branch: "PHP 8.1",
+    status: "公式サポート終了 (EOL)",
+    eolDate: "2025年12月 (期限切れ)",
+    minSafeCve: "公式パッチ提供なし (EOL)",
+    surcharge: "月額 $10〜$25 の延長保守料",
+    recommendation: "PHP2shellの公式修正なし。静的エッジ構成への脱却を推奨",
+  },
+  {
+    branch: "PHP 8.0",
+    status: "公式サポート終了 (EOL)",
+    eolDate: "2023年11月 (期限切れ)",
+    minSafeCve: "公式パッチ提供なし (EOL)",
+    surcharge: "月額 $15〜$35 の延長保守料",
+    recommendation: "極めて高リスク。PHP実行環境を廃止し静的化を強く推奨",
+  },
+  {
+    branch: "PHP 7.4 / 7.x",
+    status: "公式サポート終了 (EOL)",
+    eolDate: "2022年11月 (期限切れ)",
+    minSafeCve: "公式パッチ提供なし (EOL)",
+    surcharge: "月額 $20〜$50 の延長保守料",
+    recommendation: "深刻な技術負債。プラグインのPHP8非互換は静的化で解決",
+  },
+  {
+    branch: "PHP 5.6 / 5.x",
+    status: "公式サポート終了 (EOL)",
+    eolDate: "2018年12月 (期限切れ)",
+    minSafeCve: "公式パッチ提供なし (EOL)",
+    surcharge: "サーバー会社による強制停止",
+    recommendation: "早急にコンテンツ抽出と純静的モダン移行が必要",
+  },
+];
+
+const faqs = [
+  {
+    q: "診断結果に「PHPバージョンが公開ヘッダーで非公開」と表示されるのはなぜですか？",
+    a: "CloudflareなどのCDNやリバースプロキシ、またはexpose_php = Offが設定されたサーバーでは、自動スキャン対策としてX-Powered-Byヘッダーが除去されます。ヘッダーの非公開化は望ましい対策ですが、背後で古いPHPが稼働している場合、脆弱性自体の防御にはなりません。",
+  },
+  {
+    q: "2026年10月に発覚したPHP2shell（CVE-2026-109618）の影響を受けるバージョンは？",
+    a: "PHP 5.4から8.5.11までの全バージョンが影響を受けます。PHP Foundationにより公式パッチが提供されているのは8.5.12、8.4.27、8.3.36、8.2.35のみです。PHP 8.1以前のEOLバージョンには公式修正パッチが提供されません。",
+  },
+  {
+    q: "phpinfo.phpファイルを作らずにWordPressの正確なPHPバージョンを確認する方法は？",
+    a: "WordPress管理画面の「ツール」→「サイトヘルス」を開き、上部の「情報」タブから「サーバー」項目を展開すると確認できます。公開ディレクトリにphpinfo.phpを設置することは機密情報の漏洩につながるため絶対におやめください。",
+  },
+  {
+    q: "PHPをバージョンアップすると古いテーマやプラグインが動かなくなる場合はどうすればよいですか？",
+    a: "これは多くの企業がPHP 7.4や8.0に縛られている最大の原因です。古いPHPコードの改修に膨大な予算をかけるよりも、Astro等の静的配信に切り替えることで、PHPサーバーの保守から永久に解放され、過去記事とSEO順位も100%保全されます。",
+  },
+];
+
+const toolSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "SiteCarry PHPバージョン＆HTTPヘッダー診断ツール",
+      "url": "https://sitecarry.com/ja/php-version-checker/",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "All",
+      "description": "Webサイトが公開HTTPヘッダーでPHPバージョン、WordPressの動的シグナル、未対応のEOLサポート終了バージョンを漏洩していないかを診断する無料ツール。"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": faqs.map((f) => ({
+        "@type": "Question",
+        "name": f.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": f.a
+        }
+      }))
+    }
+  ]
+};
+---
+
+<Layout 
+  title="無料PHPバージョン・脆弱性診断ツール | HTTPヘッダー・EOL状態・CVE-2026-109618即時検証"
+  description="Webサイトが公開HTTPレスポンスヘッダーでPHPバージョンやWordPressシグナルを漏洩していないか、EOL（サポート終了）状態およびCVE-2026-109618 (PHP2shell) の安全基準を満たしているかを無料で診断します。"
+  lang={lang}
+  schema={toolSchema}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- 1. HERO & INTERACTIVE SCANNER -->
+      <div class="max-w-4xl mx-auto text-center mb-16">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1c2024] tracking-tight mb-6 leading-[1.15]">
+          PHPバージョン＆公開シグナル診断
+        </h1>
+        <p class="text-base sm:text-lg text-[#575f6e] max-w-2xl mx-auto leading-relaxed font-normal">
+          URLを入力するだけで、HTTPレスポンスヘッダーに <code class="text-amber-900 bg-amber-50 px-1.5 py-0.5 rounded font-mono text-sm border border-amber-200/80">X-Powered-By: PHP</code> 指紋が漏洩していないか、EOL（サポート終了）分支や動的WordPressの攻撃面が存在しないかを即座に検証します。
+        </p>
+      </div>
+
+      <!-- INTERACTIVE SCANNER CONSOLE -->
+      <div class="max-w-4xl mx-auto mb-24">
+        <div class="rounded-2xl border border-[#e8e6df] bg-white shadow-xs p-8 sm:p-10">
+          
+          <form id="php-check-form" class="space-y-4">
+            <label for="target-url-input" class="block text-sm font-semibold text-slate-800">
+              診断したいWebサイトのURLを入力（例: https://example.com）
+            </label>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <input 
+                type="text" 
+                id="target-url-input" 
+                name="url" 
+                required 
+                placeholder="https://example.com"
+                class="flex-grow bg-[#faf9f6] border border-[#e8e6df] rounded-xl px-4 py-3.5 text-sm text-slate-900 font-mono focus:outline-none focus:border-amber-500 focus:bg-white focus:ring-1 focus:ring-amber-500 transition-all placeholder:text-slate-400"
+              />
+              <button 
+                type="submit" 
+                id="scan-submit-btn"
+                class="px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all cursor-pointer shrink-0 flex items-center justify-center gap-2"
+              >
+                <span id="scan-btn-text">ヘッダーを診断する</span>
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Preset Simulation Buttons for Instant Testing -->
+            <div class="pt-2 flex flex-wrap items-center gap-2 text-xs font-mono text-slate-500">
+              <span class="text-xs text-slate-500 font-sans">またはサンプルで即時プレビュー:</span>
+              <button 
+                type="button" 
+                data-preset="eol-74"
+                class="preset-btn px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs text-slate-700 transition-colors cursor-pointer font-medium font-sans"
+              >
+                例: PHP 7.4.33 漏洩中 (EOL未対応)
+              </button>
+              <button 
+                type="button" 
+                data-preset="unpatched-83"
+                class="preset-btn px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs text-slate-700 transition-colors cursor-pointer font-medium font-sans"
+              >
+                例: PHP 8.3.14 (8.3.36+未適用)
+              </button>
+              <button 
+                type="button" 
+                data-preset="static-edge"
+                class="preset-btn px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-xs text-amber-900 transition-colors cursor-pointer font-bold font-sans"
+              >
+                例: SiteCarry 完全静的エッジ構成
+              </button>
+            </div>
+          </form>
+
+          <!-- Error Box -->
+          <div id="scan-error" class="hidden mt-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs font-mono text-amber-900"></div>
+
+          <!-- RESULTS PANEL -->
+          <div id="scan-results" class="hidden mt-8 pt-8 border-t border-[#e8e6df] space-y-6">
+            
+            <!-- Top Summary Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-4 p-4 rounded-xl bg-[#faf9f6] border border-[#e8e6df] font-mono text-xs">
+              <div class="flex items-center gap-2.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                <span class="text-slate-500 font-semibold font-sans">診断対象:</span>
+                <span id="res-url" class="text-slate-900 font-bold truncate max-w-[260px] sm:max-w-md"></span>
+              </div>
+              <div class="flex items-center gap-4 text-xs font-sans">
+                <span class="text-slate-500">ステータス: <strong id="res-status" class="text-slate-900 font-mono">200</strong></span>
+                <span class="text-slate-300">•</span>
+                <span class="text-slate-500">応答遅延: <strong id="res-time" class="text-amber-700 font-mono">120ms</strong></span>
+              </div>
+            </div>
+
+            <!-- 3 Telemetry Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              
+              <!-- Card 1: Detected PHP Version -->
+              <div class="p-5 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-2">
+                <span class="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold block">公開PHPヘッダー</span>
+                <div id="res-php-version" class="text-2xl font-mono font-extrabold text-slate-900">Hidden</div>
+                <div id="res-php-badge" class="inline-block px-2.5 py-0.5 rounded-md bg-white border border-slate-200 text-[10px] font-mono text-slate-600 font-medium shadow-2xs">
+                  非公開（未漏洩）
+                </div>
+              </div>
+
+              <!-- Card 2: CVE-2026-109618 Baseline -->
+              <div class="p-5 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-2">
+                <span class="text-xs uppercase tracking-wider text-slate-500 font-semibold block">PHP2shell 最低安全パッチ</span>
+                <div id="res-safe-min" class="text-lg font-mono font-bold text-slate-900">8.2.35 / 8.3.36+</div>
+                <p class="text-xs text-slate-500 font-normal">CVE-2026-109618 対策基準</p>
+              </div>
+
+              <!-- Card 3: CMS / Runtime Footprint -->
+              <div class="p-5 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-2">
+                <span class="text-xs uppercase tracking-wider text-slate-500 font-semibold block">稼働シグナル特徴</span>
+                <div id="res-cms" class="text-lg font-mono font-bold text-slate-900">診断中...</div>
+                <p id="res-edge" class="text-xs font-mono text-slate-500"></p>
+              </div>
+
+            </div>
+
+            <!-- Detailed Header & Signal Table -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              
+              <div class="lg:col-span-7 p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-700">
+                  技術診断アドバイス
+                </h3>
+                <p id="res-advisory" class="text-sm text-slate-700 leading-relaxed font-normal"></p>
+                
+                <div class="pt-3 border-t border-[#e8e6df]">
+                  <span class="text-xs text-slate-500 font-semibold block mb-2">検出されたシグナル:</span>
+                  <div id="res-signals" class="flex flex-wrap gap-2 text-xs font-mono"></div>
+                </div>
+              </div>
+
+              <div class="lg:col-span-5 p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-2.5 font-mono text-xs">
+                <h3 class="text-xs uppercase tracking-wider text-slate-700 font-bold mb-3 font-sans">
+                  HTTPレスポンスヘッダー詳細
+                </h3>
+                <div class="flex justify-between py-1.5 border-b border-[#e8e6df]">
+                  <span class="text-slate-500">X-Powered-By:</span>
+                  <span id="hdr-powered" class="text-slate-900 font-medium text-right truncate max-w-[180px]"></span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-[#e8e6df]">
+                  <span class="text-slate-500">Server:</span>
+                  <span id="hdr-server" class="text-slate-800 font-medium text-right truncate max-w-[180px]"></span>
+                </div>
+                <div class="flex justify-between py-1.5">
+                  <span class="text-slate-500">Edge / Proxy:</span>
+                  <span id="hdr-edge" class="text-slate-900 font-medium text-right truncate max-w-[180px]"></span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Conversion Callout Inside Scanner -->
+            <div class="p-8 rounded-2xl bg-[#fffcf5] border border-amber-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-2xs">
+              <div class="space-y-1.5 max-w-xl">
+                <p class="text-base font-bold text-slate-900">最も安全なPHPとは、公開サーバー上にPHPを置かないことです。</p>
+                <p class="text-sm text-slate-600 leading-relaxed font-normal">
+                  PHPのEOL課金や緊急パッチ対応に追われる日々を終わらせましょう。既存サイトをAstroによる静的エッジ構成へ移行し、全URL評価を保全しながらサーバー維持費を$0にします。
+                </p>
+              </div>
+              <div class="shrink-0">
+                <a href={`${estimatePath}?goal=php-legacy`} class="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-all shadow-sm shadow-amber-500/20">
+                  無料見積もりを相談する
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 2. 2026 PHP VERSION LIFECYCLE & CVE-2026-109618 MATRIX -->
+      <div class="max-w-6xl mx-auto mb-24">
+        <div class="mb-8">
+          <h2 class="text-2xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            PHP バージョンサポート状況・EOL一覧・PHP2shell対策基準
+          </h2>
+          <p class="text-sm text-[#575f6e] max-w-3xl leading-relaxed">
+            現在稼働中のPHPバージョンと、公式EOL（サポート終了日）、サーバー会社の延長保守課金、および <a href={guidePath} class="text-amber-800 font-semibold hover:underline">CVE-2026-109618 / CVE-2026-109619 (PHP2shell)</a> に必要な最低パッチ基準を比較確認いただけます。
+          </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-[#e8e6df] bg-white shadow-2xs">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-[#faf9f6] border-b border-[#e8e6df] text-slate-600 uppercase font-mono text-[10px] tracking-wider font-semibold">
+              <tr>
+                <th class="px-6 py-4">PHP 分岐</th>
+                <th class="px-6 py-4">サポート状態</th>
+                <th class="px-6 py-4">公式サポート終了日 (EOL)</th>
+                <th class="px-6 py-4">安全最低パッチ</th>
+                <th class="px-6 py-4">延長保守追加料金</th>
+                <th class="px-6 py-4">推奨エンジニアリング対応</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#e8e6df] font-mono">
+              {phpMatrix.map((row) => (
+                <tr class="hover:bg-[#faf9f6]/70 transition-colors">
+                  <td class="px-6 py-4 font-bold text-slate-900">{row.branch}</td>
+                  <td class="px-6 py-4">
+                    <span class={`px-2.5 py-0.5 rounded-md text-[10px] border font-medium ${
+                      row.status.includes('アクティブ')
+                        ? 'bg-amber-50 border-amber-200 text-amber-900 font-semibold'
+                        : row.status.includes('セキュリティ')
+                        ? 'bg-slate-100 border-slate-200 text-slate-700'
+                        : 'bg-stone-100 border-stone-200 text-stone-700'
+                    }`}>
+                      {row.status}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-slate-600">{row.eolDate}</td>
+                  <td class="px-6 py-4 font-bold text-amber-800">{row.minSafeCve}</td>
+                  <td class="px-6 py-4 text-slate-600">{row.surcharge}</td>
+                  <td class="px-6 py-4 font-sans text-slate-600">{row.recommendation}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 3. FAQS SECTION -->
+      <div class="max-w-4xl mx-auto mb-24">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-8 text-center">
+          よくあるご質問 (FAQ)
+        </h2>
+        <div class="space-y-4">
+          {faqs.map((faq) => (
+            <div class="p-6 rounded-2xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+              <h3 class="text-base font-bold text-slate-900">{faq.q}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed font-normal">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- 4. BOTTOM CALL TO ACTION -->
+      <div class="p-8 sm:p-12 rounded-2xl bg-[#fffcf5] border border-amber-200/80 text-center max-w-4xl mx-auto space-y-6 shadow-xs">
+        <div class="space-y-2">
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            PHPの脆弱性不安や保守費用から完全に脱却しませんか？
+          </h3>
+          <p class="text-sm text-slate-600 max-w-xl mx-auto">
+            SiteCarryでは、旧型PHPサイトのデータ抽出、Astroによる純静的化、1:1 URL完全保全を提供しています。URLをお知らせいただければ無料で現行構成を診断いたします。
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a 
+            href={phpMigrationPath} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            レガシーPHP脱却プランを見る
+          </a>
+          <a 
+            href={`${estimatePath}?goal=php-legacy`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            無料の構成診断を申し込む
+          </a>
+        </div>
+
+        <p class="text-xs text-slate-500 pt-2">
+          公式連絡先: 
+          <a href={`mailto:${siteConfig.contactEmail}`} class="font-mono text-amber-800 hover:text-amber-900 font-semibold underline underline-offset-2 ml-1">
+            {siteConfig.contactEmail}
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const form = document.getElementById('php-check-form') as HTMLFormElement;
+  const input = document.getElementById('target-url-input') as HTMLInputElement;
+  const submitBtn = document.getElementById('scan-submit-btn') as HTMLButtonElement;
+  const btnText = document.getElementById('scan-btn-text');
+  const errorBox = document.getElementById('scan-error');
+  const resultsBox = document.getElementById('scan-results');
+
+  const resUrl = document.getElementById('res-url');
+  const resStatus = document.getElementById('res-status');
+  const resTime = document.getElementById('res-time');
+  const resPhpVersion = document.getElementById('res-php-version');
+  const resPhpBadge = document.getElementById('res-php-badge');
+  const resSafeMin = document.getElementById('res-safe-min');
+  const resCms = document.getElementById('res-cms');
+  const resEdge = document.getElementById('res-edge');
+  const resAdvisory = document.getElementById('res-advisory');
+  const resSignals = document.getElementById('res-signals');
+  const hdrPowered = document.getElementById('hdr-powered');
+  const hdrServer = document.getElementById('hdr-server');
+  const hdrEdge = document.getElementById('hdr-edge');
+
+  const presets: Record<string, any> = {
+    'eol-74': {
+      scannedUrl: 'https://legacy-b2b-example.com',
+      statusCode: 200,
+      responseTimeMs: 1420,
+      phpAnalysis: {
+        version: '7.4.33',
+        statusLabel: '公式サポート終了 (PHP 7.4) · 未パッチ',
+        safeMinimum: '8.3.36+ へ更新または Astro 静的化',
+        advisory: 'PHP 7.4.33 は2022年11月に公式サポートを終了しており、セキュリティパッチが提供されません。X-Powered-By ヘッダーを通じて外部に漏洩しており、CVE-2026-109618 (PHP2shell) の標的となるリスクがあります。',
+      },
+      isWordPress: true,
+      wpVersion: '6.2.4',
+      signals: [
+        'X-Powered-By: PHP/7.4.33',
+        'WP REST API ヘッダー (api.w.org)',
+        'WordPress アセットパス (/wp-content/)',
+        'Meta Generator タグ (WordPress 6.2.4)',
+      ],
+      headers: {
+        xPoweredBy: 'PHP/7.4.33',
+        server: 'Apache/2.4.54 (Ubuntu)',
+        edgeCache: '直結配信 / CDNキャッシュなし',
+      },
+    },
+    'unpatched-83': {
+      scannedUrl: 'https://corporate-wp-sample.org',
+      statusCode: 200,
+      responseTimeMs: 680,
+      phpAnalysis: {
+        version: '8.3.14',
+        statusLabel: 'パッチ期限切れ (8.3.36+ が必要)',
+        safeMinimum: '8.3.36',
+        advisory: 'PHP 8.3.14 はアクティブな系統ですが、パッチレベルが2026年10月の CVE-2026-109618 緊急修正 (8.3.36) より前です。直ちに PHP-FPM を更新し、expose_php = Off に設定してください。',
+      },
+      isWordPress: true,
+      wpVersion: '6.6.2',
+      signals: [
+        'X-Powered-By: PHP/8.3.14',
+        'WP REST API ヘッダー (api.w.org)',
+        'PHPSESSID 動的Cookie',
+      ],
+      headers: {
+        xPoweredBy: 'PHP/8.3.14',
+        server: 'nginx/1.24.0',
+        edgeCache: '標準 HTTP 直結',
+      },
+    },
+    'static-edge': {
+      scannedUrl: 'https://sitecarry.com',
+      statusCode: 200,
+      responseTimeMs: 38,
+      phpAnalysis: {
+        version: null,
+        statusLabel: '公開PHP漏洩ゼロ (完全静的エッジ)',
+        safeMinimum: '完全防御 (Astro 純静的)',
+        advisory: '公開PHP実行環境や X-Powered-By ヘッダーは検出されませんでした。全ページが事前生成された純静的HTMLとしてグローバルエッジから即時配信されており、CVE-2026-109618 を含むPHP遠隔コード実行脆弱性は物理的に存在しません。',
+      },
+      isWordPress: false,
+      wpVersion: null,
+      signals: ['PHP / WordPress の動的シグナルは一切検出されませんでした'],
+      headers: {
+        xPoweredBy: '非公開 / なし',
+        server: 'cloudflare',
+        edgeCache: 'Cloudflare (HIT エッジキャッシュ)',
+      },
+    },
+  };
+
+  function renderReport(data: any) {
+    if (!resultsBox) return;
+    errorBox?.classList.add('hidden');
+    resultsBox.classList.remove('hidden');
+
+    if (resUrl) resUrl.textContent = data.finalUrl || data.scannedUrl;
+    if (resStatus) resStatus.textContent = String(data.statusCode || 200);
+    if (resTime) resTime.textContent = `${data.responseTimeMs || 0}ms`;
+
+    const analysis = data.phpAnalysis || {};
+    if (resPhpVersion) {
+      resPhpVersion.textContent = analysis.version ? `PHP ${analysis.version}` : '非公開 / なし';
+    }
+    if (resPhpBadge) {
+      resPhpBadge.textContent = analysis.statusLabel || '診断完了';
+    }
+    if (resSafeMin) {
+      resSafeMin.textContent = analysis.safeMinimum || '8.3.36+';
+    }
+    if (resCms) {
+      resCms.textContent = data.isWordPress
+        ? `WordPress ${data.wpVersion ? `(${data.wpVersion})` : '検出'}`
+        : data.impliesPhpRuntime
+        ? '動的 PHP 実行環境'
+        : '完全静的 / 非公開';
+    }
+    if (resEdge) {
+      resEdge.textContent = data.headers?.edgeCache || '標準 HTTP';
+    }
+    if (resAdvisory) {
+      resAdvisory.textContent = analysis.advisory || '診断が完了しました。';
+    }
+
+    if (resSignals) {
+      resSignals.innerHTML = '';
+      const list = data.signals || [];
+      if (list.length === 0) {
+        const span = document.createElement('span');
+        span.className = 'text-slate-500 font-sans';
+        span.textContent = '特異なシグナルの漏洩はありません';
+        resSignals.appendChild(span);
+      } else {
+        list.forEach((sig: string) => {
+          const badge = document.createElement('span');
+          badge.className = 'px-2 py-0.5 rounded-md bg-amber-50 border border-amber-200/80 text-amber-900 text-[11px]';
+          badge.textContent = sig;
+          resSignals.appendChild(badge);
+        });
+      }
+    }
+
+    if (hdrPowered) hdrPowered.textContent = data.headers?.xPoweredBy || 'None / Stripped';
+    if (hdrServer) hdrServer.textContent = data.headers?.server || 'Undisclosed';
+    if (hdrEdge) hdrEdge.textContent = data.headers?.edgeCache || 'None detected';
+  }
+
+  // Handle Preset Buttons
+  document.querySelectorAll('.preset-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const key = btn.getAttribute('data-preset');
+      if (key && presets[key]) {
+        if (input) input.value = presets[key].scannedUrl;
+        renderReport(presets[key]);
+      }
+    });
+  });
+
+  // Handle Form Submission
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const url = input?.value.trim();
+    if (!url) return;
+
+    if (submitBtn) submitBtn.disabled = true;
+    if (btnText) btnText.textContent = '診断中...';
+    errorBox?.classList.add('hidden');
+
+    try {
+      const res = await fetch('/api/php-check', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+      });
+
+      const json = await res.json();
+      if (!res.ok) {
+        throw new Error(json.error || '診断に失敗しました。URLが外部からアクセス可能かご確認ください。');
+      }
+
+      renderReport(json);
+    } catch (err: any) {
+      if (errorBox) {
+        errorBox.textContent = `診断エラー: ${err.message}`;
+        errorBox.classList.remove('hidden');
+      }
+      resultsBox?.classList.add('hidden');
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+      if (btnText) btnText.textContent = 'ヘッダーを診断する';
+    }
+  });
+</script>

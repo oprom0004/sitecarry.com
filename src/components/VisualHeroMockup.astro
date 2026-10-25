@@ -1,0 +1,132 @@
+---
+import { type Lang } from '../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+
+const labels = {
+  en: {
+    alt: "SiteCarry Decoupled Architecture Workflow: From Monolithic WordPress to Global Static Edge",
+    metric1Val: "Zero Hacks",
+    metric1Diff: "permanently immune",
+    metric1Label: "End PHP Runtime, Core & Plugin Exploits",
+    metric1Sub: "No PHP runtime and no database on public servers. Hacker bots cannot exploit CVEs or inject webshells.",
+    metric2Val: "Native GEO",
+    metric2Diff: "SEO & AI-ready",
+    metric2Label: "SEO & GEO Friendly Architecture",
+    metric2Sub: "Pure semantic HTML5 with Schema entities, built for Google crawl efficiency and ChatGPT/Perplexity citations.",
+    metric3Val: "100% Intact",
+    metric3Diff: "$0/mo hosting",
+    metric3Label: "1:1 Link Equity Retention & $0 Server Cost",
+    metric3Sub: "Existing healthy paths retained 1:1; malformed URLs normalized via 301. Ditch costly WordPress VPS hosting for zero-maintenance edge clouds.",
+  },
+  ja: {
+    alt: "SiteCarry アーキテクチャ構成図：WordPressから静的エッジ配信への移行フロー",
+    metric1Val: "被弾ゼロ",
+    metric1Diff: "脆弱性の根絶",
+    metric1Label: "PHP・本体・プラグイン脆弱性の完全排除",
+    metric1Sub: "公開サーバーにPHP実行環境もDBも存在しないため、CVE攻撃やボットによる改ざんが物理的に不可能です。",
+    metric2Val: "GEO対応",
+    metric2Diff: "SEO & AI検索",
+    metric2Label: "SEO・GEO（AI検索）ネイティブ対応",
+    metric2Sub: "純粋なHTML5と構造化データを実装。Googleの評価を守り、ChatGPTやPerplexityに正確に引用されます。",
+    metric3Val: "100%維持",
+    metric3Diff: "サーバー月額$0",
+    metric3Label: "検索評価・被リンクの完全継承＆サーバー費用削減",
+    metric3Sub: "既存の有効URLは1:1保持、不適切な旧URLは301正規化。高額なWordPress専用サーバー代を一掃します。",
+  },
+  'zh-tw': {
+    alt: "SiteCarry 網站現代化解耦架構流程圖：從傳統老舊 WordPress 到全球 300+ CDN 雲端節點極速發布",
+    metric1Val: "徹底零被黑",
+    metric1Diff: "一勞永逸根治",
+    metric1Label: "徹底終結 PHP 底層、核心與外掛漏洞",
+    metric1Sub: "伺服器無 PHP 執行環境、公網無資料庫，黑客自動化腳本無法發起 CVE 攻擊或植入木馬暗鏈。",
+    metric2Val: "原生 GEO",
+    metric2Diff: "SEO & AI 搜尋",
+    metric2Label: "SEO 與 GEO 友好，原生適配 AI",
+    metric2Sub: "純淨語意化架構內嵌 Schema 知識圖譜，Google 抓取更快，ChatGPT、Perplexity 查找時精準推薦。",
+    metric3Val: "100% 保留",
+    metric3Diff: "主機月租 $0",
+    metric3Label: "歷史權重無損繼承・省下昂貴主機月租",
+    metric3Sub: "正常網址 1:1 原樣保留，畸形舊路徑 301 規範化；不需要 PHP 伺服器，省下每個月高昂的 WordPress 主機費。",
+  },
+};
+
+const t = labels[lang] || labels.en;
+---
+
+<div class="mt-14 max-w-5xl mx-auto text-left">
+  <!-- Clean, Authoritative Architecture Showcase with Warm Paper Framing -->
+  <div class="rounded-2xl border border-[#e8e6df] bg-white shadow-[0_20px_50px_-15px_rgba(28,32,36,0.06)] overflow-hidden transition-all">
+    
+    <!-- Real High-Res Architecture Diagram with Subtle Warm Framing -->
+    <div class="relative bg-gradient-to-b from-[#fbfaf8] to-[#f4f3ec]/60 border-b border-[#e8e6df] p-4 sm:p-7 overflow-hidden flex items-center justify-center">
+      <img 
+        src="/images/hero-migration-architecture.png" 
+        alt={t.alt}
+        class="w-full max-w-4xl h-auto rounded-lg object-contain shadow-xs border border-[#e8e6df]"
+        loading="eager"
+      />
+    </div>
+
+    <!-- 3 Authoritative Headline Metrics with Plain, Human Value -->
+    <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#e8e6df] p-6 sm:p-8 bg-white">
+      
+      <div class="p-4 sm:p-6 space-y-2 text-left">
+        <div class="flex items-baseline justify-between">
+          <div class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight font-mono">
+            {t.metric1Val}
+          </div>
+          <span class="text-xs font-mono font-medium text-slate-800 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded">
+            {t.metric1Diff}
+          </span>
+        </div>
+        <div class="text-base font-bold text-[#1c2024]">
+          {t.metric1Label}
+        </div>
+        <p class="text-sm text-[#575f6e] leading-relaxed font-normal">
+          {t.metric1Sub}
+        </p>
+      </div>
+
+      <div class="p-4 sm:p-6 space-y-2 text-left">
+        <div class="flex items-baseline justify-between">
+          <div class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight font-mono">
+            {t.metric2Val}
+          </div>
+          <span class="text-xs font-mono font-medium text-amber-900 bg-amber-50 border border-amber-200/90 px-2 py-0.5 rounded">
+            {t.metric2Diff}
+          </span>
+        </div>
+        <div class="text-base font-bold text-[#1c2024]">
+          {t.metric2Label}
+        </div>
+        <p class="text-sm text-[#575f6e] leading-relaxed font-normal">
+          {t.metric2Sub}
+        </p>
+      </div>
+
+      <div class="p-4 sm:p-6 space-y-2 text-left">
+        <div class="flex items-baseline justify-between">
+          <div class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight font-mono">
+            {t.metric3Val}
+          </div>
+          <span class="text-xs font-mono font-medium text-slate-800 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded">
+            {t.metric3Diff}
+          </span>
+        </div>
+        <div class="text-base font-bold text-[#1c2024]">
+          {t.metric3Label}
+        </div>
+        <p class="text-sm text-[#575f6e] leading-relaxed font-normal">
+          {t.metric3Sub}
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</div>

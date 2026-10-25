@@ -1,0 +1,98 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { siteConfig } from '../data/siteConfig';
+import { getLocalizedPath, type Lang } from '../i18n/utils';
+
+const lang: Lang = 'en';
+const estimatePath = getLocalizedPath('estimate', lang);
+---
+
+<Layout 
+  title="About SiteCarry | WordPress Migration & Rebuild Studio"
+  description="Learn about SiteCarry's philosophy, engineering standards, and commitment to zero-downtime, honest-scope website migrations."
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-white border-b border-slate-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Top Title -->
+      <div class="mb-14">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6 leading-[1.15]">
+          Move your website forward. Keep what matters.
+        </h1>
+        <p class="text-lg sm:text-xl text-slate-600 leading-relaxed font-normal">
+          SiteCarry is a boutique technical studio focused exclusively on WordPress migration, legacy website rebuilds, and decoupled static architecture for businesses across the US, Europe, Japan, and Taiwan.
+        </p>
+      </div>
+
+      <!-- Principles -->
+      <div class="space-y-12 text-slate-600 leading-relaxed border-t border-slate-200 pt-12">
+        
+        <div class="space-y-4">
+          <h2 class="text-2xl font-bold text-slate-900">Why We Exist</h2>
+          <p class="text-base text-slate-600 leading-relaxed">
+            WordPress powers over 40% of the web. Millions of valuable businesses built their websites on WordPress 5–10 years ago. Today, those same companies find themselves trapped in a maintenance cycle: dozens of plugins that break on update, crawling load speeds, high monthly VPS costs, and persistent security vulnerabilities.
+          </p>
+          <p class="text-base text-slate-600 leading-relaxed">
+            Traditional agencies usually offer one of two extremes: either a superficial visual redesign that retains the bloated WordPress backend, or an exorbitant six-figure enterprise replatforming. SiteCarry was created to fill the sensible middle: a disciplined, fixed-price engineering service that migrates your valuable content and SEO authority into a blazing fast, zero-runtime modern frontend.
+          </p>
+        </div>
+
+        <div class="space-y-6">
+          <h2 class="text-2xl font-bold text-slate-900">Our 4 Engineering Principles</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+            <div class="p-7 rounded-xl bg-slate-50/70 border border-slate-200 shadow-2xs space-y-2.5">
+              <span class="text-3xl font-extrabold font-mono text-slate-300 block">01</span>
+              <h3 class="text-lg font-bold text-slate-900">Preservation First</h3>
+              <p class="text-sm text-slate-600 leading-relaxed font-normal">
+                SEO ranking is business capital. We never break URLs or delete historical metadata. Every change is matched 1:1 with permanent 301 redirects.
+              </p>
+            </div>
+            <div class="p-7 rounded-xl bg-slate-50/70 border border-slate-200 shadow-2xs space-y-2.5">
+              <span class="text-3xl font-extrabold font-mono text-slate-300 block">02</span>
+              <h3 class="text-lg font-bold text-slate-900">Fixed Scope, Fixed Price</h3>
+              <p class="text-sm text-slate-600 leading-relaxed font-normal">
+                No surprises. We quote upfront, establish unambiguous counting rules, and deliver on staging before asking for final payment.
+              </p>
+            </div>
+            <div class="p-7 rounded-xl bg-slate-50/70 border border-slate-200 shadow-2xs space-y-2.5">
+              <span class="text-3xl font-extrabold font-mono text-slate-300 block">03</span>
+              <h3 class="text-lg font-bold text-slate-900">Zero Public Attack Surface</h3>
+              <p class="text-sm text-slate-600 leading-relaxed font-normal">
+                Public visitors should never touch live PHP interpreters or raw database ports. Static edge pre-rendering is structural immunity.
+              </p>
+            </div>
+            <div class="p-7 rounded-xl bg-slate-50/70 border border-slate-200 shadow-2xs space-y-2.5">
+              <span class="text-3xl font-extrabold font-mono text-slate-300 block">04</span>
+              <h3 class="text-lg font-bold text-slate-900">100% Client Ownership</h3>
+              <p class="text-sm text-slate-600 leading-relaxed font-normal">
+                No proprietary lock-in. Your code lives in your Git repository; your site deploys to your CDN account. You hold the keys.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-4 pt-4">
+          <h2 class="text-2xl font-bold text-slate-900">Direct Operational Contact</h2>
+          <p class="text-base text-slate-600 leading-relaxed">
+            We take on a limited number of active migrations concurrently (typically no more than two at a time) to ensure focused engineering attention and strict adherence to agreed delivery dates.
+          </p>
+          <div class="p-6 rounded-xl bg-slate-50 border border-slate-200 text-sm space-y-2.5 shadow-2xs">
+            <div><strong class="text-slate-800">Email:</strong> <a href={`mailto:${siteConfig.contactEmail}`} class="text-blue-600 font-semibold hover:underline ml-1">{siteConfig.contactEmail}</a></div>
+            <div><strong class="text-slate-800">Operational Coverage:</strong> <span class="text-slate-600 ml-1">{siteConfig.timezones}</span></div>
+            <div><strong class="text-slate-800">Direct Support:</strong> <span class="text-slate-600 ml-1">Engineering responses directly from senior architects</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CTA -->
+      <div class="mt-14 pt-8 border-t border-slate-200 flex items-center justify-between">
+        <a href={estimatePath} class="px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition-all shadow-sm shadow-amber-500/20">
+          Talk to Us About Your Site
+        </a>
+      </div>
+
+    </div>
+  </div>
+</Layout>

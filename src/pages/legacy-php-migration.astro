@@ -1,0 +1,320 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PricingTable from '../components/PricingTable.astro';
+import { getLocalizedPath, type Lang } from '../i18n/utils';
+import { siteConfig } from '../data/siteConfig';
+
+const lang: Lang = 'en';
+const estimatePath = getLocalizedPath('estimate', lang);
+const pricingPath = getLocalizedPath('pricing', lang);
+
+const comparisonRows = [
+  {
+    metric: "Hosting EOL Surcharge",
+    legacy: "Incurring $15–$45/mo in extended support fees with forced shutdown ultimatums",
+    sitecarry: "Permanently $0/mo (hosted on global edge CDN with zero maintenance overhead)",
+  },
+  {
+    metric: "CVE Remote Code Execution (RCE)",
+    legacy: "Critical risk (PHP 5.6/7.x officially unpatched; automated exploits roam free)",
+    sitecarry: "Physically immune (zero public PHP runtime or open database ports)",
+  },
+  {
+    metric: "Historical .php?id= URL Authority",
+    legacy: "Standard redesigns discard old parameters, causing thousands of 404 link deaths",
+    sitecarry: "1:1 edge regex 301 rules preserve 100% of indexed search rankings & backlinks",
+  },
+  {
+    metric: "Global Page Load Time (TTFB)",
+    legacy: "2.5 – 5.0 seconds (procedural PHP overhead, slow database queries, aging hardware)",
+    sitecarry: "Under 0.8 seconds (instant millisecond response from 300+ CDN edge nodes)",
+  },
+  {
+    metric: "Code Maintainability & Tech Debt",
+    legacy: "Decade-old undocumented spaghetti code that modern engineers refuse to touch",
+    sitecarry: "Clean structured content in standard Git version control, 100% owned by you",
+  },
+];
+
+const faqs = [
+  {
+    q: "Our custom PHP site was built a decade ago with zero documentation. Can you migrate it?",
+    a: "Yes. We specialize in reverse engineering and database extraction. We do not rely on brittle legacy PHP execution code. Instead, our automated scripts connect directly to your MySQL database to analyze table relationships, cleanly exporting articles, catalog items, media files, and taxonomies into structured content repositories.",
+  },
+  {
+    q: "Our legacy URLs use parameters like /product.php?id=88. Will migrating drop our rankings?",
+    a: "No. We deploy high-precision Edge Regex rules on Cloudflare edge CDN. When visitors or search engine bots request /product.php?id=88, the edge responds within 50ms with a permanent HTTP 301 redirect to the modern semantic URL (e.g., /products/item-slug/), passing 100% of accumulated domain authority without losing a single backlink.",
+  },
+  {
+    q: "Our host warned that PHP 7 will be forcibly terminated next month. Can we make the deadline?",
+    a: "Yes. For clients facing imminent shutdown ultimatums, we offer an expedited transition protocol. We can secure full database snapshots and mirror critical pages to edge caches within days, ensuring your web presence remains online while the modernization build is finalized.",
+  },
+  {
+    q: "Do we need to keep paying monthly hosting or extended PHP support fees after migration?",
+    a: "No. Once migrated to Astro and deployed to Cloudflare edge CDN, your site runs with zero server runtime requirements. After final sign-off, you can immediately decommission your legacy dynamic VPS or cPanel account, eliminating all recurring hosting and EOL surcharge fees.",
+  },
+];
+---
+
+<Layout 
+  title="Legacy PHP Modernization & Hardening | Permanently End Vulnerabilities & Hack Panic"
+  description="Migrate custom legacy PHP websites to modern decoupled stacks. Eliminate public PHP interpreters to permanently prevent CVE vulnerabilities and hacker intrusion, with seamless 1:1 .php and .php?id= edge 301 redirects."
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- HERO SECTION (Core Commercial Keyword First, Zero Badge, Zero Orphan Arrows) -->
+      <div class="max-w-4xl mx-auto text-center mb-20">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1c2024] tracking-tight mb-6 leading-[1.15]">
+          Legacy PHP Website Modernization
+          <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-600 block mt-3 font-sans">
+            Permanently End Vulnerability Breaches & Hack Panic · 1:1 Edge 301 URL Preservation
+          </span>
+        </h1>
+        <p class="text-base sm:text-lg text-[#575f6e] max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+          Public-facing PHP runtimes face relentless automated exploits—from Remote Code Execution (RCE) flaws to zero-day botnet probes. Once compromised, sites suffer defacements, ransomware backdoors, and blacklisted corporate emails. We decouple your databases into pure static Astro builds, physically eliminating PHP interpreters from the public web while preserving every legacy .php and .php?id= URL 1:1.
+        </p>
+
+        <!-- Dual-Track Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            Select Plan · Pay Kickoff Deposit
+          </a>
+          <a 
+            href={`${estimatePath}?goal=php-legacy`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            Request Free Legacy PHP Assessment
+          </a>
+        </div>
+      </div>
+
+      <!-- SECTION 1: PAIN POINTS (The 3 Critical Liabilities of Custom Legacy PHP) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Rising botnet attacks and recurring CVE alerts? The severe risks of dynamic PHP:
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Exposing a dynamic PHP runtime to the public web leaves your business constantly vulnerable to automated exploits and emergency weekend drills.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">01</div>
+            <h3 class="text-lg font-bold text-slate-900">Endless PHP Vulnerabilities: Automated Exploits Breach Sites in Seconds</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              From PHP core CGI execution bugs to third-party library exploits, automated botnets scan domains 24/7. Once breached, attackers inject crypto miners, ransomware backdoors, or turn your server into a spam bot that destroys email deliverability.
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">02</div>
+            <h3 class="text-lg font-bold text-slate-900">The Exhausting Patch Treadmill: Today's Fix Is Tomorrow's 0-Day</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Even if you pay developers thousands to remediate current issues, new vulnerabilities surface every few months. As long as PHP and MySQL run on the public internet, engineering teams remain trapped in an endless emergency patching cycle.
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">03</div>
+            <h3 class="text-lg font-bold text-slate-900">Intricate Legacy .php?id= URLs No One Dares Touch</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Sites are filled with historical paths like <code class="text-slate-800 bg-slate-100 px-1 py-0.5 rounded font-mono text-xs">/detail.php?id=128</code> that hold critical Google rankings and backlinks. Web agencies often wipe these out, destroying decades of domain equity.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: COMPARISON TABLE -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-10">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Legacy Custom PHP vs. SiteCarry Astro Architecture
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Eliminate technical debt by replacing aging, vulnerable servers with pre-rendered static edge distribution:
+          </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-[#e8e6df] bg-white shadow-2xs">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-[#faf9f6] border-b border-[#e8e6df] text-slate-600 uppercase font-mono text-[10px] tracking-wider font-semibold">
+              <tr>
+                <th class="px-6 py-4 w-1/4">Evaluation Matrix</th>
+                <th class="px-6 py-4 w-3/8 text-slate-500">Legacy Procedural PHP (5.6 / 7.x)</th>
+                <th class="px-6 py-4 w-3/8 text-amber-900 font-bold bg-amber-50/50">SiteCarry Astro Static Architecture</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#e8e6df]">
+              {comparisonRows.map((row) => (
+                <tr class="hover:bg-[#faf9f6]/70 transition-colors">
+                  <td class="px-6 py-4 font-bold text-slate-900 font-sans">{row.metric}</td>
+                  <td class="px-6 py-4 text-slate-500 font-normal leading-relaxed">{row.legacy}</td>
+                  <td class="px-6 py-4 text-slate-900 font-semibold bg-amber-50/30 leading-relaxed">{row.sitecarry}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SECTION 3: ARCHITECTURE ADVANTAGES -->
+      <div class="mb-24 p-8 sm:p-12 rounded-2xl bg-white border border-[#e8e6df] shadow-xs space-y-8">
+        <div class="max-w-3xl">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Stop Fighting Legacy Code: Why Astro Static Modernization Is the Smart Move
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Attempting to refactor brittle, procedural PHP 5/7 code into PHP 8.4 is costly and guarantees future maintenance headaches. SiteCarry decouples your data:
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">1. Physical Zero Attack Surface</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              We compile your content into static HTML pre-rendered at build time. No public PHP interpreter or open database ports exist on the public web, permanently neutralizing SQL injection and RCE vulnerabilities.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">2. High-Precision Edge Regex 301 Mappings</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              We deploy exact regular expression rules directly to Cloudflare edge nodes, routing historical <code class="text-slate-800 bg-slate-100 px-1 py-0.5 rounded font-mono text-xs">.php?id=xxx</code> requests to clean semantic URLs without dropping a single fraction of PageRank.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">3. Clean Data Extraction (Leaving Spaghetti Code Behind)</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              We do not migrate messy legacy code. Our specialized scripts extract raw articles, media assets, and structured data from your MySQL database, reorganizing them into standard, human-readable Git repositories.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">4. Terminate Hosting Surcharges ($0/mo Edge Hosting)</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Once migrated, your site deploys globally on Cloudflare edge CDN. You can immediately decommission aging servers and cancel recurring EOL support surcharges.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: TANGIBLE BENEFITS -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            4 Tangible Business Returns from Modernizing Legacy PHP:
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Transition from an unpatchable security liability to an untouchable, ultra-fast corporate digital asset.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">01</div>
+            <h3 class="text-base font-bold text-slate-900">Eliminate EOL Surcharges</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Cancel host extended-support fees immediately, saving hundreds to thousands in annual maintenance expenses.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">02</div>
+            <h3 class="text-base font-bold text-slate-900">Lifetime CVE Immunity</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              No live PHP or MySQL exposed to the Internet means no emergency vulnerability scrambles when new CVEs emerge.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">03</div>
+            <h3 class="text-base font-bold text-slate-900">0.8-Second Global Speed</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Pages load instantaneously from 300+ CDN edge nodes, upgrading your web presence to modern tech-tier performance.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">04</div>
+            <h3 class="text-base font-bold text-slate-900">100% SEO Backlink Parity</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Every indexed URL and external backlink maps seamlessly, safeguarding years of accumulated domain authority.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: SPECIFIC FAQS -->
+      <div class="max-w-4xl mx-auto mb-24">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-8 text-center">
+          Legacy PHP Modernization FAQ
+        </h2>
+        <div class="space-y-4">
+          {faqs.map((faq) => (
+            <div class="p-6 rounded-2xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+              <h3 class="text-base font-bold text-slate-900">{faq.q}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed font-normal">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- SECTION 6: PRICING -->
+      <div class="mb-24" id="pricing">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Legacy PHP Modernization Packages & Scope
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Fixed-scope contracts covering custom database extraction, 1:1 edge URL mapping, and a full 30-day post-launch warranty.
+          </p>
+        </div>
+
+        <PricingTable lang={lang} />
+      </div>
+
+      <!-- SECTION 7: FINAL DUAL-TRACK CALL TO ACTION -->
+      <div class="p-8 sm:p-12 rounded-2xl bg-[#fffcf5] border border-amber-200/80 text-center max-w-4xl mx-auto space-y-6 shadow-xs">
+        <div class="space-y-2">
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            Ready to resolve legacy PHP risks and escape host surcharges?
+          </h3>
+          <p class="text-sm text-slate-600 max-w-xl mx-auto">
+            Provide your website URL and database details. Our engineers will audit your technical debt for free and outline a fixed-price migration proposal.
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            Select Plan · Pay Kickoff Deposit
+          </a>
+          <a 
+            href={`${estimatePath}?goal=php-legacy`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            Request Free Legacy PHP Assessment
+          </a>
+        </div>
+
+        <p class="text-xs text-slate-500 pt-2">
+          Prefer email? Reach our engineering team at 
+          <a href={`mailto:${siteConfig.contactEmail}`} class="font-mono text-amber-800 hover:text-amber-900 font-semibold underline underline-offset-2 ml-1">
+            {siteConfig.contactEmail}
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</Layout>

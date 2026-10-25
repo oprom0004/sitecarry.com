@@ -1,0 +1,62 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { siteConfig } from '../../data/siteConfig';
+import { type Lang } from '../../i18n/utils';
+
+const lang: Lang = 'zh-tw';
+---
+
+<Layout 
+  title="隱私權保護政策 | SiteCarry"
+  description="SiteCarry 隱私權保護政策與客戶數據保護規範。"
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-sm text-slate-700 space-y-6 leading-relaxed">
+      
+      <div class="mb-10">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-2">隱私權保護政策</h1>
+        <p class="text-xs text-slate-500 font-mono">生效日期：2026 年 10 月</p>
+      </div>
+
+      <p>
+        在 SiteCarry（<code class="text-amber-900 font-mono bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/80">sitecarry.com</code>），我們以嚴格的工程紀律對待客戶的商業數據與知識產權。本政策說明我們如何收集、處理與保護您的資訊。
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">1. 我們收集的資訊</h2>
+      <p>
+        當您提交需求評估表單或專案諮詢時，我們僅收集您主動提供的必要資訊，包括：
+      </p>
+      <ul class="list-disc list-inside space-y-1.5 text-slate-600">
+        <li>您的聯絡姓名與企業電子郵件信箱。</li>
+        <li>現有網站網址與技術升級目標。</li>
+        <li>預估的分頁／文章規模與預算範圍。</li>
+      </ul>
+      <p class="p-4 rounded-xl bg-white border border-[#e8e6df] text-xs text-slate-600 shadow-2xs">
+        <strong class="text-slate-900">重要安全聲明：</strong>我們絕不在公開表單中索取或收集網站管理員密碼、SSH 根金鑰或資料庫帳密。專案正式簽約開工後，技術憑證一律透過端到端加密通道單獨交換。
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">2. 資訊使用方式</h2>
+      <p>
+        您提交的資訊僅限於以下用途：
+      </p>
+      <ul class="list-disc list-inside space-y-1.5 text-slate-600">
+        <li>對您提供的公開網址進行技術健康度預檢，以出具客製化遷移評估與報價建議。</li>
+        <li>就您的諮詢問題、規格確認或工程進度進行必要溝通。</li>
+        <li>履行正式簽署的網站遷移與開發服務合約。</li>
+      </ul>
+      <p>我們絕不向任何第三方行銷機構出售、出租或交易客戶資料。</p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">3. 資料保存與刪除權利</h2>
+      <p>
+        諮詢紀錄與初審報告僅在推動合作意向或維護合約所需的期限內妥善保存。您有權隨時來信至 <code class="text-slate-900 font-mono bg-white border border-[#e8e6df] px-1.5 py-0.5 rounded">{siteConfig.contactEmail}</code> 要求刪除您的諮詢資料。
+      </p>
+
+      <h2 class="text-lg font-bold text-slate-900 pt-4">4. 聯絡我們</h2>
+      <p>
+        若您對本隱私政策有任何疑問，歡迎隨時寄信至 <code class="text-amber-800 font-mono bg-amber-50 border border-amber-200/80 px-1.5 py-0.5 rounded">{siteConfig.contactEmail}</code>。
+      </p>
+
+    </div>
+  </div>
+</Layout>

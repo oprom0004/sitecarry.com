@@ -1,0 +1,37 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProcessTimeline from '../../components/ProcessTimeline.astro';
+import { getLocalizedPath, type Lang } from '../../i18n/utils';
+
+const lang: Lang = 'zh-tw';
+const estimatePath = getLocalizedPath('estimate', lang);
+---
+
+<Layout 
+  title="標準交付流程 | 零停機移轉 SOP"
+  description="從先期診斷、資產盤點、測試機重構、301 轉址驗證到正式零停機切換與 30 天保固。SiteCarry 嚴謹的工程化流程。"
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-white border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
+          嚴謹工程化把關，確保營運不中斷
+        </h1>
+        <p class="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
+          我們不追求浮躁隨意的快速套版。每一個移轉專案皆依循 5 大核心工程階段，於測試環境完整驗收後才執行線上無縫切換。
+        </p>
+      </div>
+
+      <ProcessTimeline lang={lang} />
+
+      <div class="mt-16 text-center">
+        <a href={estimatePath} class="inline-block px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all">
+          預約您的網站移轉時程
+        </a>
+      </div>
+
+    </div>
+  </div>
+</Layout>

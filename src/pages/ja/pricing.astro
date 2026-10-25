@@ -1,0 +1,233 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PricingTable from '../../components/PricingTable.astro';
+import { siteConfig } from '../../data/siteConfig';
+import { getLocalizedPath, type Lang } from '../../i18n/utils';
+
+const lang: Lang = 'ja';
+const estimatePath = getLocalizedPath('estimate', lang);
+const checkoutPath = getLocalizedPath('checkout', lang);
+
+const jaAddOns = [
+  {
+    item: "ページの追加（既存テンプレート流用）",
+    priceRange: "$80 – $150",
+    unit: "1ページあたり",
+    note: "原稿テキストおよび画像素材をご支給いただきます",
+  },
+  {
+    item: "新規独自テンプレートの設計・実装",
+    priceRange: "$300 – $600",
+    unit: "1テンプレート",
+    note: "レスポンシブUIデザイン作成およびコンポーネント実装",
+  },
+  {
+    item: "過去記事の一括移行（100記事単位）",
+    priceRange: "$200 – $400",
+    unit: "100記事あたり",
+    note: "自動クレンジング・画像パス正規化・フィールド照合",
+  },
+  {
+    item: "WooCommerce / EC商品データ移行（500 SKU単位）",
+    priceRange: "$300 – $600",
+    unit: "500商品あたり",
+    note: "バリエーション属性・画像ギャラリー・カテゴリ移行",
+  },
+  {
+    item: "ヘッドレス決済ゲートウェイ連携（Stripe / Shopify等）",
+    priceRange: "$500 – $1,200",
+    unit: "1決済系統",
+    note: "PCI-DSS準拠のトークン化決済によりスキミングを物理遮断",
+  },
+  {
+    item: "多言語言語ブランチの追加",
+    priceRange: "+25% – 40%",
+    unit: "基本工事費比",
+    note: "多言語ルーティング・hreflang設定（翻訳文はご支給）",
+  },
+  {
+    item: "外部マーケティングツール・API連携",
+    priceRange: "$250 – $600",
+    unit: "1連携あたり",
+    note: "HubSpot、Mailchimp、Calendly、Webhook等",
+  },
+];
+---
+
+<Layout 
+  title="料金プランと制作費用 | 明朗な固定パッケージ"
+  description="WordPressサイト移行・リニューアルの料金体系。$1,490〜の固定価格パッケージ、詳細事前診断$149、明確なオプション単価。"
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-white border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
+          追加請求のない、安心の料金体系
+        </h1>
+        <p class="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
+          工数が膨らんで予算オーバーになる心配はありません。着手前に作業スコープを明確に合意し、プレビュー環境での検収、公開後30日間の瑕疵保証をお付けします。
+        </p>
+      </div>
+
+      <PricingTable lang={lang} showAllDetails={true} />
+
+      <!-- $149 詳細診断レビュー -->
+      <div class="mt-16 p-8 sm:p-10 rounded-xl bg-slate-50 border border-slate-200 max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xs">
+        <div class="space-y-3">
+          <span class="text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200/80 px-2.5 py-1 rounded-md inline-block">
+            Step 0: 着手前のリスク精査
+          </span>
+          <h2 class="text-2xl font-bold text-slate-900">移行詳細診断レビュー ($149 USD)</h2>
+          <p class="text-sm text-slate-600 leading-relaxed max-w-xl">
+            全URLクローリング一覧、プラグイン依存関係監査、リスク分析、移行推奨アーキテクチャ設計書を3〜5営業日で納品します。
+            <strong class="text-amber-900 font-semibold">30日以内に本契約をいただいた場合、診断費用の$149は全額工事費に充当（実質無料）</strong>されます。
+          </p>
+        </div>
+        <a href={`${checkoutPath}?plan=review-149`} class="shrink-0 px-7 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all">
+          $149をオンライン決済して診断開始
+        </a>
+      </div>
+
+      <!-- オプション料金表 -->
+      <div class="mt-20 max-w-5xl mx-auto">
+        <div class="mb-8">
+          <h2 class="text-2xl font-bold text-slate-900 mb-2">追加オプション標準単価</h2>
+          <p class="text-sm text-slate-600">ページ数の追加や多言語対応、外部ツール連携など、発生する追加費用はすべて事前にお見積り・合意の上で着手いたします。</p>
+        </div>
+
+        <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-2xs">
+          <table class="w-full text-left text-sm text-slate-700">
+            <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold text-xs tracking-wider">
+              <tr>
+                <th class="px-6 py-3.5">追加項目</th>
+                <th class="px-6 py-3.5">想定単価</th>
+                <th class="px-6 py-3.5">単位</th>
+                <th class="px-6 py-3.5">詳細内容</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              {jaAddOns.map((add) => (
+                <tr class="hover:bg-slate-50/70 transition-colors">
+                  <td class="px-6 py-4 font-medium text-slate-900">{add.item}</td>
+                  <td class="px-6 py-4 text-blue-600 font-bold font-mono">{add.priceRange}</td>
+                  <td class="px-6 py-4 text-slate-500 font-mono text-xs">{add.unit}</td>
+                  <td class="px-6 py-4 text-slate-600 text-xs">{add.note}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 月額保守・モニタリングプラン（任意） -->
+      <div class="mt-20 max-w-5xl mx-auto">
+        <div class="mb-8">
+          <h2 class="text-2xl font-bold text-slate-900 mb-2">月額保守・稼働監視プラン（任意）</h2>
+          <p class="text-sm text-slate-600">公開後30日間の初期保証期間終了後も、専門チームによる継続的な監視とサポートをご利用いただけます。</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="p-8 rounded-xl bg-white border border-slate-200 shadow-2xs hover:border-slate-300 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-baseline mb-4">
+                <h3 class="text-xl font-bold text-slate-900">基本保守 (Care)</h3>
+                <div class="text-right">
+                  <span class="text-2xl font-extrabold text-slate-900 font-mono">$79</span>
+                  <span class="text-xs text-slate-500 font-mono"> / 月</span>
+                </div>
+              </div>
+              <p class="text-sm text-slate-600 mb-6 font-normal">稼働状況の24時間監視、ビルドエラー時の即時アラート、静的サイトの安定性を守る基本プラン。</p>
+              <ul class="space-y-2.5 text-sm text-slate-600 mb-8">
+                <li class="flex items-start gap-2.5">
+                  <svg class="w-4 h-4 text-slate-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span>24/7 稼働率およびDNSレイテンシ監視</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <svg class="w-4 h-4 text-slate-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span>自動ビルド失敗時の即時検知と原因調査</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <svg class="w-4 h-4 text-slate-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span>月次の依存ライブラリ・セキュリティスキャン</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <svg class="w-4 h-4 text-slate-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span>バックアップ有効性の定期検証</span>
+                </li>
+              </ul>
+            </div>
+            <a href={`${estimatePath}?care=care`} class="py-3 px-4 rounded-xl bg-slate-50 hover:bg-amber-500 hover:text-slate-950 border border-slate-200 text-slate-800 text-xs font-semibold text-center transition-all">
+              Careプランについて問い合わせる
+            </a>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-slate-200 shadow-2xs hover:border-slate-300 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-baseline mb-4">
+                <h3 class="text-xl font-bold text-slate-900">拡張保守 (Care Plus)</h3>
+                <div class="text-right">
+                  <span class="text-2xl font-extrabold text-slate-900 font-mono">$199</span>
+                  <span class="text-xs text-slate-500 font-mono"> / 月</span>
+                </div>
+              </div>
+              <p class="text-sm text-slate-600 mb-6 font-normal">基本監視に加え、毎月の専任エンジニア工数による原稿更新・レイアウト微調整をサポート。</p>
+              <ul class="space-y-2.5 text-sm text-slate-600 mb-8">
+                <li class="flex items-start gap-2.5">
+                  <svg class="w-4 h-4 text-slate-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span>Careプランの全監視・セキュリティ巡回項目</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <svg class="w-4 h-4 text-slate-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span>月2時間までのエンジニア作業工数（テキスト差替・画像変更・微細レイアウト調整）</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <svg class="w-4 h-4 text-slate-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span>四半期ごとのSEO健全性・Core Web Vitals測定レポート</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <svg class="w-4 h-4 text-slate-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span>技術相談の優先メール対応</span>
+                </li>
+              </ul>
+            </div>
+            <a href={`${estimatePath}?care=care-plus`} class="py-3 px-4 rounded-xl bg-slate-50 hover:bg-amber-500 hover:text-slate-950 border border-slate-200 text-slate-800 text-xs font-semibold text-center transition-all">
+              Care Plusプランについて問い合わせる
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- お支払いスケジュールとスコープ規定 -->
+      <div class="mt-20 max-w-5xl mx-auto p-8 rounded-xl bg-slate-50 border border-slate-200 space-y-4 text-sm text-slate-600 shadow-2xs">
+        <h3 class="text-base font-bold text-slate-900 tracking-tight">お支払いスケジュールとプロジェクト規定</h3>
+        <ul class="space-y-3 text-slate-600 list-disc list-inside">
+          <li><strong class="text-slate-800">ご相談・お支払い手順：</strong> 当社はオンラインでの即時課金は行いません。まずは現行URLの無料診断を行い、確定した固定見積書・仕様書を合意いただいた後に契約・着手となります。</li>
+          <li><strong class="text-slate-800">お支払い条件：</strong> Essentialプランは着手時50%、ステージング検収完了・本番DNS切り替え前50%。BusinessおよびEnterpriseプランは着手時40%、ステージング検収時40%、本番切り替え前20%となります。</li>
+          <li><strong class="text-slate-800">WooCommerce・EC移行スコープ：</strong> Enterpriseプランでは、Next.js Commerceを用いたヘッドレスアーキテクチャおよびPCI-DSS準拠の決済ゲートウェイ（Stripe / Shopify等）を構築します。商品カタログ、バリエーション属性、顧客の過去注文履歴の移行に対応します。特殊な独自基幹ERPや在庫連動は個別にお見積りいたします。</li>
+          <li><strong class="text-slate-800">検収修正回数：</strong> ステージング環境での一括フィードバック修正を2回含みます。合意仕様に対する不具合の修正は回数に含まれません。</li>
+          <li><strong class="text-slate-800">インフラ・アカウント帰属：</strong> お客様自身のクラウドインフラ（Cloudflare Pages、Vercel、AWS等）へ直接デプロイします。すべてのソースコードとGitリポジトリはお客様に100%帰属します。</li>
+          <li><strong class="text-slate-800">コンテンツおよび原稿：</strong> 最終原稿および多言語翻訳テキストはお客様よりご支給いただきます。過去記事や商品データは自動スクリプトによりクレンジング移行しますが、文章自体の再執筆は含みません。</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,639 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getLocalizedPath, type Lang } from '../i18n/utils';
+import { siteConfig } from '../data/siteConfig';
+
+const lang: Lang = 'en';
+const estimatePath = getLocalizedPath('estimate', lang);
+const astroPath = getLocalizedPath('wordpress-to-astro', lang);
+const phpMigrationPath = getLocalizedPath('legacy-php-migration', lang);
+const guidePath = getLocalizedPath('guides/php2shell-wordpress-static-mitigation', lang);
+
+const phpMatrix = [
+  {
+    branch: "PHP 8.5",
+    status: "Active Support",
+    eolDate: "Nov 2028",
+    minSafeCve: "8.5.12+",
+    surcharge: "None",
+    recommendation: "Ensure patched to 8.5.12+ for CVE-2026-109618",
+  },
+  {
+    branch: "PHP 8.4",
+    status: "Active Support",
+    eolDate: "Dec 2028",
+    minSafeCve: "8.4.27+",
+    surcharge: "None",
+    recommendation: "Ensure patched to 8.4.27+ for CVE-2026-109618",
+  },
+  {
+    branch: "PHP 8.3",
+    status: "Security Support",
+    eolDate: "Dec 2027",
+    minSafeCve: "8.3.36+",
+    surcharge: "None",
+    recommendation: "Ensure patched to 8.3.36+ for CVE-2026-109618",
+  },
+  {
+    branch: "PHP 8.2",
+    status: "Security Only (Nearing EOL)",
+    eolDate: "Dec 2026",
+    minSafeCve: "8.2.35+",
+    surcharge: "Starts Q1 2027",
+    recommendation: "Patch to 8.2.35 immediately; plan upgrade or static migration",
+  },
+  {
+    branch: "PHP 8.1",
+    status: "End-of-Life (EOL)",
+    eolDate: "Dec 2025 (Expired)",
+    minSafeCve: "Unpatched (EOL)",
+    surcharge: "$10–$25/mo Extended Fee",
+    recommendation: "No official patches for PHP2shell. Migrate off legacy runtime",
+  },
+  {
+    branch: "PHP 8.0",
+    status: "End-of-Life (EOL)",
+    eolDate: "Nov 2023 (Expired)",
+    minSafeCve: "Unpatched (EOL)",
+    surcharge: "$15–$35/mo Extended Fee",
+    recommendation: "High risk. Decommission or rebuild into static edge architecture",
+  },
+  {
+    branch: "PHP 7.4 / 7.x",
+    status: "End-of-Life (EOL)",
+    eolDate: "Nov 2022 (Expired)",
+    minSafeCve: "Unpatched (EOL)",
+    surcharge: "$20–$50/mo Extended Fee",
+    recommendation: "Critical legacy debt. Plugins often incompatible with PHP 8+",
+  },
+  {
+    branch: "PHP 5.6 / 5.x",
+    status: "End-of-Life (EOL)",
+    eolDate: "Dec 2018 (Expired)",
+    minSafeCve: "Unpatched (EOL)",
+    surcharge: "Host Forced Shutdown",
+    recommendation: "Immediate full-site extraction & static rebuild recommended",
+  },
+];
+
+const faqs = [
+  {
+    q: "Why does the PHP Version Checker say my PHP version is 'Hidden from Public Headers'?",
+    a: "Many modern hosts, reverse proxies, and CDNs (such as Cloudflare or Nginx with expose_php = Off) strip the X-Powered-By HTTP header so automated bots cannot easily see which PHP version your server is running. While hiding the header is good hygiene, it does not protect an unpatched server if PHP is still executing requests publicly.",
+  },
+  {
+    q: "Which PHP versions are affected by the October 2026 PHP2shell (CVE-2026-109618) vulnerability?",
+    a: "All versions of PHP from 5.4 up through 8.5.11 are affected. The PHP Foundation released official security patches in versions 8.5.12, 8.4.27, 8.3.36, and 8.2.35. Versions 8.1 and older are End-of-Life (EOL) and do not receive official patches.",
+  },
+  {
+    q: "How can I check my exact PHP version inside WordPress without creating a phpinfo.php file?",
+    a: "Log into your WordPress administrator dashboard, navigate to Tools → Site Health, click the 'Info' tab at the top, and expand the 'Server' section. You will see the exact PHP version, memory limit, and server architecture. Never upload a public phpinfo.php file, as it exposes sensitive environment variables to attackers.",
+  },
+  {
+    q: "What if upgrading my PHP version breaks my older WordPress theme or plugins?",
+    a: "This is the most common reason sites remain stuck on PHP 7.4 or 8.0. Legacy themes and abandoned plugins often throw fatal errors on PHP 8.3+. Instead of spending thousands debugging obsolete PHP code, migrating the public frontend to a static edge build (Astro or Next.js) eliminates public PHP entirely while preserving your pages, content, and SEO URLs.",
+  },
+];
+
+const toolSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "SiteCarry PHP Version & Header Security Checker",
+      "url": "https://sitecarry.com/php-version-checker/",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "All",
+      "description": "Free online HTTP header inspector to check if your website publicly exposes its PHP version, WordPress runtime footprint, or unpatched EOL branches (including CVE-2026-109618 PHP2shell)."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": faqs.map((f) => ({
+        "@type": "Question",
+        "name": f.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": f.a
+        }
+      }))
+    }
+  ]
+};
+---
+
+<Layout 
+  title="PHP Version Checker | Inspect HTTP Headers, EOL Status & CVE-2026-109618"
+  description="Check if your website publicly exposes its PHP version via HTTP headers, verify End-of-Life (EOL) status and CVE-2026-109618 (PHP2shell) patch levels, and audit WordPress runtime signals."
+  lang={lang}
+  schema={toolSchema}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- 1. HERO & INTERACTIVE SCANNER -->
+      <div class="max-w-4xl mx-auto text-center mb-16">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1c2024] tracking-tight mb-6 leading-[1.15]">
+          PHP Version & Runtime Exposure Checker
+        </h1>
+        <p class="text-base sm:text-lg text-[#575f6e] max-w-2xl mx-auto leading-relaxed font-normal">
+          Inspect any domain’s live HTTP response headers to check if it broadcasts an exposed <code class="text-amber-900 bg-amber-50 px-1.5 py-0.5 rounded font-mono text-sm border border-amber-200/80">X-Powered-By: PHP</code> fingerprint, runs an End-of-Life branch, or reveals dynamic WordPress runtime signals.
+        </p>
+      </div>
+
+      <!-- INTERACTIVE SCANNER CONSOLE -->
+      <div class="max-w-4xl mx-auto mb-24">
+        <div class="rounded-2xl border border-[#e8e6df] bg-white shadow-xs p-8 sm:p-10">
+          
+          <form id="php-check-form" class="space-y-4">
+            <label for="target-url-input" class="block text-sm font-semibold text-slate-800">
+              Enter Website URL to Inspect Live Headers
+            </label>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <input 
+                type="text" 
+                id="target-url-input" 
+                name="url" 
+                required 
+                placeholder="https://example.com"
+                class="flex-grow bg-[#faf9f6] border border-[#e8e6df] rounded-xl px-4 py-3.5 text-sm text-slate-900 font-mono focus:outline-none focus:border-amber-500 focus:bg-white focus:ring-1 focus:ring-amber-500 transition-all placeholder:text-slate-400"
+              />
+              <button 
+                type="submit" 
+                id="scan-submit-btn"
+                class="px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all cursor-pointer shrink-0 flex items-center justify-center gap-2"
+              >
+                <span id="scan-btn-text">Inspect PHP Headers</span>
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Preset Simulation Buttons for Instant Testing -->
+            <div class="pt-2 flex flex-wrap items-center gap-2 text-xs font-mono text-slate-500">
+              <span class="text-xs text-slate-500 font-sans">Or preview sample diagnostics:</span>
+              <button 
+                type="button" 
+                data-preset="eol-74"
+                class="preset-btn px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs text-slate-700 transition-colors cursor-pointer font-medium font-sans"
+              >
+                Sample: Exposed PHP 7.4.33 (EOL)
+              </button>
+              <button 
+                type="button" 
+                data-preset="unpatched-83"
+                class="preset-btn px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs text-slate-700 transition-colors cursor-pointer font-medium font-sans"
+              >
+                Sample: PHP 8.3.14 (Needs 8.3.36+)
+              </button>
+              <button 
+                type="button" 
+                data-preset="static-edge"
+                class="preset-btn px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-xs text-amber-900 transition-colors cursor-pointer font-bold font-sans"
+              >
+                Sample: Zero-PHP Static Edge
+              </button>
+            </div>
+          </form>
+
+          <!-- Error Box -->
+          <div id="scan-error" class="hidden mt-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs font-mono text-amber-900"></div>
+
+          <!-- RESULTS PANEL -->
+          <div id="scan-results" class="hidden mt-8 pt-8 border-t border-[#e8e6df] space-y-6">
+            
+            <!-- Top Summary Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-4 p-4 rounded-xl bg-[#faf9f6] border border-[#e8e6df] font-mono text-xs">
+              <div class="flex items-center gap-2.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                <span class="text-slate-500 font-semibold font-sans">TARGET:</span>
+                <span id="res-url" class="text-slate-900 font-bold truncate max-w-[260px] sm:max-w-md"></span>
+              </div>
+              <div class="flex items-center gap-4 text-xs font-sans">
+                <span class="text-slate-500">HTTP <strong id="res-status" class="text-slate-900 font-mono">200</strong></span>
+                <span class="text-slate-300">•</span>
+                <span class="text-slate-500">TTFB: <strong id="res-time" class="text-amber-700 font-mono">120ms</strong></span>
+              </div>
+            </div>
+
+            <!-- 3 Telemetry Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              
+              <!-- Card 1: Detected PHP Version -->
+              <div class="p-5 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-2">
+                <span class="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold block">Public PHP Header</span>
+                <div id="res-php-version" class="text-2xl font-mono font-extrabold text-slate-900">Hidden</div>
+                <div id="res-php-badge" class="inline-block px-2.5 py-0.5 rounded-md bg-white border border-slate-200 text-[10px] font-mono text-slate-600 font-medium shadow-2xs">
+                  Not Broadcast
+                </div>
+              </div>
+
+              <!-- Card 2: CVE-2026-109618 Baseline -->
+              <div class="p-5 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-2">
+                <span class="text-xs uppercase tracking-wider text-slate-500 font-semibold block">PHP2shell Safe Minimum</span>
+                <div id="res-safe-min" class="text-lg font-mono font-bold text-slate-900">8.2.35 / 8.3.36+</div>
+                <p class="text-xs text-slate-500 font-normal">CVE-2026-109618 / 109619 baseline</p>
+              </div>
+
+              <!-- Card 3: CMS / Runtime Footprint -->
+              <div class="p-5 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-2">
+                <span class="text-xs uppercase tracking-wider text-slate-500 font-semibold block">Runtime Footprint</span>
+                <div id="res-cms" class="text-lg font-mono font-bold text-slate-900">Checking...</div>
+                <p id="res-edge" class="text-xs font-mono text-slate-500"></p>
+              </div>
+
+            </div>
+
+            <!-- Detailed Header & Signal Table -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              
+              <div class="lg:col-span-7 p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-700">
+                  Diagnostic Advisory
+                </h3>
+                <p id="res-advisory" class="text-sm text-slate-700 leading-relaxed font-normal"></p>
+                
+                <div class="pt-3 border-t border-[#e8e6df]">
+                  <span class="text-xs text-slate-500 font-semibold block mb-2">Detected Runtime Signals:</span>
+                  <div id="res-signals" class="flex flex-wrap gap-2 text-xs font-mono"></div>
+                </div>
+              </div>
+
+              <div class="lg:col-span-5 p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-2.5 font-mono text-xs">
+                <h3 class="text-xs uppercase tracking-wider text-slate-700 font-bold mb-3 font-sans">
+                  HTTP Response Headers
+                </h3>
+                <div class="flex justify-between py-1.5 border-b border-[#e8e6df]">
+                  <span class="text-slate-500">X-Powered-By:</span>
+                  <span id="hdr-powered" class="text-slate-900 font-medium text-right truncate max-w-[180px]"></span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-[#e8e6df]">
+                  <span class="text-slate-500">Server:</span>
+                  <span id="hdr-server" class="text-slate-800 font-medium text-right truncate max-w-[180px]"></span>
+                </div>
+                <div class="flex justify-between py-1.5">
+                  <span class="text-slate-500">Edge / Proxy:</span>
+                  <span id="hdr-edge" class="text-slate-900 font-medium text-right truncate max-w-[180px]"></span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Conversion Callout Inside Scanner -->
+            <div class="p-8 rounded-2xl bg-[#fffcf5] border border-amber-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-2xs">
+              <div class="space-y-1.5 max-w-xl">
+                <p class="text-base font-bold text-slate-900">The safest PHP version is zero public PHP.</p>
+                <p class="text-sm text-slate-600 leading-relaxed font-normal">
+                  Stop worrying about PHP EOL surcharges and emergency RCE patches. We migrate legacy WordPress & PHP sites into pre-rendered static edge builds (Astro / Next.js) with 100% URL parity.
+                </p>
+              </div>
+              <div class="shrink-0">
+                <a href={`${estimatePath}?goal=php-legacy`} class="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-all shadow-sm shadow-amber-500/20">
+                  Get a Migration Estimate
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 2. 2026 PHP VERSION LIFECYCLE & CVE-2026-109618 MATRIX -->
+      <div class="max-w-6xl mx-auto mb-24">
+        <div class="mb-8">
+          <h2 class="text-2xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            PHP Version Support, EOL & PHP2shell Patch Matrix
+          </h2>
+          <p class="text-sm text-[#575f6e] max-w-3xl leading-relaxed">
+            Compare your server’s PHP branch against official PHP Foundation End-of-Life dates, hosting extended-support surcharges, and the minimum patched release required to mitigate <a href={guidePath} class="text-amber-800 font-semibold hover:underline">CVE-2026-109618 / CVE-2026-109619 (PHP2shell)</a>.
+          </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-[#e8e6df] bg-white shadow-2xs">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-[#faf9f6] border-b border-[#e8e6df] text-slate-600 uppercase font-mono text-[10px] tracking-wider font-semibold">
+              <tr>
+                <th class="px-6 py-4">PHP Branch</th>
+                <th class="px-6 py-4">2026 Lifecycle Status</th>
+                <th class="px-6 py-4">Official EOL Date</th>
+                <th class="px-6 py-4">CVE-2026-109618 Safe Min</th>
+                <th class="px-6 py-4">Host EOL Surcharge</th>
+                <th class="px-6 py-4">Engineering Action</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#e8e6df] font-mono">
+              {phpMatrix.map((row) => (
+                <tr class="hover:bg-[#faf9f6]/70 transition-colors">
+                  <td class="px-6 py-4 font-bold text-slate-900">{row.branch}</td>
+                  <td class="px-6 py-4">
+                    <span class={`px-2.5 py-0.5 rounded-md text-[10px] border font-medium ${
+                      row.status.includes('Active')
+                        ? 'bg-amber-50 border-amber-200 text-amber-900 font-semibold'
+                        : row.status.includes('Security')
+                        ? 'bg-slate-100 border-slate-200 text-slate-700'
+                        : 'bg-stone-100 border-stone-200 text-stone-700'
+                    }`}>
+                      {row.status}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-slate-600">{row.eolDate}</td>
+                  <td class="px-6 py-4 font-bold text-amber-800">{row.minSafeCve}</td>
+                  <td class="px-6 py-4 text-slate-600">{row.surcharge}</td>
+                  <td class="px-6 py-4 font-sans text-slate-600">{row.recommendation}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 3. HOW TO CHECK PHP VERSION INTERNALLY WHEN HEADERS ARE HIDDEN -->
+      <div class="max-w-6xl mx-auto mb-24">
+        <div class="mb-10">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-2">
+            3 Safe Ways to Check Your Exact PHP Version Internally
+          </h2>
+          <p class="text-sm text-[#575f6e]">
+            If your website hides <code class="text-slate-800 font-mono bg-slate-100 px-1 py-0.5 rounded border border-slate-200">X-Powered-By</code> behind Cloudflare or Nginx, use one of these safe internal methods—never upload a public <code class="text-slate-800 font-mono bg-slate-100 px-1 py-0.5 rounded border border-slate-200">phpinfo.php</code> file.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <div class="p-8 rounded-2xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <span class="text-2xl font-bold font-mono text-amber-800 block">01</span>
+            <h3 class="text-base font-bold text-slate-900">WordPress Site Health Info</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Log into your WordPress dashboard and navigate to <strong>Tools → Site Health → Info</strong>. Expand the <strong>Server</strong> accordion to view your exact PHP version, SAPI type, and memory limits without installing any plugins.
+            </p>
+          </div>
+
+          <div class="p-8 rounded-2xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <span class="text-2xl font-bold font-mono text-amber-800 block">02</span>
+            <h3 class="text-base font-bold text-slate-900">Command Line & WP-CLI</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Connect via SSH and run <code class="text-slate-900 bg-[#faf9f6] border border-[#e8e6df] px-1.5 py-0.5 rounded font-mono text-xs">php -v</code> or <code class="text-slate-900 bg-[#faf9f6] border border-[#e8e6df] px-1.5 py-0.5 rounded font-mono text-xs">wp --info</code>. Check <code class="text-slate-900 bg-[#faf9f6] border border-[#e8e6df] px-1.5 py-0.5 rounded font-mono text-xs">systemctl status php*-fpm</code> to confirm the live web worker version.
+            </p>
+          </div>
+
+          <div class="p-8 rounded-2xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <span class="text-2xl font-bold font-mono text-amber-800 block">03</span>
+            <h3 class="text-base font-bold text-slate-900">cPanel / Kinsta / WP Engine</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Open your hosting dashboard and look for <strong>MultiPHP Manager</strong> or <strong>PHP Engine Settings</strong>. If upgrading from PHP 7.4 to 8.3+ causes a fatal white screen, your theme or plugins have legacy code incompatibilities.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 4. FAQ SECTION -->
+      <div class="max-w-4xl mx-auto mb-24">
+        <div class="text-center mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight">
+            Frequently Asked Questions
+          </h2>
+        </div>
+
+        <div class="space-y-4">
+          {faqs.map((item) => (
+            <div class="p-6 rounded-2xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+              <h3 class="text-base font-bold text-slate-900">{item.q}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed font-normal">{item.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- 5. BOTTOM CALL TO ACTION -->
+      <div class="p-8 sm:p-12 rounded-2xl bg-[#fffcf5] border border-amber-200/80 text-center max-w-4xl mx-auto space-y-6 shadow-xs">
+        <div class="space-y-2">
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            Stuck on an old PHP version because plugins break on update?
+          </h3>
+          <p class="text-sm text-slate-600 max-w-xl mx-auto">
+            We extract your content, preserve 100% of your URLs and SEO rankings, and rebuild your website into a sub-second Astro or Next.js frontend with zero public PHP exposure.
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a 
+            href={phpMigrationPath} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            Explore Legacy PHP Migration
+          </a>
+          <a 
+            href={`${estimatePath}?goal=php-legacy`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            Request Free Assessment
+          </a>
+        </div>
+
+        <p class="text-xs text-slate-500 pt-2">
+          Prefer email? Reach our lead engineer directly at 
+          <a href={`mailto:${siteConfig.contactEmail}`} class="font-mono text-amber-800 hover:text-amber-900 font-semibold underline underline-offset-2 ml-1">
+            {siteConfig.contactEmail}
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const form = document.getElementById('php-check-form') as HTMLFormElement;
+  const urlInput = document.getElementById('target-url-input') as HTMLInputElement;
+  const submitBtn = document.getElementById('scan-submit-btn') as HTMLButtonElement;
+  const btnText = document.getElementById('scan-btn-text');
+  const errorBox = document.getElementById('scan-error');
+  const resultsBox = document.getElementById('scan-results');
+
+  const resUrl = document.getElementById('res-url');
+  const resStatus = document.getElementById('res-status');
+  const resTime = document.getElementById('res-time');
+  const resPhpVersion = document.getElementById('res-php-version');
+  const resPhpBadge = document.getElementById('res-php-badge');
+  const resSafeMin = document.getElementById('res-safe-min');
+  const resCms = document.getElementById('res-cms');
+  const resEdge = document.getElementById('res-edge');
+  const resAdvisory = document.getElementById('res-advisory');
+  const resSignals = document.getElementById('res-signals');
+  const hdrPowered = document.getElementById('hdr-powered');
+  const hdrServer = document.getElementById('hdr-server');
+  const hdrEdge = document.getElementById('hdr-edge');
+
+  const presets: Record<string, any> = {
+    'eol-74': {
+      scannedUrl: 'https://legacy-b2b-example.com',
+      statusCode: 200,
+      responseTimeMs: 1420,
+      phpAnalysis: {
+        version: '7.4.33',
+        statusLabel: 'End-of-Life (PHP 7.4) · Unpatched',
+        safeMinimum: 'Upgrade to 8.3.36+ or Static Edge',
+        advisory: 'PHP 7.4.33 reached official End-of-Life in Nov 2022 and receives zero security patches from the PHP Foundation. It is publicly broadcasting its version via X-Powered-By and is exposed to CVE-2026-109618 (PHP2shell).',
+      },
+      isWordPress: true,
+      wpVersion: '6.2.4',
+      signals: [
+        'X-Powered-By: PHP/7.4.33',
+        'WP REST API Link Header (api.w.org)',
+        'WordPress Asset Paths (/wp-content/)',
+        'Meta Generator Tag (WordPress 6.2.4)',
+      ],
+      headers: {
+        xPoweredBy: 'PHP/7.4.33',
+        server: 'Apache/2.4.54 (Ubuntu)',
+        edgeCache: 'Direct / No CDN Cache',
+      },
+    },
+    'unpatched-83': {
+      scannedUrl: 'https://corporate-wp-sample.org',
+      statusCode: 200,
+      responseTimeMs: 680,
+      phpAnalysis: {
+        version: '8.3.14',
+        statusLabel: 'Outdated Patch Level (Needs 8.3.36+)',
+        safeMinimum: '8.3.36',
+        advisory: 'PHP 8.3.14 is on an active branch (8.3), but its patch level predates the October 21, 2026 emergency fix (8.3.36) for CVE-2026-109618 / CVE-2026-109619. Update your PHP-FPM runtime immediately and set expose_php = Off.',
+      },
+      isWordPress: true,
+      wpVersion: '6.6.2',
+      signals: [
+        'X-Powered-By: PHP/8.3.14',
+        'WP REST API Link Header (api.w.org)',
+        'PHPSESSID Dynamic Cookie',
+      ],
+      headers: {
+        xPoweredBy: 'PHP/8.3.14',
+        server: 'nginx/1.24.0',
+        edgeCache: 'Direct / Standard',
+      },
+    },
+    'static-edge': {
+      scannedUrl: 'https://sitecarry.com',
+      statusCode: 200,
+      responseTimeMs: 38,
+      phpAnalysis: {
+        version: null,
+        statusLabel: 'Zero Public PHP Exposure',
+        safeMinimum: 'Immune (Static Edge Build)',
+        advisory: 'No PHP runtime or X-Powered-By header is exposed publicly. Pages are served as pre-rendered static HTML from edge nodes, eliminating PHP runtime RCE vectors such as CVE-2026-109618.',
+      },
+      isWordPress: false,
+      wpVersion: null,
+      signals: ['No PHP / WordPress Runtime Footprint Detected'],
+      headers: {
+        xPoweredBy: 'Hidden / None',
+        server: 'cloudflare',
+        edgeCache: 'Cloudflare (HIT)',
+      },
+    },
+  };
+
+  function renderReport(data: any) {
+    if (!resultsBox) return;
+    errorBox?.classList.add('hidden');
+    resultsBox.classList.remove('hidden');
+
+    if (resUrl) resUrl.textContent = data.finalUrl || data.scannedUrl;
+    if (resStatus) resStatus.textContent = String(data.statusCode || 200);
+    if (resTime) resTime.textContent = `${data.responseTimeMs || 0}ms`;
+
+    const analysis = data.phpAnalysis || {};
+    if (resPhpVersion) {
+      resPhpVersion.textContent = analysis.version ? `PHP ${analysis.version}` : 'Hidden / None';
+    }
+    if (resPhpBadge) {
+      resPhpBadge.textContent = analysis.statusLabel || 'Checked';
+    }
+    if (resSafeMin) {
+      resSafeMin.textContent = analysis.safeMinimum || '8.3.36+';
+    }
+    if (resCms) {
+      resCms.textContent = data.isWordPress
+        ? `WordPress ${data.wpVersion ? `(${data.wpVersion})` : 'Detected'}`
+        : data.impliesPhpRuntime
+        ? 'Dynamic PHP Runtime'
+        : 'Static / Undisclosed';
+    }
+    if (resEdge) {
+      resEdge.textContent = data.headers?.edgeCache || 'Standard HTTP';
+    }
+    if (resAdvisory) {
+      resAdvisory.textContent = analysis.advisory || '';
+    }
+    if (hdrPowered) {
+      hdrPowered.textContent = data.headers?.xPoweredBy || 'Hidden';
+    }
+    if (hdrServer) {
+      hdrServer.textContent = data.headers?.server || 'Not Disclosed';
+    }
+    if (hdrEdge) {
+      hdrEdge.textContent = data.headers?.edgeCache || 'Direct';
+    }
+
+    if (resSignals) {
+      resSignals.innerHTML = '';
+      const list = data.signals && data.signals.length > 0
+        ? data.signals
+        : ['No Public WordPress / PHP Session Footprints Exposed'];
+      list.forEach((sig: string) => {
+        const span = document.createElement('span');
+        span.className = 'px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-700 shadow-sm';
+        span.textContent = sig;
+        resSignals.appendChild(span);
+      });
+    }
+  }
+
+  // Handle preset buttons
+  document.querySelectorAll('.preset-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const key = btn.getAttribute('data-preset') || '';
+      if (presets[key]) {
+        if (urlInput) urlInput.value = presets[key].scannedUrl;
+        renderReport(presets[key]);
+      }
+    });
+  });
+
+  // Handle live form submission
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!urlInput?.value.trim()) return;
+
+      errorBox?.classList.add('hidden');
+      if (submitBtn) submitBtn.disabled = true;
+      if (btnText) btnText.textContent = 'Scanning Headers...';
+
+      try {
+        const resp = await fetch('/api/php-check', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: urlInput.value.trim() }),
+        });
+        const data = await resp.json();
+
+        if (!resp.ok || data.error) {
+          throw new Error(data.error || 'Could not inspect URL.');
+        }
+
+        renderReport(data);
+      } catch (err: any) {
+        if (errorBox) {
+          errorBox.textContent = err.message || 'Failed to inspect target URL.';
+          errorBox.classList.remove('hidden');
+        }
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+        if (btnText) btnText.textContent = 'Inspect PHP Headers';
+      }
+    });
+  }
+</script>

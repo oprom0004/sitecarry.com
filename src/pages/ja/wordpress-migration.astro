@@ -1,0 +1,349 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PricingTable from '../../components/PricingTable.astro';
+import { getLocalizedPath, type Lang } from '../../i18n/utils';
+import { siteConfig } from '../../data/siteConfig';
+
+const lang: Lang = 'ja';
+const estimatePath = getLocalizedPath('estimate', lang);
+const pricingPath = getLocalizedPath('pricing', lang);
+
+const comparisonRows = [
+  {
+    metric: "モバイル表示速度 (TTFB/LCP)",
+    legacy: "3.5 ～ 6.8 秒（PHPの実行処理とMySQLクエリによる構造的ボトルネック）",
+    sitecarry: "0.8 秒未満（世界300箇所以上のCDNエッジからミリ秒配信）",
+  },
+  {
+    metric: "サーバー運用コスト",
+    legacy: "月額 数千円 ～ 数万円（高スペックVPS、キャッシュプラグイン、WAF費用）",
+    sitecarry: "月額 0 円（Cloudflare Pages のグローバル無料枠で恒久運用）",
+  },
+  {
+    metric: "公開攻撃面 (セキュリティ)",
+    legacy: "高リスク（PHPコアやプラグインのCVE脆弱性、公開DBポートへの総当たり）",
+    sitecarry: "物理的にゼロ（純粋な静的HTMLのみ公開、PHPやDBは公網に非存在）",
+  },
+  {
+    metric: "Core Web Vitals 合格率",
+    legacy: "慢性的な警告（重いJSやCSSによりLCP・INP・CLSの改善が困難）",
+    sitecarry: "安定して 98〜100 点合格（Google広告の品質スコア向上にも寄与）",
+  },
+  {
+    metric: "プラグイン依存と定期保守",
+    legacy: "毎週の保守不安（更新のたびに画面真っ白になる重大エラーの恐怖）",
+    sitecarry: "保守ゼロ（プラグイン不使用、コードが陳腐化せず何年も安定稼働）",
+  },
+  {
+    metric: "検索順位・URL資産の継承",
+    legacy: "一般的なリニューアルでURLが改変され404多発、検索流入が半減",
+    sitecarry: "1:1 URLパリティとエッジ301転送により、PageRankを100%継承",
+  },
+];
+
+const faqs = [
+  {
+    q: "Astroへ移行すると、これまでのGoogle検索順位は下がりますか？",
+    a: "いいえ、下がりません。私たちは厳格な「1:1 URLパリティ規約」を適用しています。移行前にクローラーで全インデックス済みURLをマッピングし、変更が必要なパスにはCDNエッジでHTTP 301永久転送を設定します。これにより蓄積された被リンクとドメイン評価（PageRank）が100%確実に新サイトへ継承されます。",
+  },
+  {
+    q: "過去のブログ記事内の画像や添付ファイル、内部リンクはどうなりますか？",
+    a: "すべて完全に保持されます。メディアライブラリの画像は自動パイプラインで一括抽出し、ビルド時に自動でWebP/AVIFに最適化変換されます。また、記事内の内部リンクも自動的に新構成に合わせて書き換えられるため、リンク切れ（404エラー）が発生することはありません。",
+  },
+  {
+    q: "移行作業中、既存のWordPressサイトは一時的に停止（ダウンタイム）しますか？",
+    a: "ダウンタイムは一切発生しません。すべてのデータ抽出、コードクレンジング、コンポーネント再構築、検証テストは独立したステージング環境で実施されます。お客様がテストサイトを確認し承認されるまで、既存のWordPressサイトは通常通り稼働を継続します。",
+  },
+  {
+    q: "移行後も、ノンプログラマーの社内スタッフが簡単に記事を更新できますか？",
+    a: "はい、可能です。既存のWordPress管理画面をそのまま非公開ヘッドレスCMSとして利用し続ける方式や、月額サーバー費0円で利用できるGitベースの直感的なビジュアルエディタ（Keystaticなど）への移行が選べます。マークダウンやコードを書くことなく、これまでのWord感覚で執筆いただけます。",
+  },
+];
+---
+
+<Layout 
+  title="WordPress サイト移行サービス (WordPress Migration) | 検索順位100%継承・表示速度0.8秒化・セキュリティゼロリスク"
+  description="既存のWordPress投稿データ・画像・SEO評価を確実に継承。独立したデータパイプラインにより、安全なAstro静的アーキテクチャへ無停止で移行し、公開サーバーの攻撃面をゼロ化します。"
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- HERO SECTION (Core Commercial Keyword First, Zero Badge, Zero Orphan Arrows) -->
+      <div class="max-w-4xl mx-auto text-center mb-20">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1c2024] tracking-tight mb-6 leading-[1.15]">
+          WordPress サイト移行サービス
+          <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-600 block mt-3 font-sans">
+            検索順位・URL資産を100%継承 · 脆弱性ゼロのAstro静的アーキテクチャへ
+          </span>
+        </h1>
+        <p class="text-base sm:text-lg text-[#575f6e] max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+          プラグイン肥大化、表示速度の低下、頻発するセキュリティ脅威から完全に脱却。汚染された公開サーバーに手を加えず、独立したパイプラインで投稿データ、画像、階層構造を抽出。改ざんリスクのない最新Astroフロントエンドへ移行し、全URLスラッグを1:1で完全保全します。
+        </p>
+
+        <!-- Dual-Track Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            プランを選択 · 手付金で着手
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-migration`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            無料のサイト移行診断を依頼
+          </a>
+        </div>
+      </div>
+
+      <!-- SECTION 1: PAIN POINTS (運用3年以上のWordPressが直面する苦悩) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            サイトを触るのが怖い？多くの企業が抱えるWordPressの3大苦痛：
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            長年運用されているWordPressサイトの多くは、「更新すると壊れる」「定期的に改ざんされる」「でもリニューアルすると順位が落ちる」という深刻なジレンマに陥っています。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">01</div>
+            <h3 class="text-lg font-bold text-slate-900">更新恐怖：クリック一つで画面真っ白</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              20個以上のプラグインが複雑に依存。管理画面にセキュリティ警告が毎日のように表示されるものの、安易に「更新」を押すとFatal Errorが発生しサイト全体がダウンする恐怖に晒されています。
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">02</div>
+            <h3 class="text-lg font-bold text-slate-900">不正侵入とGoogle警告表示の悪夢</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              古いPHPや放置されたプラグインの隙を突かれ、不正なボットに狙われます。マルウェア駆除を依頼しても数ヶ月後に再感染し、最終的にGoogleの検索結果で「このサイトは侵害されている可能性があります」と警告されます。
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">03</div>
+            <h3 class="text-lg font-bold text-slate-900">リニューアルしたいがSEO順位の急落が怖い</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              何百本もの過去記事と被リンクは企業の最重要資産です。一般的な制作会社にリニューアルを依頼するとURL階層が変更され、404エラーが多発して検索流入が半減する悲劇が後を絶ちません。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: ARCHITECTURE COMPARISON -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-10">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            従来のWordPressモノリス vs. SiteCarry Astro 静的アーキテクチャ
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            不安定なサーバーサイド動的演算から、最新のプリレンダリング・エッジ配信へ構造改革：
+          </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-[#e8e6df] bg-white shadow-2xs">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-[#faf9f6] border-b border-[#e8e6df] text-slate-600 uppercase font-mono text-[10px] tracking-wider font-semibold">
+              <tr>
+                <th class="px-6 py-4 w-1/4">比較項目</th>
+                <th class="px-6 py-4 w-3/8 text-slate-500">従来のWordPressモノリス</th>
+                <th class="px-6 py-4 w-3/8 text-amber-900 font-bold bg-amber-50/50">SiteCarry Astro 静的ビルド</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#e8e6df]">
+              {comparisonRows.map((row) => (
+                <tr class="hover:bg-[#faf9f6]/70 transition-colors">
+                  <td class="px-6 py-4 font-bold text-slate-900 font-sans">{row.metric}</td>
+                  <td class="px-6 py-4 text-slate-500 font-normal leading-relaxed">{row.legacy}</td>
+                  <td class="px-6 py-4 text-slate-900 font-semibold bg-amber-50/30 leading-relaxed">{row.sitecarry}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SECTION 3: SCOPE & SANITIZATION -->
+      <div class="mb-24 p-8 sm:p-12 rounded-2xl bg-white border border-[#e8e6df] shadow-xs space-y-8">
+        <div class="max-w-3xl">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            完全データ継承 & ディープクレンジング規約
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            古いゴミコードをそのままコピーすることはありません。すべてのデータは厳格な自動サニタイズパイプラインを通過します：
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">100% 継承されるデータ資産</h4>
+            <ul class="space-y-2 text-xs text-slate-600 leading-relaxed">
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>すべての公開記事（Posts）、固定ページ（Pages）、カテゴリー・タグ階層構造</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>カスタム投稿タイプ（CPT）およびカスタムフィールド（ACF）の構造化データ</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>メディアライブラリの画像ファイル、アイキャッチ画像、投稿者プロフィール情報</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>既存のSEOタイトル、メタディスクリプション、OGPソーシャル共有タグ設定</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">自動ディープクレンジング仕様</h4>
+            <ul class="space-y-2 text-xs text-slate-600 leading-relaxed">
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>遺棄されたショートコード（Shortcodes）を除去し、クリーンなセマンティックHTMLへ変換</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>過去に混入したスパムリンク、不正iframe、悪意あるJSスニペットを徹底走査・無害化</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>重いJPG/PNG画像を最新のAVIF/WebP形式へ自動変換し、転送量を最大70%削減</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 font-bold">✓</span>
+                <span>記事内の内部リンクを全件走査し、リンク切れや旧URLへの参照を新構成に合わせて自動修正</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: 5-STAGE PROCESS -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            ダウンタイムゼロで完結する5段階の移行プロセス
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            貴社の本番ビジネスに影響を与えない、厳格なエンジニアリング工程：
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+            <span class="text-xs font-mono font-bold text-amber-800 block">STEP 01</span>
+            <h3 class="text-sm font-bold text-slate-900">安全なデータ抽出</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              読み取り専用API経由で抽出。稼働中の本番サイトには一切影響を与えません。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+            <span class="text-xs font-mono font-bold text-amber-800 block">STEP 02</span>
+            <h3 class="text-sm font-bold text-slate-900">データクレンジング</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              不要なショートコード、スパム記述、肥大化したインラインCSSを自動一括パージ。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+            <span class="text-xs font-mono font-bold text-amber-800 block">STEP 03</span>
+            <h3 class="text-sm font-bold text-slate-900">Astroコンポーネント再構築</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              セマンティックな最新コンポーネントとデフォルト0KB JSで超高速ページを再設計。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+            <span class="text-xs font-mono font-bold text-amber-800 block">STEP 04</span>
+            <h3 class="text-sm font-bold text-slate-900">1:1 URLパリティ検証</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              過去の全URLスラッグを自動照合し、CDNエッジ301リダイレクトを配備。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+            <span class="text-xs font-mono font-bold text-amber-800 block">STEP 05</span>
+            <h3 class="text-sm font-bold text-slate-900">無停止DNS切替</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              ステージング承認後に瞬時に切替。納品後30日間の瑕疵保証付き。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: SPECIFIC FAQS -->
+      <div class="max-w-4xl mx-auto mb-24">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-8 text-center">
+          WordPress サイト移行 よくある質問
+        </h2>
+        <div class="space-y-4">
+          {faqs.map((faq) => (
+            <div class="p-6 rounded-2xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+              <h3 class="text-base font-bold text-slate-900">{faq.q}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed font-normal">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- SECTION 6: PRICING -->
+      <div class="mb-24" id="pricing">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            WordPress サイト移行 明確なプランと納品仕様
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            データ抽出、1:1 URLパリティ保全、納品後30日間の無償サポートを含む固定価格プラン。
+          </p>
+        </div>
+
+        <PricingTable lang={lang} />
+      </div>
+
+      <!-- SECTION 7: FINAL DUAL-TRACK CALL TO ACTION -->
+      <div class="p-8 sm:p-12 rounded-2xl bg-[#fffcf5] border border-amber-200/80 text-center max-w-4xl mx-auto space-y-6 shadow-xs">
+        <div class="space-y-2">
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            検索順位を犠牲にすることなく、サイト基盤を刷新しませんか？
+          </h3>
+          <p class="text-sm text-slate-600 max-w-xl mx-auto">
+            現在のWebサイトURLをお知らせください。シニアエンジニアが技術負債とURL構造を無料で監査し、確定費用の移行提案書を作成します。
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            プランを選択 · 手付金で着手
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-migration`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            無料のサイト移行診断を依頼
+          </a>
+        </div>
+
+        <p class="text-xs text-slate-500 pt-2">
+          フォーム入力がお手間の場合は、直接メールでお問い合わせいただけます：
+          <a href={`mailto:${siteConfig.contactEmail}`} class="font-mono text-amber-800 hover:text-amber-900 font-semibold underline underline-offset-2 ml-1">
+            {siteConfig.contactEmail}
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</Layout>

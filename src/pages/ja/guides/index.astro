@@ -1,0 +1,75 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getLocalizedPath, type Lang } from '../../../i18n/utils';
+
+const lang: Lang = 'ja';
+const estimatePath = getLocalizedPath('estimate', lang);
+
+const articles = [
+  {
+    slug: "php2shell-wordpress-static-mitigation",
+    image: "/images/guide-zero-attack-surface.png",
+    tag: "セキュリティアーキテクチャ解説",
+    date: "2026年10月22日",
+    title: "PHP2shell (CVE-2026-109618) と終わらない緊急パッチ対応：企業サイトが静的デカップル構成へ移行すべき根本的理由",
+    excerpt: "直近のPHPコア未認証RCE（リモートコード実行）脆弱性をエンジニアリング視点で分析。企業WordPressを静的エッジ構成へ刷新することで、脆弱性突入とパッチ対応のいたちごっこを根本的に解消するアプローチを解説。",
+    readTime: "読了目安：約6分",
+  },
+];
+---
+
+<Layout 
+  title="移行技術ガイド・脆弱性解説レポート | SiteCarry"
+  description="WordPressモダン化移行、旧URL 1:1引き継ぎ、Core Web Vitals 90+高速化、静的デカップル構成によるPHP脆弱性ゼロ化の技術的解説。"
+  lang={lang}
+>
+  <div class="py-16 sm:py-24 bg-gradient-to-b from-slate-50 via-white to-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="max-w-3xl mb-16">
+        <span class="text-xs font-mono uppercase tracking-widest text-blue-600 font-semibold mb-2 block">ナレッジベース・技術分析</span>
+        <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
+          サイト移行・設計技術ガイド
+        </h1>
+        <p class="text-base text-slate-600 leading-relaxed font-normal">
+          企業の技術責任者、Web担当者、事業責任者に向けて、サイトリニューアルにおけるセキュリティリスク、SEO順位下落の防止、最新エッジ構成への刷新を深く解説します。
+        </p>
+      </div>
+
+      <div class="max-w-5xl">
+        {articles.map((art) => (
+          <article class="rounded-3xl bg-white border border-slate-200 hover:border-amber-400 overflow-hidden shadow-sm hover:shadow-md transition-all grid grid-cols-1 lg:grid-cols-12">
+            <div class="lg:col-span-5 relative bg-slate-100 overflow-hidden group min-h-[240px]">
+              <img 
+                src={art.image} 
+                alt={art.title} 
+                class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+              />
+            </div>
+            <div class="lg:col-span-7 p-8 sm:p-10 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between text-xs font-mono text-slate-500 mb-4">
+                  <span class="text-amber-700 font-bold uppercase tracking-wider">{art.tag}</span>
+                  <span>{art.date}</span>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-900 mb-3 hover:text-amber-700 transition-colors leading-snug">
+                  <a href={getLocalizedPath(`guides/${art.slug}`, lang)}>{art.title}</a>
+                </h2>
+                <p class="text-xs text-slate-600 leading-relaxed mb-6">
+                  {art.excerpt}
+                </p>
+              </div>
+              <div class="flex items-center justify-between pt-4 border-t border-slate-200 text-xs font-mono">
+                <span class="text-slate-500">{art.readTime}</span>
+                <a href={getLocalizedPath(`guides/${art.slug}`, lang)} class="text-amber-700 hover:text-amber-900 transition-colors font-semibold">
+                  詳細な技術解説を読む
+                </a>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+
+    </div>
+  </div>
+</Layout>

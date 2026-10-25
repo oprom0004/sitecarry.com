@@ -1,0 +1,325 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PricingTable from '../../components/PricingTable.astro';
+import { getLocalizedPath, type Lang } from '../../i18n/utils';
+import { siteConfig } from '../../data/siteConfig';
+
+const lang: Lang = 'ja';
+const estimatePath = getLocalizedPath('estimate', lang);
+const pricingPath = getLocalizedPath('pricing', lang);
+
+const comparisonRows = [
+  {
+    metric: "クライアント側 JS 転送量",
+    legacy: "数MB以上（重いハイドレーション処理と積み重なったプラグインスクリプト）",
+    sitecarry: "デフォルト 0KB（Astro アイランドアーキテクチャにより必要箇所のみ配信）",
+  },
+  {
+    metric: "レンダリングモデル",
+    legacy: "アクセス毎にサーバー側で動的コンパイル（PHP処理とMySQLクエリ）",
+    sitecarry: "ビルド時に事前生成（AOT静的プリレンダリングによる純粋HTML）",
+  },
+  {
+    metric: "グローバル TTFB（応答速度）",
+    legacy: "800ms ～ 2,500ms（地理的距離やデータベース負荷により大幅に遅延）",
+    sitecarry: "50ms 未満（世界300箇所以上のCDNエッジキャッシュから即時返答）",
+  },
+  {
+    metric: "サーバー維持・保守費用",
+    legacy: "月額 数千円 ～ 数万円（高スペックVPS、キャッシュプラグイン、セキュリティ監視）",
+    sitecarry: "月額 0 円（グローバルエッジCDNの標準枠を活用し恒久運用）",
+  },
+  {
+    metric: "セキュリティ・攻撃面",
+    legacy: "恒常的な脅威（PHPのRCE脆弱性やSQLインジェクションを狙う自動ボット）",
+    sitecarry: "物理的に免疫（公網にPHP実行エンジンやDBポートが存在しない）",
+  },
+  {
+    metric: "画像フォーマットと自動最適化",
+    legacy: "外部プラグインへの課金が必要で、サーバーのCPUと容量を圧迫",
+    sitecarry: "ビルド時に最新AVIF/WebPへ自動一括変換（容量を最大70%削減）",
+  },
+];
+
+const faqs = [
+  {
+    q: "静的化（Astro）しても、お問い合わせフォームや動的機能は動作しますか？",
+    a: "はい、完全に動作します。Astroは「アイランドアーキテクチャ」を採用しており、お問い合わせフォームやサイト内検索などの動的UIパーツのみをエッジサーバーレス関数と連携させることができます。PHPのメール送信プラグインを不要にし、スパム対策を備えた安全なフォームを実現します。",
+  },
+  {
+    q: "コンテンツサイトにおいて、AstroはNext.jsやGatsbyとどう違いますか？",
+    a: "Next.jsやGatsbyは静的なテキスト主体のページであっても大容量のReactハイドレーションスクリプトをブラウザに送信するため、モバイル端末での描画が重くなりがちです。一方AstroはデフォルトでJavaScriptを一切含めず純粋なHTMLを出力するため、圧倒的な軽量性とGoogle PageSpeed 99点以上を確実に達成できます。",
+  },
+  {
+    q: "移行後も、社内の運用チームはWordPressで記事を書き続けられますか？",
+    a: "はい、可能です。既存のWordPress管理画面をそのまま非公開ヘッドレスCMS（WPGraphQL）として温存し、記事公開時にWebhookで自動静的デプロイを行う構成や、月額サーバー費0円で利用できるGitベースの直感的なビジュアルエディタ（Keystaticなど）への移行が選べます。",
+  },
+  {
+    q: "過去記事が数百本ある場合、Astroでの静的ビルドに時間はかかりませんか？",
+    a: "非常に高速です。Astroはコンパイル性能に優れており、数百本規模のコンテンツサイトであっても通常10〜30秒程度でビルドが完了します。更新内容もエッジCDN経由で世界中へ数秒で即時反映されます。",
+  },
+];
+---
+
+<Layout 
+  title="WordPress to Astro 完全移行サービス (WordPress to Astro) | 表示速度0.8秒・サーバー代月額0円・CVEゼロ"
+  description="動的なWordPressサイトを最新のAstro静的アーキテクチャへ移行。アイランドアーキテクチャによる余剰JS 0KB、Google PageSpeed 99点以上、公開攻撃面ゼロ化、そしてCloudflare Pagesによるサーバー月額費用$0を実現します。"
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- HERO SECTION (Core Commercial Keyword First, Zero Badge, Zero Orphan Arrows) -->
+      <div class="max-w-4xl mx-auto text-center mb-20">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1c2024] tracking-tight mb-6 leading-[1.15]">
+          WordPress to Astro 完全移行サービス
+          <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-600 block mt-3 font-sans">
+            重い動的サーバーから脱却 · 0.8秒表示とサーバー維持費月額0円へ
+          </span>
+        </h1>
+        <p class="text-base sm:text-lg text-[#575f6e] max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+          全ページを公開前に事前ビルド（AOT静的HTML化）し、世界300箇所以上のCDNエッジからミリ秒で配信。公開サーバーからPHP実行環境とMySQLデータベースを物理的に排除し、極限の表示速度とサーバー維持費$0を両立します。
+        </p>
+
+        <!-- Dual-Track Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            プランを選択 · 手付金で着手
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-astro`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            無料のAstro移行診断を依頼
+          </a>
+        </div>
+      </div>
+
+      <!-- SECTION 1: PAIN POINTS (従来のWordPressが抱える3大苦痛) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            高いサーバー代を払い続けても重い？従来のWordPressが引き起こすビジネス損失：
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            従来のWordPressは、アクセスがあるたびにサーバー上で数百回のPHP実行とMySQL問い合わせを行う「動的計算」モデルです。これが構造的な遅延と脆弱性の根源となっています。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">01</div>
+            <h3 class="text-lg font-bold text-slate-900">高額なサーバー維持費を毎月支払い</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              表示速度を保つためだけに、KinstaやWP Engine、大型クラウドVPSへ毎月数万〜数十万円を支払い続ける状況。スペックを下げれば管理画面がフリーズし、504 Gateway Timeoutが頻発します。
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">02</div>
+            <h3 class="text-lg font-bold text-slate-900">プラグインを重ねてもPageSpeedが赤点</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              キャッシュプラグインを何重にも導入しても、Google PageSpeedスコアは30〜40点台に低迷。Core Web Vitalsに不合格となり、SEO検索順位や広告の品質スコアで不利な扱いを受けます。
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">03</div>
+            <h3 class="text-lg font-bold text-slate-900">サーバー運用と脆弱性対応の疲弊</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              ログ肥大化によるディスク容量圧迫、MySQLのデッドロック、PHP強制バージョンアップに伴うプラグイン破損。深夜にサイトがダウンするたび、緊急の外部委託を探す悪循環に陥ります。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: ARCHITECTURE COMPARISON TABLE -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-10">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            従来の動的WordPressサーバー vs. Astro 静的エッジアーキテクチャ
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            サーバー側の動的演算ボトルネックを解消し、純粋な事前レンダリング構造へ移行：
+          </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-[#e8e6df] bg-white shadow-2xs">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-[#faf9f6] border-b border-[#e8e6df] text-slate-600 uppercase font-mono text-[10px] tracking-wider font-semibold">
+              <tr>
+                <th class="px-6 py-4 w-1/4">比較項目</th>
+                <th class="px-6 py-4 w-3/8 text-slate-500">従来の動的WordPress</th>
+                <th class="px-6 py-4 w-3/8 text-amber-900 font-bold bg-amber-50/50">Astro 現代的静的アーキテクチャ</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#e8e6df]">
+              {comparisonRows.map((row) => (
+                <tr class="hover:bg-[#faf9f6]/70 transition-colors">
+                  <td class="px-6 py-4 font-bold text-slate-900 font-sans">{row.metric}</td>
+                  <td class="px-6 py-4 text-slate-500 font-normal leading-relaxed">{row.legacy}</td>
+                  <td class="px-6 py-4 text-slate-900 font-semibold bg-amber-50/30 leading-relaxed">{row.sitecarry}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SECTION 3: ASTRO 4 SUPERPOWERS -->
+      <div class="mb-24 p-8 sm:p-12 rounded-2xl bg-white border border-[#e8e6df] shadow-xs space-y-8">
+        <div class="max-w-3xl">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            世界の先進企業がコンテンツサイトをAstroへ移行する理由
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            Astroはコンテンツ主体のWebサイトのために設計された最新フレームワークです。動的CMSの構造的な欠点を完全に克服します：
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">1. アイランドアーキテクチャ（デフォルト0KB JS）</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Next.jsやGatsbyのように数MBのReactスクリプトを強制読み込みさせず、デフォルトで純粋なHTMLのみを出力。インタラクティブなUIパーツのみに限定してJSを遅延配信するため、極限の表示速度を実現します。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">2. 完全事前ビルド（AOT静的プリレンダリング）</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              全ページを公開前に事前ビルド（静的HTML化）。ユーザーがアクセスした瞬間にCloudflareエッジCDNからミリ秒単位で返答するため、サーバーCPUを回す必要もDBクエリを待つ必要もありません。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">3. 公開攻撃面の物理的排除</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              公網にPHP実行エンジンもMySQLポートも存在しません。ボットによる脆弱性スキャン、SQLインジェクション、プラグインの改ざんバックドアが成立する余地を物理的にゼロにします。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">4. 最新画像自動最適化（AVIF / WebP）</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              有料の画像圧縮プラグインに頼る必要はありません。ビルド時に過去の全画像を自動で最新のAVIFやWebPに変換し、画質を保ったまま画像ファイルサイズを最大70%削減します。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: TANGIBLE BENEFITS -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Astro移行によって得られる4大ビジネス成果：
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            単なる技術の刷新にとどまらず、固定費の大幅削減と検索流入・CVRの向上をもたらします。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">01</div>
+            <h3 class="text-base font-bold text-slate-900">サーバー維持費 月額0円</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Cloudflare Pagesの世界無料枠を活用。年間数十万円規模のサーバー・ホスティング費用を恒久的に削減できます。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">02</div>
+            <h3 class="text-base font-bold text-slate-900">PageSpeed 99点以上の極速</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              モバイル0.8秒表示とCore Web Vitalsオールグリーンを達成。直帰率を激減させ、検索順位の向上に直結します。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">03</div>
+            <h3 class="text-base font-bold text-slate-900">生成AI検索（GEO）標準対応</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              セマンティックHTMLとJSON-LD構造化データにより、ChatGPTやPerplexityなどのAI検索エンジンによる正確な引用を促進します。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">04</div>
+            <h3 class="text-base font-bold text-slate-900">サーバー保守の悩みから完全解放</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              サーバー再起動、DB破損、緊急のプラグインパッチ対応は一切不要。長期間にわたり安定して自律稼働します。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: SPECIFIC FAQS -->
+      <div class="max-w-4xl mx-auto mb-24">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-8 text-center">
+          WordPress to Astro よくある質問
+        </h2>
+        <div class="space-y-4">
+          {faqs.map((faq) => (
+            <div class="p-6 rounded-2xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+              <h3 class="text-base font-bold text-slate-900">{faq.q}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed font-normal">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- SECTION 6: PRICING -->
+      <div class="mb-24" id="pricing">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            WordPress to Astro 透明なプランと納品仕様
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            すべてのプランにデータ自動抽出・クレンジング、1:1 URLパリティ保全、納品後30日間の無償サポートを含みます。
+          </p>
+        </div>
+
+        <PricingTable lang={lang} />
+      </div>
+
+      <!-- SECTION 7: FINAL DUAL-TRACK CALL TO ACTION -->
+      <div class="p-8 sm:p-12 rounded-2xl bg-[#fffcf5] border border-amber-200/80 text-center max-w-4xl mx-auto space-y-6 shadow-xs">
+        <div class="space-y-2">
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            0.8秒表示と月額0円ホスティングの未来へ移行しませんか？
+          </h3>
+          <p class="text-sm text-slate-600 max-w-xl mx-auto">
+            既存サイトのURLをお知らせください。シニアエンジニアが技術診断を行い、確定お見積もりと移行設計書をご提示します。
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            プランを選択 · 手付金で着手
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-astro`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            無料のAstro移行診断を依頼
+          </a>
+        </div>
+
+        <p class="text-xs text-slate-500 pt-2">
+          メールでのお問い合わせをご希望ですか？技術担当直通：
+          <a href={`mailto:${siteConfig.contactEmail}`} class="font-mono text-amber-800 hover:text-amber-900 font-semibold underline underline-offset-2 ml-1">
+            {siteConfig.contactEmail}
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</Layout>

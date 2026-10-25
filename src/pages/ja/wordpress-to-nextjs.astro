@@ -1,0 +1,320 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PricingTable from '../../components/PricingTable.astro';
+import { getLocalizedPath, type Lang } from '../../i18n/utils';
+import { siteConfig } from '../../data/siteConfig';
+
+const lang: Lang = 'ja';
+const estimatePath = getLocalizedPath('estimate', lang);
+const pricingPath = getLocalizedPath('pricing', lang);
+
+const comparisonRows = [
+  {
+    metric: "セール時の同時アクセス耐性",
+    legacy: "数百人の同時購入でCPUが100%に達し、502/504エラーや決済フリーズが発生",
+    sitecarry: "エッジISR静的キャッシュにより、数百万リクエストのスパイクも遅延なく処理",
+  },
+  {
+    metric: "カード側録（Magecart）リスク",
+    legacy: "高リスク（自社サーバー上で決済を処理するため、プラグイン改ざんでカード流出）",
+    sitecarry: "物理的に免疫（Stripeトークン決済に完全委任、カード情報が自社サーバーを非通過）",
+  },
+  {
+    metric: "商品絞り込み・カート体験",
+    legacy: "絞り込みのたびに全画面リロードが発生し、スマホでの買い物がストレスフル",
+    sitecarry: "滑らかなReact SPA設計により、ミリ秒での瞬時フィルタリングと快適なカート操作",
+  },
+  {
+    metric: "モバイル成約率・購入摩擦",
+    legacy: "多段階の煩雑な入力フォームにより、カゴ落ち率（離脱率）が75%を超える",
+    sitecarry: "Apple Pay / Google Pay の1クリック決済に対応し、購入完了率を25%以上引き上げ",
+  },
+  {
+    metric: "既存ECデータ・商品URLの継承",
+    legacy: "一般的なリプレイスで過去の注文履歴が消滅し、商品URLの404エラーが多発",
+    sitecarry: "既存WooCommerceの商品、顧客履歴、SKU、インデックス済みURLを1:1完全継承",
+  },
+];
+
+const faqs = [
+  {
+    q: "出荷担当やカスタマーサポートのスタッフは、新しい管理画面の使い方を覚える必要がありますか？",
+    a: "いいえ、不要です。既存のWooCommerce管理画面をそのまま非公開のヘッドレスAPI（WPGraphQL）として温存できます。倉庫の出荷業務や受注処理を行うバックオフィススタッフは、これまで使い慣れた管理画面をそのまま利用し続けることが可能です。",
+  },
+  {
+    q: "Next.jsのヘッドレス構成にすることで、なぜMagecartによるカード情報漏洩を防げるのですか？",
+    a: "従来のWooCommerceでは自社サーバー上の入力フォームでカード番号を直接受け取るため、改ざんされたプラグインから不正なJavaScriptを仕込まれる危険がありました。ヘッドレス構成では決済処理を完全にStripeのトークン決済へ委任するため、顧客のカード番号が貴社サーバーを一切通過せず、国際セキュリティ基準（PCI-DSS Level 1）に準拠します。",
+  },
+  {
+    q: "商品価格や在庫数を変更した際、Next.jsの商品ページは即座に反映されますか？",
+    a: "はい、即時に反映されます。Next.jsのインクリメンタル静的再生成（ISR）とオンデマンド・キャッシュパージを連携させています。WooCommerce上で価格や在庫が更新されると、Webhookを通じて数秒以内にエッジCDNのキャッシュが自動更新されるため、購入者に常に正確な最新情報が表示されます。",
+  },
+  {
+    q: "Googleに数千件の商品URLがインデックスされています。移行でSEO順位は下がりませんか？",
+    a: "下がりません。全商品ページ、カテゴリ階層、タグURLを1:1で厳密にマッピングします。さらに、Google検索結果でリッチスニペット（価格・在庫状況・レビュースコア）が表示されるよう、完全なJSON-LD構造化データ（Product, Offer, AggregateRating）を自動付与するため、検索順位の維持とクリック率向上が期待できます。",
+  },
+];
+---
+
+<Layout 
+  title="WordPress to Next.js 移行サービス (WordPress to Next.js) | 高負荷EC・ヘッドレスReact基盤"
+  description="WooCommerceや動的WordPressを最新のNext.js App Routerヘッドレス構成へ刷新。カタログのエッジミリ秒表示、セール時のアクセス集中に強い耐障害性、Stripeトークン決済によるMagecartスキミング根絶を実現します。"
+  lang={lang}
+>
+  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- HERO SECTION (Core Commercial Keyword First, Zero Badge, Zero Orphan Arrows) -->
+      <div class="max-w-4xl mx-auto text-center mb-20">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1c2024] tracking-tight mb-6 leading-[1.15]">
+          WordPress to Next.js 移行サービス
+          <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-600 block mt-3 font-sans">
+            WooCommerceのセール時ダウンを根絶 · 高耐性ヘッドレスEC＆Stripe決済
+          </span>
+        </h1>
+        <p class="text-base sm:text-lg text-[#575f6e] max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+          会員機能、高トラフィック耐性、大規模ECを必要とする成長企業向け。フロントエンドをNext.js App Routerでエッジ配信し、決済をStripeトークンゲートウェイへ完全委任することで、重い遅延とカード情報不正取得（Magecart）を根本から解決します。
+        </p>
+
+        <!-- Dual-Track Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            プランを選択 · 手付金で着手
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-nextjs`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            無料のNext.js移行診断を依頼
+          </a>
+        </div>
+      </div>
+
+      <!-- SECTION 1: PAIN POINTS (従来型WooCommerceが抱える3大危機) -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            アクセス集中でサーバー停止？カード不正利用？動的ECの致命的リスク：
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            WooCommerceや動的WordPressは、商品表示・カート計算・注文処理を単一のサーバーで同時に行うため、アクセス増加時に深刻な障害を引き起こします。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">01</div>
+            <h3 class="text-lg font-bold text-slate-900">大型セール時の502/504サーバーダウン</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              SNS広告やメルマガ配信で同時アクセスが集中した瞬間、PHPがCPUを100%占有してMySQLがロック。決済画面が数十秒フリーズした末にタイムアウトし、多額の広告費と注文機会を喪失します。
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">02</div>
+            <h3 class="text-lg font-bold text-slate-900">クレジットカード側録（Magecart）の脅威</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              自社サーバー上で決済フォームを動かすWordPressでは、わずか1つのプラグイン脆弱性から不正なJSを注入され、顧客のカード番号を抜き取られる被害が続発。莫大な損害賠償と信用失墜に直面します。
+            </p>
+          </div>
+
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono">03</div>
+            <h3 class="text-lg font-bold text-slate-900">商品絞り込みの重さと高カゴ落ち率</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              サイズやカラーを選択するたびに画面全体が再読み込みされ、スマホでの買い物が極めてストレスフルに。面倒な入力手順と表示の遅さが原因で、7割以上のユーザーが購入前に離脱します。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: ARCHITECTURE COMPARISON TABLE -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-10">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            従来のWooCommerceモノリス vs. Next.js エッジ・ヘッドレスEC
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            世界のトップDTCブランドやグローバルECが採用する業界標準アーキテクチャへ：
+          </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-[#e8e6df] bg-white shadow-2xs">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-[#faf9f6] border-b border-[#e8e6df] text-slate-600 uppercase font-mono text-[10px] tracking-wider font-semibold">
+              <tr>
+                <th class="px-6 py-4 w-1/4">比較項目</th>
+                <th class="px-6 py-4 w-3/8 text-slate-500">従来のWooCommerceモノリス</th>
+                <th class="px-6 py-4 w-3/8 text-amber-900 font-bold bg-amber-50/50">Next.js エッジ・ヘッドレスEC</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#e8e6df]">
+              {comparisonRows.map((row) => (
+                <tr class="hover:bg-[#faf9f6]/70 transition-colors">
+                  <td class="px-6 py-4 font-bold text-slate-900 font-sans">{row.metric}</td>
+                  <td class="px-6 py-4 text-slate-500 font-normal leading-relaxed">{row.legacy}</td>
+                  <td class="px-6 py-4 text-slate-900 font-semibold bg-amber-50/30 leading-relaxed">{row.sitecarry}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SECTION 3: NEXT.JS ADVANTAGES -->
+      <div class="mb-24 p-8 sm:p-12 rounded-2xl bg-white border border-[#e8e6df] shadow-xs space-y-8">
+        <div class="max-w-3xl">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            世界水準のDTCブランドがNext.jsヘッドレスを選択する理由
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            フロントエンドとバックエンドを完全に切り離す「疎結合構成」が、成長するECビジネスに強靭な土台を提供します：
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">1. 商品一覧・詳細のエッジミリ秒表示（ISRキャッシュ）</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              数千件の商品詳細やカテゴリー一覧をエッジCDNに静的キャッシュ。ユーザーはサーバーDBに負荷をかけることなく、瞬時のページ遷移で快適にショッピングを楽しめます。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">2. トークン化決済の安全委任（PCI-DSS Level 1 準拠）</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              決済処理をStripeのトークン決済ゲートウェイへ直接接続。自社サーバーにクレジットカード情報が一切残らないため、Magecartスキミング被害のリスクを物理的にゼロにします。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">3. 滑らかなReact SPA体験（高い成約率）</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              待ち時間のないファセット絞り込み、スライドイン方式のクイックカート、Apple Pay / Google Pay のワンクリック購入に対応。モバイルでの購入摩擦を最小限に抑え、転換率（CVR）を大幅に向上させます。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-[#faf9f6] border border-[#e8e6df] space-y-3">
+            <h4 class="text-base font-bold text-slate-900">4. 既存の受注・出荷管理画面をそのまま温存</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              現場のオペレーションを変更する必要はありません。WooCommerceを非公開の管理API（WPGraphQL）として運用し続けることで、スタッフの再教育コストをかけずにフロントエンドのみを最先端化できます。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: TANGIBLE BENEFITS -->
+      <div class="mb-24">
+        <div class="max-w-3xl mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Next.js 移行によって実現する4大ビジネス成果：
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            広告のバズや大規模セールにもびくともしない、強靭なデジタルコマース基盤を構築します。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">01</div>
+            <h3 class="text-base font-bold text-slate-900">セール時サーバーダウンゼロ</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              エッジCDNによるキャッシュ配信により、数百万規模のアクセス集中時にもサーバーダウンを起こさず売上機会を死守します。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">02</div>
+            <h3 class="text-base font-bold text-slate-900">カード情報流出リスクゼロ</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              公開PHP環境の脆弱性を排除し、完全なStripeトークン決済によりカードスキミングの脅威と賠償リスクを根本から防ぎます。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">03</div>
+            <h3 class="text-base font-bold text-slate-900">カゴ落ち率改善・CVR向上</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              スマホでの極速表示とApple Pay対応により、ショッピング体験の離脱を大幅に防ぎ、購入完了率を平均25%以上引き上げます。
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#e8e6df] shadow-2xs space-y-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 font-bold font-mono text-xs">04</div>
+            <h3 class="text-base font-bold text-slate-900">既存ECデータとSEOを完全保全</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              過去の顧客データ、注文履歴、SKU、インデックス済み商品URLを1:1で完全移行。長年積み上げたSEO評価を確実に引き継ぎます。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: SPECIFIC FAQS -->
+      <div class="max-w-4xl mx-auto mb-24">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-8 text-center">
+          WordPress to Next.js よくある質問
+        </h2>
+        <div class="space-y-4">
+          {faqs.map((faq) => (
+            <div class="p-6 rounded-2xl bg-white border border-[#e8e6df] shadow-2xs space-y-2">
+              <h3 class="text-base font-bold text-slate-900">{faq.q}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed font-normal">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- SECTION 6: PRICING -->
+      <div class="mb-24" id="pricing">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+            Next.js ヘッドレスEC 明確なプランと納品仕様
+          </h2>
+          <p class="text-sm text-[#575f6e] leading-relaxed">
+            WooCommerceデータ抽出、カスタムReactコンポーネント開発、Stripe決済連携、納品後30日間の無償サポートを含みます。
+          </p>
+        </div>
+
+        <PricingTable lang={lang} />
+      </div>
+
+      <!-- SECTION 7: FINAL DUAL-TRACK CALL TO ACTION -->
+      <div class="p-8 sm:p-12 rounded-2xl bg-[#fffcf5] border border-amber-200/80 text-center max-w-4xl mx-auto space-y-6 shadow-xs">
+        <div class="space-y-2">
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            落ちない、漏洩しない最先端のヘッドレスECへアップグレードしませんか？
+          </h3>
+          <p class="text-sm text-slate-600 max-w-xl mx-auto">
+            店舗サイトのURLと商品SKU数をお知らせください。シニアアーキテクトが同時アクセス要件を診断し、ヘッドレス移行のロードマップを作成します。
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a 
+            href="#pricing" 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+          >
+            プランを選択 · 手付金で着手
+          </a>
+          <a 
+            href={`${estimatePath}?goal=wp-nextjs`} 
+            class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+          >
+            無料のNext.js移行診断を依頼
+          </a>
+        </div>
+
+        <p class="text-xs text-slate-500 pt-2">
+          メールでのお問い合わせをご希望ですか？技術直通デスク：
+          <a href={`mailto:${siteConfig.contactEmail}`} class="font-mono text-amber-800 hover:text-amber-900 font-semibold underline underline-offset-2 ml-1">
+            {siteConfig.contactEmail}
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</Layout>

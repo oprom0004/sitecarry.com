@@ -1,0 +1,581 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PricingTable from './PricingTable.astro';
+import ProcessTimeline from './ProcessTimeline.astro';
+import FaqAccordion from './FaqAccordion.astro';
+import VisualHeroMockup from './VisualHeroMockup.astro';
+import VisualUrlMapper from './VisualUrlMapper.astro';
+import { useTranslations, getLocalizedPath, type Lang } from '../i18n/utils';
+import { siteConfig } from '../data/siteConfig';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const estimatePath = getLocalizedPath('estimate', lang);
+const pricingPath = getLocalizedPath('pricing', lang);
+const checkoutPath = getLocalizedPath('checkout', lang);
+const astroPath = getLocalizedPath('wordpress-to-astro', lang);
+const nextjsPath = getLocalizedPath('wordpress-to-nextjs', lang);
+const phpPath = getLocalizedPath('legacy-php-migration', lang);
+const workPath = getLocalizedPath('work', lang);
+const guidesPath = getLocalizedPath('guides', lang);
+
+const pageTitles = {
+  en: "Transform WordPress & PHP Sites into Fast, Secure Astro / Next.js Websites",
+  ja: "WordPress・PHPサイトを安全で現代的なAstro / Next.jsサイトへ改造・移行",
+  'zh-tw': "將 WordPress、PHP 網站改造成安全、現代的 Astro / Next.js 網站",
+};
+
+const pageDescriptions = {
+  en: "In the AI era, permanently end public PHP vulnerabilities and repeat malware. Transform your WordPress & PHP sites into fast, secure Astro / Next.js websites with sub-second speed, $0/mo hosting, and 100% legacy SEO retention.",
+  ja: "AI時代におけるPHP脆弱性と改ざん被害を根本遮断。WordPress・PHPサイトを安全で現代的なAstro / Next.jsサイトへ改造・移行し、秒未満の高速表示、被リンク資産の完全継承、サーバー代$0運用を実現します。",
+  'zh-tw': "在 AI 時代，徹底終結公網 PHP 漏洞與反覆被黑。將 WordPress、PHP 網站改造成安全、現代的 Astro / Next.js 網站，公網物理剔除 PHP 執行環境與動態資料庫，全球秒開，每月主機費降為 $0。",
+};
+
+const benchmarkCopy = {
+  en: {
+    title: "Verifiable Benchmark Results",
+    viewAll: "View All Demo Migration Specs",
+    badge: "B2B Industrial Portal",
+    scopeMeta: "15 Pages · 180 Articles",
+    heading: "From 28 bloated Elementor plugins to sub-second static global delivery.",
+    desc: "A complete architectural overhaul of an aging corporate website—extracting all historical posts and product datasheets into an Astro 7 static frontend deployed on Cloudflare Pages.",
+    speedIndex: "Speed Index",
+    speedVal: "0.8s",
+    speedWas: "was 6.2s",
+    lighthouse: "Lighthouse",
+    lighthouseVal: "99/100",
+    lighthouseWas: "was 43/100",
+    publicPhp: "Public PHP",
+    publicPhpVal: "Zero",
+    publicPhpSub: "Immune",
+    hosting: "Hosting",
+    hostingVal: "$0/mo",
+    hostingWas: "was $49/mo",
+    parityNote: "100% URL Parity:",
+    parityDesc: "All 195 slugs verified via Global 301 rules.",
+    cta: "Inspect Full Benchmark",
+  },
+  'zh-tw': {
+    title: "真實可驗證的移轉重構實績",
+    viewAll: "查看完整標準演示規格",
+    badge: "B2B 製造設備企業官網",
+    scopeMeta: "15 個核心頁面 · 180 篇技術文章",
+    heading: "從 28 個臃腫 Elementor 外掛，進化至全球秒開的純淨靜態架構。",
+    desc: "老舊企業形象網站的徹底重構示範——腳本全量萃取既有歷史文章與產品型錄，編譯為 Astro 7 現代前端並託管於 Cloudflare Pages 全球雲端節點。",
+    speedIndex: "手機載入",
+    speedVal: "0.8 秒",
+    speedWas: "原 6.2 秒",
+    lighthouse: "Lighthouse 測速",
+    lighthouseVal: "99/100",
+    lighthouseWas: "原 43 分",
+    publicPhp: "公網 PHP 漏洞",
+    publicPhpVal: "零風險",
+    publicPhpSub: "物理剔除",
+    hosting: "每月伺服器費",
+    hostingVal: "$0 / 月",
+    hostingWas: "原 $49 / 月",
+    parityNote: "100% 網址對齊：",
+    parityDesc: "全站 195 條歷史路徑全數照合，配置全域 301 轉址。",
+    cta: "檢視此案例詳細規格",
+  },
+  ja: {
+    title: "検証可能な実サイト移行実績",
+    viewAll: "全デモ移行仕様を見る",
+    badge: "B2B製造業コーポレートサイト",
+    scopeMeta: "固定15ページ · 記事180件",
+    heading: "肥大化した28個のプラグインから、秒速表示のクリーンな静的配信へ。",
+    desc: "老朽化したコーポレートサイトの全面刷新モデル。既存記事と製品カタログを安全に抽出し、Astro 7で再構築してCloudflare PagesのグローバルCDNへ展開。",
+    speedIndex: "表示速度",
+    speedVal: "0.8秒",
+    speedWas: "元: 6.2秒",
+    lighthouse: "Lighthouse",
+    lighthouseVal: "99/100",
+    lighthouseWas: "元: 43点",
+    publicPhp: "公開PHP脆弱性",
+    publicPhpVal: "ゼロ",
+    publicPhpSub: "完全撤廃",
+    hosting: "サーバー費用",
+    hostingVal: "$0 / 月",
+    hostingWas: "元: $49/月",
+    parityNote: "100% URL保持：",
+    parityDesc: "全195件のURLを完全照合、グローバル301転送設定。",
+    cta: "このベンチマーク詳細を見る",
+  },
+};
+
+const bm = benchmarkCopy[lang] || benchmarkCopy.en;
+---
+
+<Layout 
+  title={pageTitles[lang]} 
+  description={pageDescriptions[lang]} 
+  lang={lang}
+>
+
+  <!-- 1. HERO SECTION -->
+  <section class="relative pt-24 pb-20 overflow-hidden bg-[#faf9f6] border-b border-[#e8e6df] bg-[radial-gradient(ellipse_80%_60%_at_50%_-15%,rgba(249,115,22,0.08),rgba(245,158,11,0.04),transparent)]">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+
+      <!-- Headline: Concrete, direct, states the exact transformation without buzzwords -->
+      <h1 class="text-4xl sm:text-6xl lg:text-[62px] font-extrabold tracking-tight text-[#1c2024] mb-6 mx-auto leading-[1.14] sm:leading-[1.16] max-w-4xl">
+        {lang === 'en' ? (
+          <>Transform WordPress & PHP Sites into Fast, Secure <span class="text-amber-600">Astro / Next.js</span> Websites.</>
+        ) : lang === 'ja' ? (
+          <>WordPress・PHPサイトを、安全で現代的な<span class="text-amber-600">Astro / Next.js</span>サイトへ改造・移行。</>
+        ) : (
+          <>將 WordPress、PHP 網站，改造成安全、現代的 <span class="text-amber-600">Astro / Next.js</span> 網站。</>
+        )}
+      </h1>
+
+      <!-- Subtitle: States the scope, tech stack, and key dividends (speed, security, 1:1 URL, SEO & GEO) -->
+      <p class="text-lg sm:text-xl text-[#575f6e] max-w-3xl mx-auto mb-10 leading-relaxed font-normal">
+        {t.hero.subtitle}
+      </p>
+
+      <!-- Unified Architecture Audit Console Dock (Warm Sunny Amber, Zero-AI Clutter) -->
+      <div class="max-w-2xl mx-auto mb-16 rounded-2xl bg-white border border-[#e2e8f0] shadow-[0_12px_32px_-12px_rgba(245,158,11,0.12)] overflow-hidden text-left">
+        <!-- Main Input Row -->
+        <form action={estimatePath} method="GET" class="p-2 sm:p-2.5 flex flex-col sm:flex-row gap-2">
+          <div class="flex-1 flex items-center px-3.5 gap-2.5 bg-slate-50/70 rounded-xl border border-slate-200/90 focus-within:bg-white focus-within:border-amber-500 focus-within:ring-2 focus-within:ring-amber-500/20 transition-all">
+            <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+            </svg>
+            <input 
+              type="url" 
+              name="url" 
+              placeholder={t.hero.inputPlaceholder || "https://your-current-website.com"} 
+              class="w-full py-3 text-sm text-slate-900 bg-transparent placeholder:text-slate-400 focus:outline-none font-mono"
+              required
+            />
+          </div>
+          <button 
+            type="submit" 
+            class="px-7 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 active:scale-[0.99] text-slate-950 font-bold text-sm transition-all flex items-center justify-center gap-2 shrink-0 cursor-pointer shadow-sm shadow-amber-500/20"
+          >
+            <span>{t.hero.ctaPrimary}</span>
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </button>
+        </form>
+
+        <!-- Integrated Console Footer (Quiet, High-Trust, Seamless Fast-Track) -->
+        <div class="px-4 py-2.5 bg-slate-50/90 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500 font-medium">
+          <div class="flex items-center gap-2 text-slate-500 shrink-0">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+            <span>
+              {lang === 'zh-tw' ? '免費獲取網站檢測報告 · 出具客製建議與固定總價' :
+               lang === 'ja' ? '無料サイト診断レポート · サイト規模に応じた確定見積書を提示' :
+               'Free architecture report · Custom audit & fixed-price quote'}
+            </span>
+          </div>
+          <a 
+            href="#pricing" 
+            class="inline-flex items-center gap-1 text-amber-700 hover:text-amber-900 font-semibold transition-colors shrink-0 whitespace-nowrap"
+          >
+            <span>
+              {lang === 'zh-tw' ? '不需檢測？直接檢視收費方案 · 線上支付定金開工' :
+               lang === 'ja' ? '診断不要？直接料金プランを確認 · 手付金をオンライン決済して着手' :
+               'Skip the audit? View Pricing Packages · Pay Deposit Online to Kick Off'}
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Real High-Res Architecture Workflow Diagram -->
+      <VisualHeroMockup lang={lang} />
+
+    </div>
+  </section>
+
+  <!-- 2. CORE TARGET ARCHITECTURES (Right below Hero, clear product offerings) -->
+  <section class="py-20 bg-[#f4f3ec]/60 border-b border-[#e8e6df]">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="max-w-3xl mb-12">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1c2024] tracking-tight mb-3">
+          {t.frameworks.title}
+        </h2>
+        <p class="text-base text-[#575f6e] leading-relaxed font-normal">
+          {t.frameworks.subtitle}
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        
+        <!-- 01: WordPress to Astro -->
+        <a href={astroPath} class="p-7 rounded-xl bg-white hover:bg-[#fffefc] border border-[#e8e6df] hover:border-amber-300 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group flex flex-col justify-between">
+          <div>
+            <h3 class="text-lg font-bold text-[#1c2024] group-hover:text-amber-700 transition-colors mb-2">
+              {t.frameworks.astro.title}
+            </h3>
+            <p class="text-sm text-[#575f6e] leading-relaxed">
+              {t.frameworks.astro.desc}
+            </p>
+          </div>
+          <span class="mt-6 text-xs font-semibold text-[#575f6e] group-hover:text-amber-700 transition-colors inline-flex items-center gap-1">
+            {t.frameworks.astro.cta}
+          </span>
+        </a>
+
+        <!-- 02: WordPress to Next.js -->
+        <a href={nextjsPath} class="p-7 rounded-xl bg-white hover:bg-[#fffefc] border border-[#e8e6df] hover:border-amber-300 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group flex flex-col justify-between">
+          <div>
+            <h3 class="text-lg font-bold text-[#1c2024] group-hover:text-amber-700 transition-colors mb-2">
+              {t.frameworks.nextjs.title}
+            </h3>
+            <p class="text-sm text-[#575f6e] leading-relaxed">
+              {t.frameworks.nextjs.desc}
+            </p>
+          </div>
+          <span class="mt-6 text-xs font-semibold text-[#575f6e] group-hover:text-amber-700 transition-colors inline-flex items-center gap-1">
+            {t.frameworks.nextjs.cta}
+          </span>
+        </a>
+
+        <!-- 03: Legacy PHP Overhaul -->
+        <a href={phpPath} class="p-7 rounded-xl bg-white hover:bg-[#fffefc] border border-[#e8e6df] hover:border-amber-300 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group flex flex-col justify-between">
+          <div>
+            <h3 class="text-lg font-bold text-[#1c2024] group-hover:text-amber-700 transition-colors mb-2">
+              {t.frameworks.php.title}
+            </h3>
+            <p class="text-sm text-[#575f6e] leading-relaxed">
+              {t.frameworks.php.desc}
+            </p>
+          </div>
+          <span class="mt-6 text-xs font-semibold text-[#575f6e] group-hover:text-amber-700 transition-colors inline-flex items-center gap-1">
+            {t.frameworks.php.cta}
+          </span>
+        </a>
+
+        <!-- 04: Free Header/CVE Diagnostic -->
+        <a href="/php-version-checker/" class="p-7 rounded-xl bg-white hover:bg-[#fffefc] border border-[#e8e6df] hover:border-amber-300 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group flex flex-col justify-between">
+          <div>
+            <h3 class="text-lg font-bold text-[#1c2024] group-hover:text-amber-700 transition-colors mb-2">
+              {t.frameworks.audit.title}
+            </h3>
+            <p class="text-sm text-[#575f6e] leading-relaxed">
+              {t.frameworks.audit.desc}
+            </p>
+          </div>
+          <span class="mt-6 text-xs font-semibold text-[#575f6e] group-hover:text-amber-700 transition-colors inline-flex items-center gap-1">
+            {t.frameworks.audit.cta}
+          </span>
+        </a>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 3. WHY MIGRATE TO MODERN STATIC ARCHITECTURE (4 Architectural Dividends) -->
+  <section class="py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="max-w-3xl mb-16">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight leading-snug mb-4">
+          {t.architecturePillars.title}
+        </h2>
+        <p class="text-base sm:text-lg text-[#575f6e] leading-relaxed font-normal">
+          {t.architecturePillars.subtitle}
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {t.architecturePillars.items.map((item, idx) => (
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] hover:border-[#dcd9ce] hover:shadow-md transition-all flex flex-col justify-between">
+            <div class="space-y-3">
+              <span class="text-2xl font-extrabold font-mono text-slate-300 block">
+                0{idx + 1}
+              </span>
+              <h3 class="text-xl font-bold text-[#1c2024] leading-snug">
+                {item.title}
+              </h3>
+              <p class="text-sm text-[#575f6e] leading-relaxed font-normal">
+                {item.desc}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4. TECHNICAL DELIVERABLES: 1:1 SEO ENGINE & DECOUPLED ARCHITECTURE -->
+  <section class="py-24 bg-[#f4f3ec]/60 border-b border-[#e8e6df]">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="max-w-3xl mb-16">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-4">
+          {t.solutions.title}
+        </h2>
+        <p class="text-base sm:text-lg text-[#575f6e] leading-relaxed font-normal">
+          {t.solutions.subtitle}
+        </p>
+      </div>
+
+      <!-- 1:1 Route Mapper & Headless CMS Interface Showcase -->
+      <VisualUrlMapper lang={lang} />
+
+    </div>
+  </section>
+
+  <!-- 5. REAL BENCHMARK CASE STUDY (Postmark-Style High-Contrast Centerpiece Container) -->
+  <section class="py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 mb-14">
+        <div>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight">
+            {bm.title}
+          </h2>
+        </div>
+        <a href={workPath} class="text-sm text-[#575f6e] hover:text-amber-600 font-semibold transition-colors">
+          {bm.viewAll}
+        </a>
+      </div>
+
+      <!-- High-Contrast Rich Dark Centerpiece Card -->
+      <div class="rounded-2xl bg-[#151922] border border-[#262c38] shadow-2xl overflow-hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-12 items-stretch">
+          
+          <!-- Left 6 Cols: Mockup Image -->
+          <div class="lg:col-span-6 relative bg-[#0e1219] border-b lg:border-b-0 lg:border-r border-[#262c38] overflow-hidden group min-h-[320px]">
+            <img 
+              src="/images/demo-b2b-portal.png" 
+              alt={bm.heading} 
+              class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-95"
+              loading="lazy"
+            />
+          </div>
+
+          <!-- Right 6 Cols: Specs & Metrics -->
+          <div class="lg:col-span-6 p-8 sm:p-10 flex flex-col justify-between space-y-6 bg-[#151922]">
+            <div class="space-y-4">
+              <div class="flex items-center justify-between text-xs font-mono">
+                <span class="text-amber-400 font-semibold">{bm.badge}</span>
+                <span class="text-slate-400">{bm.scopeMeta}</span>
+              </div>
+              <h3 class="text-xl sm:text-2xl font-bold text-white leading-snug">
+                {bm.heading}
+              </h3>
+              <p class="text-sm text-slate-300 leading-relaxed font-normal">
+                {bm.desc}
+              </p>
+
+              <!-- 4 Key Metric Boxes with Amber Accents -->
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                <div class="bg-[#1c2230] p-4 rounded-xl border border-[#2a303c] space-y-1">
+                  <p class="text-xs text-slate-400 font-medium">{bm.speedIndex}</p>
+                  <p class="text-2xl font-extrabold text-white font-mono">{bm.speedVal}</p>
+                  <p class="text-xs text-slate-500 font-mono">{bm.speedWas}</p>
+                </div>
+                <div class="bg-[#1c2230] p-4 rounded-xl border border-[#2a303c] space-y-1">
+                  <p class="text-xs text-slate-400 font-medium">{bm.lighthouse}</p>
+                  <p class="text-2xl font-extrabold text-amber-400 font-mono">{bm.lighthouseVal}</p>
+                  <p class="text-xs text-slate-500 font-mono">{bm.lighthouseWas}</p>
+                </div>
+                <div class="bg-[#1c2230] p-4 rounded-xl border border-[#2a303c] space-y-1">
+                  <p class="text-xs text-slate-400 font-medium">{bm.publicPhp}</p>
+                  <p class="text-2xl font-extrabold text-emerald-400 font-mono">{bm.publicPhpVal}</p>
+                  <p class="text-xs text-slate-500">{bm.publicPhpSub}</p>
+                </div>
+                <div class="bg-[#1c2230] p-4 rounded-xl border border-[#2a303c] space-y-1">
+                  <p class="text-xs text-slate-400 font-medium">{bm.hosting}</p>
+                  <p class="text-2xl font-extrabold text-white font-mono">{bm.hostingVal}</p>
+                  <p class="text-xs text-slate-500 font-mono">{bm.hostingWas}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-[#262c38] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div class="text-xs text-slate-300">
+                <span class="text-white font-semibold">{bm.parityNote}</span> {bm.parityDesc}
+              </div>
+              <a href={workPath} class="px-5 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-all shrink-0 shadow-md">
+                {bm.cta}
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 6. VERIFIED CLIENT EXPERIENCES -->
+  <section class="py-24 bg-[#f4f3ec]/60 border-b border-[#e8e6df]">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="max-w-3xl mb-16">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight leading-snug mb-4">
+          {t.testimonials.title}
+        </h2>
+        <p class="text-base sm:text-lg text-[#575f6e] leading-relaxed font-normal">
+          {t.testimonials.subtitle}
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {t.testimonials.items.map((item) => (
+          <div class="p-8 rounded-xl bg-white border border-[#e8e6df] shadow-xs hover:border-[#dcd9ce] transition-colors flex flex-col justify-between">
+            <div class="space-y-4">
+              <p class="text-sm text-[#3c424d] leading-relaxed font-normal italic">
+                "{item.quote}"
+              </p>
+            </div>
+            <div class="pt-6 mt-6 border-t border-[#f4f3ec] space-y-0.5">
+              <div class="text-sm font-bold text-[#1c2024]">
+                {item.author}
+              </div>
+              <div class="text-xs text-[#575f6e]">
+                {item.role} · {item.company}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 7. TRANSPARENT PRICING -->
+  <section class="py-24 bg-[#faf9f6] border-b border-[#e8e6df]" id="pricing">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <h2 class="text-3xl sm:text-5xl font-extrabold text-[#1c2024] tracking-tight mb-4">
+          {t.pricingSection.title}
+        </h2>
+        <p class="text-base text-[#575f6e] leading-relaxed font-normal">
+          {t.pricingSection.subtitle}
+        </p>
+      </div>
+
+      <PricingTable lang={lang} />
+
+      <div class="mt-12 text-center">
+        <a href={pricingPath} class="inline-flex items-center gap-2 text-sm text-[#575f6e] hover:text-amber-700 font-semibold transition-colors">
+          <span>{t.pricingSection.viewFullPricing}</span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 8. LOW-RISK REVIEW BANNER -->
+  <section class="py-16 bg-[#f4f3ec]/40 border-b border-[#e8e6df]">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="rounded-xl bg-[#fffcf5] border border-[#fde68a] p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-xs hover:shadow-sm transition-shadow">
+        
+        <div class="space-y-3 max-w-xl text-center md:text-left">
+          <h3 class="text-2xl sm:text-3xl font-bold text-[#1c2024]">
+            {t.reviewBanner.title}
+          </h3>
+          <p class="text-sm text-[#575f6e] leading-relaxed font-normal">
+            {t.reviewBanner.desc}
+          </p>
+        </div>
+
+        <div class="shrink-0 text-center">
+          <a 
+            href={`${checkoutPath}?plan=review-149`} 
+            class="inline-block px-7 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all"
+          >
+            {t.reviewBanner.cta}
+          </a>
+          <p class="text-xs text-amber-800/80 mt-2 font-medium">100% Credited Toward Build</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. PROCESS SECTION -->
+  <section class="py-24 bg-[#f4f3ec]/60 border-b border-[#e8e6df]" id="process">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-4">
+          {t.processSection.title}
+        </h2>
+        <p class="text-base text-[#575f6e] leading-relaxed font-normal">
+          {t.processSection.subtitle}
+        </p>
+      </div>
+
+      <ProcessTimeline lang={lang} />
+
+    </div>
+  </section>
+
+  <!-- 10. FAQ SECTION -->
+  <section class="py-24 bg-[#faf9f6] border-b border-[#e8e6df]" id="faq">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight">
+          {t.faq.title}
+        </h2>
+      </div>
+
+      <FaqAccordion lang={lang} />
+
+    </div>
+  </section>
+
+  <!-- 11. FINAL INQUIRY & ESTIMATE ANCHOR -->
+  <section class="py-24 bg-[#faf9f6] border-t border-[#e8e6df]" id="estimate">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      
+      <div class="mb-10 space-y-3">
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#1c2024] tracking-tight leading-[1.2] max-w-3xl mx-auto">
+          {lang === 'zh-tw' ? (
+            <>準備好擺脫資安隱患，<br class="hidden sm:inline" />讓網站穩健升級了嗎？</>
+          ) : lang === 'ja' ? (
+            <>老朽化したサイトを、<br class="hidden sm:inline" />安全で高速なモダン資産へ刷新しませんか？</>
+          ) : (
+            t.ctaFooter.title
+          )}
+        </h2>
+        <p class="text-base sm:text-lg text-[#575f6e] leading-relaxed max-w-2xl mx-auto font-normal">
+          {t.ctaFooter.subtitle}
+        </p>
+      </div>
+
+      <!-- Dual-Track Action Buttons: Direct Purchase (Primary) + Free Assessment (Secondary) -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-xl mx-auto">
+        <a 
+          href="#pricing" 
+          class="w-full sm:w-auto px-8 py-4 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold text-sm shadow-sm shadow-amber-500/20 transition-all text-center"
+        >
+          {t.ctaFooter.btnPrimary}
+        </a>
+        <a 
+          href={estimatePath} 
+          class="w-full sm:w-auto px-8 py-4 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 active:scale-[0.99] text-slate-800 font-semibold text-sm shadow-2xs transition-all text-center"
+        >
+          {t.ctaFooter.btnSecondary}
+        </a>
+      </div>
+
+      <!-- Direct Email Fallback Note -->
+      <div class="text-center pt-4">
+        <p class="text-xs text-slate-500">
+          {t.ctaFooter.emailNote}
+          <a href={`mailto:${siteConfig.contactEmail}`} class="font-mono text-amber-800 hover:text-amber-900 font-semibold underline underline-offset-2 ml-1">
+            {siteConfig.contactEmail}
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+</Layout>
