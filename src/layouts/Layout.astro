@@ -82,6 +82,9 @@ const finalSchema = schema ? {
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json" set:html={JSON.stringify(finalSchema)} />
+
+    <!-- Umami Analytics -->
+    <script defer src="https://umamimy.vercel.app/script.js" data-website-id="528ffeda-1f5e-4ed5-8202-a3287be522fa"></script>
   </head>
   <body class="min-h-screen bg-[#faf9f6] text-[#1c2024] antialiased selection:bg-blue-600 selection:text-white flex flex-col font-sans">
     <Header lang={lang} currentPath={pathname} />
