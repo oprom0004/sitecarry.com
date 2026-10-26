@@ -1,12 +1,17 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import PricingTable from '../../components/PricingTable.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
 import { siteConfig } from '../../data/siteConfig';
 import { getLocalizedPath, type Lang } from '../../i18n/utils';
 
 const lang: Lang = 'zh-tw';
 const estimatePath = getLocalizedPath('estimate', lang);
 const checkoutPath = getLocalizedPath('checkout', lang);
+
+const breadcrumbs = [
+  { label: '收費方案' },
+];
 
 const zhAddOns = [
   {
@@ -59,8 +64,10 @@ const zhAddOns = [
   description="WordPress 老站移轉與改版收費標準。USD $1,490 起固定總價合約，USD $149 深度先期診斷，無隱藏工時追加。"
   lang={lang}
 >
-  <div class="py-20 sm:py-24 bg-white border-b border-slate-200">
+  <div class="py-12 sm:py-20 bg-white border-b border-slate-200">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <Breadcrumb items={breadcrumbs} lang={lang} className="mb-8" />
       
       <div class="text-center max-w-3xl mx-auto mb-16">
         <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">

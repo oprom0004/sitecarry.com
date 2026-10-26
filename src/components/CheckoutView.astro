@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Breadcrumb from './Breadcrumb.astro';
 import { getLocalizedPath, type Lang } from '../i18n/utils';
 
 interface Props {
@@ -8,6 +9,11 @@ interface Props {
 
 const { lang } = Astro.props;
 const estimatePath = getLocalizedPath('estimate', lang);
+
+const breadcrumbs = [
+  { label: lang === 'zh-tw' ? '收費方案' : lang === 'ja' ? '料金プラン' : 'Pricing', href: getLocalizedPath('pricing', lang) },
+  { label: lang === 'zh-tw' ? '線上預約' : lang === 'ja' ? 'オンライン予約' : 'Checkout' },
+];
 
 const labels = {
   en: {
@@ -253,8 +259,10 @@ const plansData = {
 ---
 
 <Layout title={t.pageTitle} description={t.pageDesc} lang={lang}>
-  <div class="py-16 sm:py-20 bg-white border-b border-slate-200">
+  <div class="py-12 sm:py-16 bg-white border-b border-slate-200">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <Breadcrumb items={breadcrumbs} lang={lang} className="mb-6" />
 
       <!-- Header -->
       <div class="max-w-3xl mx-auto text-center mb-12">

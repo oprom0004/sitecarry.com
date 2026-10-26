@@ -1,10 +1,15 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import VisualUrlMapper from '../../components/VisualUrlMapper.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
 import { getLocalizedPath, type Lang } from '../../i18n/utils';
 
 const lang: Lang = 'zh-tw';
 const estimatePath = getLocalizedPath('estimate', lang);
+
+const breadcrumbs = [
+  { label: '移轉實績' },
+];
 ---
 
 <Layout 
@@ -12,8 +17,10 @@ const estimatePath = getLocalizedPath('estimate', lang);
   description="秉持誠信透明原則，絕不捏造虛假客戶 Logo 與評語。公開標準化演示移轉前後的視覺預覽與實測數據。"
   lang={lang}
 >
-  <div class="py-20 sm:py-24 bg-white border-b border-slate-200">
+  <div class="py-12 sm:py-20 bg-white border-b border-slate-200">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <Breadcrumb items={breadcrumbs} lang={lang} className="mb-8" />
       
       <div class="max-w-3xl mb-16">
         <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">

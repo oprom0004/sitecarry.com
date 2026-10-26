@@ -1,9 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
 import { siteConfig } from '../data/siteConfig';
 import { type Lang } from '../i18n/utils';
 
 const lang: Lang = 'en';
+
+const breadcrumbs = [
+  { label: 'Privacy Policy' },
+];
 ---
 
 <Layout 
@@ -11,8 +16,10 @@ const lang: Lang = 'en';
   description="Privacy policy and data protection practices at SiteCarry."
   lang={lang}
 >
-  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+  <div class="py-12 sm:py-20 bg-[#faf9f6] border-b border-[#e8e6df]">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-sm text-slate-700 space-y-6 leading-relaxed">
+      
+      <Breadcrumb items={breadcrumbs} lang={lang} className="mb-6" />
       
       <div class="mb-10">
         <h1 class="text-3xl sm:text-4xl font-extrabold text-[#1c2024] tracking-tight mb-2">Privacy Policy</h1>

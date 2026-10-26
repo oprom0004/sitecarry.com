@@ -1,12 +1,19 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import PricingTable from '../../components/PricingTable.astro';
-import { getLocalizedPath, type Lang } from '../../i18n/utils';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import { getLocalizedPath, useTranslations, type Lang } from '../../i18n/utils';
 import { siteConfig } from '../../data/siteConfig';
 
 const lang: Lang = 'zh-tw';
+const t = useTranslations(lang);
 const estimatePath = getLocalizedPath('estimate', lang);
 const pricingPath = getLocalizedPath('pricing', lang);
+
+const breadcrumbs = [
+  { label: t.nav.services, href: `/${lang}/#services` },
+  { label: t.nav.phpMigration },
+];
 
 const comparisonRows = [
   {
@@ -61,8 +68,10 @@ const faqs = [
   description="專為原生 PHP 與客製系統打造。公網物理剔除 PHP 執行環境，黑客在物理層面失去攻擊載體，徹底終結 CVE 漏洞入侵與反覆被黑噩夢，.php 與 .php?id= 舊網址 1:1 邊緣 301 映射，無損遷往現代極速架構。"
   lang={lang}
 >
-  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+  <div class="py-12 sm:py-20 bg-[#faf9f6] border-b border-[#e8e6df]">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <Breadcrumb items={breadcrumbs} lang={lang} className="mb-8" />
       
       <!-- HERO SECTION (核心關鍵詞置頂，無破 Badge 藥丸，無孤行箭頭) -->
       <div class="max-w-4xl mx-auto text-center mb-20">

@@ -1,11 +1,17 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import Breadcrumb from '../../../components/Breadcrumb.astro';
 import { getLocalizedPath, type Lang } from '../../../i18n/utils';
 
 const lang: Lang = 'ja';
 const estimatePath = getLocalizedPath('estimate', lang);
 const astroPath = getLocalizedPath('wordpress-to-astro', lang);
 const phpCheckerPath = getLocalizedPath('php-version-checker', lang);
+
+const breadcrumbs = [
+  { label: '技術ガイド', href: getLocalizedPath('guides', lang) },
+  { label: 'PHP2shell (CVE-2026-109618) 脆弱性対策' },
+];
 ---
 
 <Layout 
@@ -13,9 +19,12 @@ const phpCheckerPath = getLocalizedPath('php-version-checker', lang);
   description="CVE-2026-109618（PHP2shell）の未認証RCE脆弱性を技術的に分析。AstroとCloudflare Edgeによる静的デカップル構成が、公開サーバーの攻撃面をゼロにする理由を解説。"
   lang={lang}
 >
-  <div class="py-16 sm:py-24 bg-gradient-to-b from-slate-50 via-white to-white border-b border-slate-200">
+  <div class="py-12 sm:py-20 bg-gradient-to-b from-slate-50 via-white to-white border-b border-slate-200">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       
+      <!-- Breadcrumb Navigation -->
+      <Breadcrumb items={breadcrumbs} lang={lang} className="mb-6" />
+
       <!-- Article Header -->
       <div class="mb-10">
         <div class="flex items-center gap-3 text-xs text-slate-500 mb-4 font-mono">

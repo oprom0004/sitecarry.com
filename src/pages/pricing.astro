@@ -1,12 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PricingTable from '../components/PricingTable.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
 import { siteConfig } from '../data/siteConfig';
 import { getLocalizedPath, type Lang } from '../i18n/utils';
 
 const lang: Lang = 'en';
 const estimatePath = getLocalizedPath('estimate', lang);
 const checkoutPath = getLocalizedPath('checkout', lang);
+
+const breadcrumbs = [
+  { label: 'Pricing' },
+];
 ---
 
 <Layout 
@@ -14,8 +19,10 @@ const checkoutPath = getLocalizedPath('checkout', lang);
   description="Transparent fixed pricing for WordPress migration and website rebuilds. Packages starting from $1,490. No hidden hourly meters."
   lang={lang}
 >
-  <div class="py-20 sm:py-24 bg-white border-b border-slate-200">
+  <div class="py-12 sm:py-20 bg-white border-b border-slate-200">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <Breadcrumb items={breadcrumbs} lang={lang} className="mb-8" />
       
       <!-- Top Title -->
       <div class="text-center max-w-3xl mx-auto mb-16">

@@ -1,0 +1,65 @@
+---
+import { getLocalizedPath, type Lang } from '../i18n/utils';
+
+export interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+  lang?: Lang;
+  className?: string;
+}
+
+const { items, lang = 'en', className = '' } = Astro.props;
+
+const homeLabel = lang === 'zh-tw' ? '首頁' : lang === 'ja' ? 'ホーム' : 'Home';
+const homeHref = getLocalizedPath('', lang);
+
+// If the first item isn't already Home, prepend Home
+const fullItems: BreadcrumbItem[] = (items[0]?.href === homeHref || items[0]?.label === homeLabel)
+  ? items
+  : [{ label: homeLabel, href: homeHref }, ...items];
+
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": fullItems.map((item, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "name": item.label,
+    ...(item.href ? { "item": item.href.startsWith('http') ? item.href : `https://sitecarry.com${item.href}` } : {})
+  }))
+};
+---
+
+<nav aria-label="Breadcrumb" class={`text-xs font-mono py-2.5 ${className}`}>
+  <ol class="flex items-center flex-wrap gap-1 text-slate-500">
+    {fullItems.map((item, index) => {
+      const isLast = index === fullItems.length - 1;
+      return (
+        <li class="flex items-center">
+          {index > 0 && (
+            <span class="text-slate-300 mx-1.5 select-none font-sans text-xs">/</span>
+          )}
+          {isLast || !item.href ? (
+            <span class="text-slate-900 font-semibold truncate max-w-[240px] sm:max-w-md" aria-current="page">
+              {item.label}
+            </span>
+          ) : (
+            <a 
+              href={item.href} 
+              class="hover:text-amber-800 hover:underline underline-offset-2 transition-colors"
+            >
+              {item.label}
+            </a>
+          )}
+        </li>
+      );
+    })}
+  </ol>
+
+  <!-- Schema.org BreadcrumbList JSON-LD for Search Engines -->
+  <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
+</nav>

@@ -1,11 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import EstimateForm from '../components/EstimateForm.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
 import { useTranslations, type Lang } from '../i18n/utils';
 
 const lang: Lang = 'en';
 const t = useTranslations(lang);
 const tier = Astro.url.searchParams.get('tier') || '';
+
+const breadcrumbs = [
+  { label: 'Free Estimate' },
+];
 ---
 
 <Layout 
@@ -13,8 +18,10 @@ const tier = Astro.url.searchParams.get('tier') || '';
   description="Request a detailed scope and price assessment for your WordPress migration or legacy website rebuild. Receive an objective technical recommendations and fixed quote."
   lang={lang}
 >
-  <div class="py-20 sm:py-24 bg-white border-b border-slate-200">
+  <div class="py-12 sm:py-20 bg-white border-b border-slate-200">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <Breadcrumb items={breadcrumbs} lang={lang} className="mb-8" />
       
       <!-- Top Overview Header -->
       <div class="text-center max-w-2xl mx-auto mb-14">

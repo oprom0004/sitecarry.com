@@ -1,0 +1,127 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getLocalizedPath, type Lang } from '../i18n/utils';
+
+const lang: Lang = 'en';
+
+const quickLinks = [
+  {
+    category: "Services",
+    title: "WordPress 1:1 Migration",
+    desc: "Preserve SEO equity with 1:1 URL mapping and decoupled static edge speed.",
+    href: "/wordpress-migration/",
+    badge: "01"
+  },
+  {
+    category: "Services",
+    title: "Legacy PHP Modernization",
+    desc: "End recurring public PHP exploits (PHP2shell) and botnet attacks permanently.",
+    href: "/legacy-php-migration/",
+    badge: "02"
+  },
+  {
+    category: "Knowledge",
+    title: "Technical Guides & CVE Analyses",
+    desc: "In-depth engineering insights on static edge shielding and migration architecture.",
+    href: "/guides/",
+    badge: "03"
+  },
+  {
+    category: "Diagnostics",
+    title: "Free Architecture Estimate",
+    desc: "Submit your legacy URL for a custom audit, fixed-price quote, and risk matrix.",
+    href: "/estimate/",
+    badge: "04"
+  }
+];
+---
+
+<Layout 
+  title="404 - Page Not Found | SiteCarry"
+  description="The requested page could not be found. Explore SiteCarry migration services, technical guides, or request a free architecture consultation."
+  lang={lang}
+>
+  <div class="py-20 sm:py-28 bg-[#faf9f6] border-b border-[#e8e6df]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      
+      <!-- Top Badge -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-50 border border-amber-200/80 text-amber-900 text-xs font-mono font-semibold mb-6">
+        <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+        <span>404 ERROR · PAGE NOT FOUND</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="text-4xl sm:text-6xl font-extrabold text-slate-900 tracking-tight mb-4">
+        Looking for a Page That Moved?
+      </h1>
+      
+      <!-- Multi-lingual friendly clarification -->
+      <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mb-3 leading-relaxed">
+        The link you followed may be outdated, or the address was restructured. Because SiteCarry specializes in zero-loss 1:1 legacy URL migrations, we make sure you find your way immediately.
+      </p>
+
+      <p class="text-xs sm:text-sm text-slate-500 max-w-xl mx-auto mb-10 leading-relaxed font-mono">
+        找不到頁面？若您是從舊連結訪問，請查看下方快捷入口或返回首頁。<br />
+        お探しのページが見つかりませんでした。以下のリンクより目的のページへお進みください。
+      </p>
+
+      <!-- Primary Action Buttons -->
+      <div class="flex flex-wrap items-center justify-center gap-3 mb-14">
+        <a 
+          href="/" 
+          class="px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs sm:text-sm transition-all shadow-sm"
+        >
+          Return to Homepage
+        </a>
+        <a 
+          href="/pricing/" 
+          class="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs sm:text-sm transition-all shadow-sm shadow-amber-500/20"
+        >
+          View Pricing Packages
+        </a>
+        <button 
+          type="button" 
+          onclick="window.history.length > 1 ? window.history.back() : window.location.href='/'"
+          class="px-5 py-3 rounded-xl bg-white hover:bg-slate-50 border border-[#e8e6df] text-slate-700 font-semibold text-xs sm:text-sm transition-all shadow-2xs cursor-pointer"
+        >
+          Back to Previous Page
+        </button>
+      </div>
+
+      <!-- Quick Navigation Grid -->
+      <div class="text-left border-t border-[#e8e6df] pt-12">
+        <div class="flex items-center justify-between mb-6">
+          <span class="text-xs font-mono uppercase tracking-widest text-slate-500 font-semibold">Suggested Destinations</span>
+          <span class="text-xs font-mono text-slate-400">SiteCarry Architecture Studio</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {quickLinks.map((item) => (
+            <a 
+              href={item.href}
+              class="p-5 rounded-2xl bg-white border border-[#e8e6df] hover:border-amber-400 transition-all shadow-2xs hover:shadow-sm group flex flex-col justify-between"
+            >
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-[11px] font-mono text-slate-400 uppercase tracking-wider">{item.category}</span>
+                  <span class="text-xs font-mono font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200/50">{item.badge}</span>
+                </div>
+                <h3 class="text-sm font-bold text-slate-900 group-hover:text-amber-800 transition-colors mb-1">
+                  {item.title}
+                </h3>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  {item.desc}
+                </p>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-mono text-amber-700 font-semibold">
+                <span>Explore</span>
+                <span class="text-slate-400 group-hover:text-amber-700 transition-colors">↗</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</Layout>

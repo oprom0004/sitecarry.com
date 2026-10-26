@@ -1,12 +1,19 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PricingTable from '../components/PricingTable.astro';
-import { getLocalizedPath, type Lang } from '../i18n/utils';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import { getLocalizedPath, useTranslations, type Lang } from '../i18n/utils';
 import { siteConfig } from '../data/siteConfig';
 
 const lang: Lang = 'en';
+const t = useTranslations(lang);
 const estimatePath = getLocalizedPath('estimate', lang);
 const pricingPath = getLocalizedPath('pricing', lang);
+
+const breadcrumbs = [
+  { label: t.nav.services, href: '/#services' },
+  { label: t.nav.migration },
+];
 
 const comparisonRows = [
   {
@@ -66,8 +73,10 @@ const faqs = [
   description="Professional WordPress migration service. Meticulous 1:1 URL parity and SEO rank preservation, comprehensive content extraction and sanitization, and modern Astro static edge architecture."
   lang={lang}
 >
-  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+  <div class="py-12 sm:py-20 bg-[#faf9f6] border-b border-[#e8e6df]">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <Breadcrumb items={breadcrumbs} lang={lang} className="mb-8" />
       
       <!-- HERO SECTION (Keyword front-and-center, zero badge pill, zero arrows) -->
       <div class="max-w-4xl mx-auto text-center mb-20">

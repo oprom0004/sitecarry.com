@@ -10,8 +10,61 @@ interface Props {
 const { lang, currentPath } = Astro.props;
 const t = useTranslations(lang);
 
-const navItems = [
-  { label: t.nav.services, href: getLocalizedPath('wordpress-migration', lang) },
+const homePath = getLocalizedPath('', lang);
+const estimatePath = getLocalizedPath('estimate', lang);
+
+const serviceDropdownItems = [
+  {
+    title: t.nav.migration,
+    desc: lang === 'zh-tw' ? '1:1 舊站網址精確對齊 · 零 404 斷鏈 · SEO 權重完整繼承' :
+          lang === 'ja' ? '旧URL完全保持 · 404リンク切れゼロ · 既存SEO評価を完全継承' :
+          '1:1 legacy URL mapping · Zero 404 broken links · 100% SEO equity retention',
+    href: getLocalizedPath('wordpress-migration', lang),
+    badge: '01'
+  },
+  {
+    title: t.nav.rebuild,
+    desc: lang === 'zh-tw' ? '徹底終結 Elementor / Divi 臃腫死局 · 現代極簡設計系統' :
+          lang === 'ja' ? '肥大化したページビルダー脱却 · 洗練されたモダンUI' :
+          'Eliminate page builder DOM bloat · Bespoke high-speed design system',
+    href: getLocalizedPath('wordpress-rebuild', lang),
+    badge: '02'
+  },
+  {
+    title: t.nav.astroPage,
+    desc: lang === 'zh-tw' ? '極致純靜態邊緣預渲染 · Google 90+ 滿分 · 零維護負擔' :
+          lang === 'ja' ? '完全静的エッジ配信 · 表示速度50ms未満 · サーバ維持費$0' :
+          'Pure static edge pre-rendering · Sub-50ms speed · Zero server maintenance',
+    href: getLocalizedPath('wordpress-to-astro', lang),
+    badge: '03'
+  },
+  {
+    title: t.nav.nextjsPage,
+    desc: lang === 'zh-tw' ? '企業級動態門戶 · 複雜權限 · Headless CMS 與現代 Web App' :
+          lang === 'ja' ? '動的ポータル・複雑な権限管理・ヘッドレスCMS連携' :
+          'Dynamic enterprise portals · Complex auth · Headless CMS & scalable web apps',
+    href: getLocalizedPath('wordpress-to-nextjs', lang),
+    badge: '04'
+  },
+  {
+    title: t.nav.phpMigration,
+    desc: lang === 'zh-tw' ? '徹底終結公網 PHP 漏洞入侵與反覆被黑噩夢 · 攻擊面物理歸零' :
+          lang === 'ja' ? 'PHPコア脆弱性・不正侵入のいたちごっこを完全脱却' :
+          'Permanently end automated botnet breaches & 0-Day PHP vulnerability panic',
+    href: getLocalizedPath('legacy-php-migration', lang),
+    badge: '05'
+  },
+  {
+    title: t.nav.phpChecker,
+    desc: lang === 'zh-tw' ? '線上即時檢測現有網站 PHP 版本狀態與安全防護支援矩陣' :
+          lang === 'ja' ? '稼働中サイトのPHPバージョンと脆弱性リスクをオンライン無料診断' :
+          'Free real-time risk diagnostic · Version matrix & vulnerability checker',
+    href: getLocalizedPath('php-version-checker', lang),
+    badge: '06'
+  },
+];
+
+const standardNavItems = [
   { label: t.nav.pricing, href: getLocalizedPath('pricing', lang) },
   { label: t.nav.process, href: getLocalizedPath('process', lang) },
   { label: t.nav.work, href: getLocalizedPath('work', lang) },
@@ -19,22 +72,22 @@ const navItems = [
   { label: t.nav.guides, href: getLocalizedPath('guides', lang) },
 ];
 
-const homePath = getLocalizedPath('', lang);
-const estimatePath = getLocalizedPath('estimate', lang);
-
 const languages = [
   { code: 'en' as Lang, label: 'EN', full: 'English (US / EU)' },
   { code: 'ja' as Lang, label: 'JA', full: '日本語 (Japan)' },
   { code: 'zh-tw' as Lang, label: 'TW', full: '繁體中文 (Taiwan)' },
 ];
+
+const isServicesActive = serviceDropdownItems.some(item => currentPath.includes(item.href));
+const isHomeActive = currentPath === homePath || currentPath === `${homePath}/` || (lang === 'en' && currentPath === '/');
 ---
 
 <header class="sticky top-0 z-50 backdrop-blur-md bg-[#faf9f6]/95 border-b border-[#e8e6df] transition-all shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
       
-      <!-- Brand Logo (Sunny Warm Golden Amber Mark, perfectly matching the theme) -->
-      <a href={homePath} class="flex items-center gap-2.5 group">
+      <!-- Brand Logo -->
+      <a href={homePath} class="flex items-center gap-2.5 group shrink-0">
         <div class="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center text-slate-950 shadow-sm shadow-amber-500/20 group-hover:bg-amber-400 transition-colors">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="17 11 12 6 7 11"></polyline>
@@ -48,8 +101,94 @@ const languages = [
       </a>
 
       <!-- Desktop Nav -->
-      <nav class="hidden md:flex items-center gap-7">
-        {navItems.map((item) => {
+      <nav class="hidden md:flex items-center gap-5 lg:gap-7">
+        
+        <!-- 1. Explicit Home Link -->
+        <a 
+          href={homePath} 
+          class={`text-sm tracking-tight transition-colors ${
+            isHomeActive 
+              ? 'text-amber-700 font-bold' 
+              : 'text-slate-600 hover:text-slate-900 font-medium'
+          }`}
+        >
+          {t.nav.home}
+        </a>
+
+        <!-- 2. Services Interactive Dropdown -->
+        <div class="relative" id="services-menu-container">
+          <button 
+            type="button" 
+            id="services-menu-btn"
+            aria-expanded="false"
+            aria-haspopup="true"
+            class={`flex items-center gap-1 text-sm tracking-tight transition-colors cursor-pointer py-2 ${
+              isServicesActive 
+                ? 'text-amber-700 font-bold' 
+                : 'text-slate-600 hover:text-slate-900 font-medium'
+            }`}
+          >
+            <span>{t.nav.services}</span>
+            <svg id="services-caret" class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+            </svg>
+          </button>
+
+          <!-- Dropdown Card -->
+          <div 
+            id="services-dropdown"
+            class="absolute left-1/2 -translate-x-1/2 top-full pt-1.5 w-[580px] transition-all z-50 hidden"
+          >
+            <div class="rounded-2xl border border-slate-200 bg-white shadow-xl p-4 ring-1 ring-black/5">
+              
+              <!-- Dropdown Header -->
+              <div class="flex items-center justify-between pb-2.5 mb-2.5 border-b border-slate-100">
+                <span class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
+                  {lang === 'zh-tw' ? '企業網站現代化遷移方案' : lang === 'ja' ? 'サイト移行・モダン化ソリューション' : 'Migration & Modernization Services'}
+                </span>
+                <span class="text-[11px] font-mono text-amber-700 font-semibold">
+                  1:1 SEO Link Equity Guarantee
+                </span>
+              </div>
+
+              <!-- 2-Column Grid -->
+              <div class="grid grid-cols-2 gap-2">
+                {serviceDropdownItems.map((item) => (
+                  <a 
+                    href={item.href}
+                    class="p-2.5 rounded-xl hover:bg-slate-50 transition-colors flex items-start gap-2.5 group/item"
+                  >
+                    <span class="text-[10px] font-mono font-bold text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/50 shrink-0 mt-0.5">
+                      {item.badge}
+                    </span>
+                    <div class="min-w-0">
+                      <div class="text-xs font-bold text-slate-900 group-hover/item:text-amber-800 transition-colors leading-snug">
+                        {item.title}
+                      </div>
+                      <p class="text-[11px] text-slate-500 leading-tight mt-1 line-clamp-2">
+                        {item.desc}
+                      </p>
+                    </div>
+                  </a>
+                ))}
+              </div>
+
+              <!-- Dropdown Bottom Bar -->
+              <div class="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                <span class="text-slate-500">
+                  {lang === 'zh-tw' ? '不確定適合哪種架構？' : lang === 'ja' ? '最適な構成をお悩みですか？' : 'Unsure which architecture fits?'}
+                </span>
+                <a href={estimatePath} class="text-amber-800 hover:text-amber-950 font-bold font-mono text-xs flex items-center gap-1 transition-colors">
+                  <span>{lang === 'zh-tw' ? '獲取免費診斷建議書 ↗' : lang === 'ja' ? '無料診断レポートを請求 ↗' : 'Get Free Migration Plan ↗'}</span>
+                </a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Remaining Standard Nav Items -->
+        {standardNavItems.map((item) => {
           const isActive = currentPath.includes(item.href) && item.href !== homePath;
           return (
             <a 
@@ -69,7 +208,7 @@ const languages = [
       <!-- Right Actions & Language Switcher -->
       <div class="hidden md:flex items-center gap-3">
         
-        <!-- Language Switcher: Zero dead zone (top-full pt-1.5), robust hover bridge + click toggle -->
+        <!-- Language Switcher -->
         <div class="relative" id="lang-switcher">
           <button 
             type="button" 
@@ -85,7 +224,6 @@ const languages = [
             </svg>
           </button>
           
-          <!-- Dropdown Wrapper: Physically starts at top-full with padding-top to eliminate mouse dead zone -->
           <div 
             id="lang-dropdown"
             class="absolute right-0 top-full pt-1.5 w-48 transition-all z-50 hidden"
@@ -113,7 +251,7 @@ const languages = [
           </div>
         </div>
 
-        <!-- Primary CTA Button (Sunny Golden Amber, unified with Hero CTA) -->
+        <!-- Primary CTA Button -->
         <a 
           href={estimatePath} 
           class="inline-flex items-center justify-center px-4 py-2 rounded-lg text-xs font-bold text-slate-950 bg-amber-500 hover:bg-amber-400 active:scale-[0.99] shadow-sm shadow-amber-500/20 transition-all"
@@ -147,7 +285,41 @@ const languages = [
 
   <!-- Mobile Drawer -->
   <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6 space-y-2">
-    {navItems.map((item) => (
+    <!-- Home -->
+    <a 
+      href={homePath} 
+      class={`block px-3 py-2 rounded-lg text-sm font-medium ${isHomeActive ? 'bg-amber-50 text-amber-800 font-bold' : 'text-slate-700 hover:bg-slate-50'}`}
+    >
+      {t.nav.home}
+    </a>
+
+    <!-- Mobile Services Accordion -->
+    <div>
+      <button 
+        type="button"
+        id="mobile-services-toggle"
+        class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 cursor-pointer"
+      >
+        <span class={isServicesActive ? 'text-amber-800 font-bold' : ''}>{t.nav.services}</span>
+        <svg id="mobile-services-caret" class="w-4 h-4 text-slate-400 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+        </svg>
+      </button>
+
+      <div id="mobile-services-list" class="hidden pl-3 pr-1 py-1 space-y-1 border-l-2 border-amber-200 ml-3 mt-1">
+        {serviceDropdownItems.map((item) => (
+          <a 
+            href={item.href}
+            class="block px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-amber-800 hover:bg-slate-50"
+          >
+            <div class="font-semibold text-slate-800">{item.title}</div>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Standard Nav Items -->
+    {standardNavItems.map((item) => (
       <a 
         href={item.href} 
         class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-amber-700"
@@ -156,6 +328,7 @@ const languages = [
       </a>
     ))}
     
+    <!-- Mobile Language Selector -->
     <div class="pt-3 border-t border-slate-200 flex items-center justify-around">
       {languages.map((l) => (
         <a 
@@ -174,7 +347,7 @@ const languages = [
 </header>
 
 <script>
-  // Mobile menu toggle
+  // Mobile drawer toggle
   const mobileBtn = document.getElementById('mobile-menu-btn');
   const mobileMenu = document.getElementById('mobile-menu');
   if (mobileBtn && mobileMenu) {
@@ -183,75 +356,96 @@ const languages = [
     });
   }
 
-  // Desktop Language Dropdown (Hover with Grace-Delay + Click Toggle + Click Outside)
-  const switcher = document.getElementById('lang-switcher');
-  const langBtn = document.getElementById('lang-menu-btn');
-  const langDropdown = document.getElementById('lang-dropdown');
-  const langCaret = document.getElementById('lang-caret');
-
-  if (switcher && langBtn && langDropdown) {
-    let closeTimer: ReturnType<typeof setTimeout> | null = null;
-    let isOpen = false;
-
-    function openMenu() {
-      if (closeTimer) {
-        clearTimeout(closeTimer);
-        closeTimer = null;
-      }
-      isOpen = true;
-      langDropdown?.classList.remove('hidden');
-      langBtn?.setAttribute('aria-expanded', 'true');
-      if (langCaret) langCaret.classList.add('rotate-180');
-    }
-
-    function closeMenu(immediate = false) {
-      if (immediate) {
-        if (closeTimer) {
-          clearTimeout(closeTimer);
-          closeTimer = null;
-        }
-        isOpen = false;
-        langDropdown?.classList.add('hidden');
-        langBtn?.setAttribute('aria-expanded', 'false');
-        if (langCaret) langCaret.classList.remove('rotate-180');
-        return;
-      }
-
-      if (closeTimer) clearTimeout(closeTimer);
-      closeTimer = setTimeout(() => {
-        isOpen = false;
-        langDropdown?.classList.add('hidden');
-        langBtn?.setAttribute('aria-expanded', 'false');
-        if (langCaret) langCaret.classList.remove('rotate-180');
-      }, 220); // 220ms grace delay ensures mouse never loses hover bridge
-    }
-
-    // Hover on container: open immediately, close with grace buffer
-    switcher.addEventListener('mouseenter', () => openMenu());
-    switcher.addEventListener('mouseleave', () => closeMenu(false));
-
-    // Click toggle on button
-    langBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (isOpen) {
-        closeMenu(true);
+  // Mobile services accordion toggle
+  const mobileServicesToggle = document.getElementById('mobile-services-toggle');
+  const mobileServicesList = document.getElementById('mobile-services-list');
+  const mobileServicesCaret = document.getElementById('mobile-services-caret');
+  if (mobileServicesToggle && mobileServicesList) {
+    mobileServicesToggle.addEventListener('click', () => {
+      const isExpanded = !mobileServicesList.classList.contains('hidden');
+      if (isExpanded) {
+        mobileServicesList.classList.add('hidden');
+        mobileServicesCaret?.classList.remove('rotate-180');
       } else {
-        openMenu();
-      }
-    });
-
-    // Close when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!switcher.contains(e.target as Node)) {
-        closeMenu(true);
-      }
-    });
-
-    // Close on Escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeMenu(true);
+        mobileServicesList.classList.remove('hidden');
+        mobileServicesCaret?.classList.add('rotate-180');
       }
     });
   }
+
+  // Generic Dropdown Helper for Desktop with Grace Delay
+  function setupDropdown(containerId: string, btnId: string, menuId: string, caretId?: string) {
+    const container = document.getElementById(containerId);
+    const btn = document.getElementById(btnId);
+    const menu = document.getElementById(menuId);
+    const caret = caretId ? document.getElementById(caretId) : null;
+
+    if (!container || !btn || !menu) return;
+
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    let isOpen = false;
+
+    function open() {
+      if (timer) {
+        clearTimeout(timer);
+        timer = null;
+      }
+      isOpen = true;
+      menu?.classList.remove('hidden');
+      btn?.setAttribute('aria-expanded', 'true');
+      if (caret) caret.classList.add('rotate-180');
+    }
+
+    function close(immediate = false) {
+      if (immediate) {
+        if (timer) {
+          clearTimeout(timer);
+          timer = null;
+        }
+        isOpen = false;
+        menu?.classList.add('hidden');
+        btn?.setAttribute('aria-expanded', 'false');
+        if (caret) caret.classList.remove('rotate-180');
+        return;
+      }
+
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        isOpen = false;
+        menu?.classList.add('hidden');
+        btn?.setAttribute('aria-expanded', 'false');
+        if (caret) caret.classList.remove('rotate-180');
+      }, 200);
+    }
+
+    container.addEventListener('mouseenter', () => open());
+    container.addEventListener('mouseleave', () => close(false));
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (isOpen) {
+        close(true);
+      } else {
+        open();
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!container.contains(e.target as Node)) {
+        close(true);
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        close(true);
+      }
+    });
+  }
+
+  // Setup Desktop Services Dropdown
+  setupDropdown('services-menu-container', 'services-menu-btn', 'services-dropdown', 'services-caret');
+
+  // Setup Desktop Language Dropdown
+  setupDropdown('lang-switcher', 'lang-menu-btn', 'lang-dropdown', 'lang-caret');
 </script>

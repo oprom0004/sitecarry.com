@@ -1,12 +1,19 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import PricingTable from '../../components/PricingTable.astro';
-import { getLocalizedPath, type Lang } from '../../i18n/utils';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import { getLocalizedPath, useTranslations, type Lang } from '../../i18n/utils';
 import { siteConfig } from '../../data/siteConfig';
 
 const lang: Lang = 'zh-tw';
+const t = useTranslations(lang);
 const estimatePath = getLocalizedPath('estimate', lang);
 const pricingPath = getLocalizedPath('pricing', lang);
+
+const breadcrumbs = [
+  { label: t.nav.services, href: `/${lang}/#services` },
+  { label: t.nav.nextjsPage },
+];
 
 const comparisonRows = [
   {
@@ -61,8 +68,10 @@ const faqs = [
   description="將傳統 WooCommerce 與動態 WordPress 升級為現代 Next.js App Router 無頭架構。商品目錄邊緣秒開，大促高並發百萬級流量不當機，Stripe Tokenized 結帳徹底終結信用卡側錄木馬。"
   lang={lang}
 >
-  <div class="py-20 sm:py-24 bg-[#faf9f6] border-b border-[#e8e6df]">
+  <div class="py-12 sm:py-20 bg-[#faf9f6] border-b border-[#e8e6df]">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <Breadcrumb items={breadcrumbs} lang={lang} className="mb-8" />
       
       <!-- HERO SECTION (核心關鍵詞置頂，無破 Badge 藥丸，無孤行箭頭) -->
       <div class="max-w-4xl mx-auto text-center mb-20">
